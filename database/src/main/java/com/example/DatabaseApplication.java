@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DatabaseApplication {
     public static void main(String[] args) {
         SpringApplication.run(DatabaseApplication.class, args);
-        System.out.println("Hello world!");
+        System.out.println("DatabaseApplication is online!");
     }
 }
