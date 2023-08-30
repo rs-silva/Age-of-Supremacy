@@ -1,6 +1,6 @@
-package com.example.config;
+//package com.example.config;
 
-import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-@EnableWebSecurity
+/*@EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
@@ -42,8 +42,8 @@ public class SecurityConfig {
                 .password(bCryptPasswordEncoder.encode("adminPass"))
                 .roles("USER", "ADMIN")
                 .build());*/
-        return manager;
-    }
+        //return manager;
+    //}
 
-}
+//}
 
