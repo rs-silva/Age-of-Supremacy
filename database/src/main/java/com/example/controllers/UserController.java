@@ -22,14 +22,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("{username}")
     public ResponseEntity<User> findUserByUsername(@PathVariable String username) {
         User user = userService.findByUsername(username);
 
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<String> addUserToDatabase(@RequestBody User user) {
         userService.addUserToDatabase(user);
 
