@@ -2,6 +2,8 @@ package com.example.controllers;
 
 import com.example.models.User;
 import com.example.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/users")
 public class UserController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
 
     @Autowired
@@ -24,6 +28,7 @@ public class UserController {
 
     @GetMapping("{username}")
     public ResponseEntity<User> findUserByUsername(@PathVariable String username) {
+        LOG.error("username = {}", username);
         User user = userService.findByUsername(username);
 
         return ResponseEntity.ok(user);
@@ -31,6 +36,7 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<String> addUserToDatabase(@RequestBody User user) {
+        LOG.error("user = {}", user.toString());
         userService.addUserToDatabase(user);
 
         return ResponseEntity.ok().build();

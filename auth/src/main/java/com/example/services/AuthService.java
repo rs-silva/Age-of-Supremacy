@@ -1,11 +1,13 @@
 package com.example.services;
 
-import com.example.controllers.AuthController;
 import com.example.dto.UserDTO;
 import com.example.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,10 +26,18 @@ public class AuthService {
 
     public void registerUser(UserDTO user) {
         LOG.error("user = {}", user.toString());
-        String url = "http://localhost:8082/api/users" + user.getUsername();
+        String url = "http://localhost:8082/api/users";
         String jsonString = JsonUtils.asJsonString(user);
         LOG.error("user jsonString = {}", jsonString);
-        ResponseEntity<String> response = restTemplate.postForEntity(url, jsonString, String.class);
+        LOG.error("url = {}", url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // Create a HttpEntity with headers and request body
+        HttpEntity<String> httpEntity = new HttpEntity<>(jsonString, headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(url, httpEntity, String.class);
 
     }
 

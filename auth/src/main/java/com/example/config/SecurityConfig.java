@@ -21,7 +21,9 @@ public class SecurityConfig {
 
     private static final String[] PUBLIC_MATCHERS = {
             "/api/auth/register",
-            "/api/auth/login"
+            "/api/auth/login",
+            "/api/users",
+            "/api/users/*"
     };
 
     @Bean
