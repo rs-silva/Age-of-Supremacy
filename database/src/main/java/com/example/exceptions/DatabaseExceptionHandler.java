@@ -13,10 +13,16 @@ public class DatabaseExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
         LOG.error(ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<String> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
+        LOG.error(ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
 }

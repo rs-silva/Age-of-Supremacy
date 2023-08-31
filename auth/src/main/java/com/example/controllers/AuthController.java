@@ -39,6 +39,7 @@ public class AuthController {
 
     @PostMapping("login")
     public ResponseEntity<String> loginUser(@RequestBody UserDTO user) {
+        LOG.error("Login user = {}", user.toString());
         authService.loginUser(user);
         return ResponseEntity.ok().build();
     }

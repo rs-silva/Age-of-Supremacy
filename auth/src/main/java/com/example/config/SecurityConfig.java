@@ -6,26 +6,34 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private static final String[] PUBLIC_MATCHERS = {
-            "/api/auth/*"
+            "/api/auth/register",
+            "/api/auth/login"
     };
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/").permitAll()
+                //.requestMatchers("/").permitAll()
                 .requestMatchers(PUBLIC_MATCHERS).permitAll()
+                .requestMatchers(antMatcher("/api/users")).permitAll()
+                .requestMatchers(antMatcher("/api/users/*")).permitAll()
                 .anyRequest().authenticated()
                 );
                 /*.formLogin()
