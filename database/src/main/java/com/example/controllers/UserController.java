@@ -28,17 +28,15 @@ public class UserController {
 
     @GetMapping("{username}")
     public ResponseEntity<User> findUserByUsername(@PathVariable String username) {
-        LOG.error("username = {}", username);
+        LOG.info("findUserByUsername = {}", username);
         User user = userService.findByUsername(username);
-
         return ResponseEntity.ok(user);
     }
 
     @PostMapping()
     public ResponseEntity<String> addUserToDatabase(@RequestBody User user) {
-        LOG.error("user = {}", user.toString());
+        LOG.info("addUserToDatabase = {}", user.toString());
         userService.addUserToDatabase(user);
-
         return ResponseEntity.ok().build();
     }
 }

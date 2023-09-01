@@ -23,7 +23,8 @@ public class SecurityConfig {
             "/api/auth/register",
             "/api/auth/login",
             "/api/users",
-            "/api/users/*"
+            "/api/users/*",
+            "/error"
     };
 
     @Bean

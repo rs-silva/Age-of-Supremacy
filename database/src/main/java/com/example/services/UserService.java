@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
-
 @Service
 public class UserService {
 
@@ -32,7 +30,7 @@ public class UserService {
                     String.format(DatabaseConstants.USER_NOT_FOUND_EXCEPTION, username));
         }
 
-        LOG.error("Found user = {}", user);
+        LOG.info("Found user = {}", user);
         return user;
     }
 
@@ -44,6 +42,7 @@ public class UserService {
                     String.format(DatabaseConstants.USER_ALREADY_EXISTS_EXCEPTION, newUser.getUsername()));
         }
 
+        LOG.info("Added user {} to database!", newUser.getUsername());
         userRepository.save(newUser);
     }
 }

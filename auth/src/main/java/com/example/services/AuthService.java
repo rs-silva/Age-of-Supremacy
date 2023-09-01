@@ -7,9 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -25,11 +27,11 @@ public class AuthService {
     }
 
     public void registerUser(UserDTO user) {
-        LOG.error("user = {}", user.toString());
+        LOG.info("user = {}", user.toString());
         String url = "http://localhost:8082/api/users";
         String jsonString = JsonUtils.asJsonString(user);
-        LOG.error("user jsonString = {}", jsonString);
-        LOG.error("url = {}", url);
+        LOG.info("user jsonString = {}", jsonString);
+        LOG.info("url = {}", url);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -37,15 +39,12 @@ public class AuthService {
         // Create a HttpEntity with headers and request body
         HttpEntity<String> httpEntity = new HttpEntity<>(jsonString, headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(url, httpEntity, String.class);
-
+        restTemplate.postForEntity(url, httpEntity, String.class);
     }
 
     public void loginUser(UserDTO user) {
         String url = "http://localhost:8082/api/users/" + user.getUsername();
-        LOG.error("user = {}", user);
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-
+        restTemplate.getForEntity(url, String.class);
     }
 
 }

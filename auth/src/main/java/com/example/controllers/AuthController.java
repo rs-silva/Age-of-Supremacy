@@ -32,14 +32,14 @@ public class AuthController {
 
     @PostMapping("register")
     public ResponseEntity<String> registerUser(@RequestBody UserDTO user) {
-        LOG.error("Register user = {}", user.toString());
+        LOG.info("Register user = {}", user.toString());
         authService.registerUser(user);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("login")
     public ResponseEntity<String> loginUser(@RequestBody UserDTO user) {
-        LOG.error("Login user = {}", user.toString());
+        LOG.info("Login user = {}", user.toString());
         authService.loginUser(user);
         return ResponseEntity.ok().build();
     }
