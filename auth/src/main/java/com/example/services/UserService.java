@@ -4,7 +4,7 @@ import com.example.exceptions.ResourceAlreadyExistsException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.User;
 import com.example.repositories.UserRepository;
-import com.example.utils.DatabaseConstants;
+import com.example.utils.AuthConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class UserService {
 
         if (user == null) {
             throw new ResourceNotFoundException(
-                    String.format(DatabaseConstants.USER_NOT_FOUND_EXCEPTION, username));
+                    String.format(AuthConstants.USER_NOT_FOUND_EXCEPTION, username));
         }
 
         LOG.info("Found user = {}", user);
@@ -39,7 +39,7 @@ public class UserService {
 
         if (user != null) {
             throw new ResourceAlreadyExistsException(
-                    String.format(DatabaseConstants.USER_ALREADY_EXISTS_EXCEPTION, newUser.getUsername()));
+                    String.format(AuthConstants.USER_ALREADY_EXISTS_EXCEPTION, newUser.getUsername()));
         }
 
         LOG.info("Added user {} to database!", newUser.getUsername());
