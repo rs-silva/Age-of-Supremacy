@@ -48,5 +48,4 @@ public class AuthService {
         return passwordEncoder.matches(loginPassword, databasePassword);
     }
 
-
 }
