@@ -28,8 +28,8 @@ public class AuthConfig {
     @Bean
     public void populateDB() {
         List<User> userList = new ArrayList<>();
-        userList.add(new User(1L, "user", passwordUtils.encodePassword("password")));
-        userList.add(new User(2L, "user2", passwordUtils.encodePassword("password2")));
+        userList.add(new User(1L, "user", passwordUtils.encodePassword("password"), List.of("USER")));
+        userList.add(new User(2L, "user2", passwordUtils.encodePassword("password2"), List.of("USER")));
 
         userList.forEach(userService::addUserToDatabase);
     }

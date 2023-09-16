@@ -34,6 +34,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 //.requestMatchers(antMatcher("/")).permitAll()
                 .requestMatchers(antMatcher("/h2-console/**")).permitAll()
+                .requestMatchers(antMatcher("/error")).permitAll()
                 //.requestMatchers(antMatcher()).permitAll()
                 .requestMatchers(antMatcher("/api/users")).permitAll()
                 .requestMatchers(antMatcher("/api/users/*")).permitAll()

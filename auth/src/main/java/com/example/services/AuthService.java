@@ -4,11 +4,11 @@ import com.example.dto.UserLoginDTO;
 import com.example.exceptions.UnauthorizedException;
 import com.example.models.User;
 import com.example.utils.AuthConstants;
+import com.example.utils.JwtTokenUtils;
 import com.example.utils.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,12 +18,15 @@ public class AuthService {
 
     private final PasswordUtils passwordUtils;
 
+    private final JwtTokenUtils jwtTokenUtils;
+
     private static final Logger LOG = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
-    public AuthService(UserService userService, PasswordUtils passwordUtils) {
+    public AuthService(UserService userService, PasswordUtils passwordUtils, JwtTokenUtils jwtTokenUtils) {
         this.userService = userService;
         this.passwordUtils = passwordUtils;
+        this.jwtTokenUtils = jwtTokenUtils;
     }
 
     public void registerUser(User user) {
@@ -38,7 +41,7 @@ public class AuthService {
         if (!areCredentialsValid) {
             throw new UnauthorizedException(AuthConstants.WRONG_LOGIN_CREDENTIALS);
         }
-        return user.getPassword();
+        return jwtTokenUtils.generateToken(user);
     }
 
 }
