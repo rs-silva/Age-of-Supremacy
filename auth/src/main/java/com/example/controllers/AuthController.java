@@ -1,12 +1,12 @@
 package com.example.controllers;
 
-import com.example.dto.UserDTO;
+import com.example.dto.UserLoginDTO;
+import com.example.models.User;
 import com.example.services.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,23 +25,18 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("login")
-    public void HelloWorld() {
-        LOG.debug("Hello World!");
-    }
-
     @PostMapping("register")
-    public ResponseEntity<String> registerUser(@RequestBody UserDTO user) {
+    public ResponseEntity<String> registerUser(@RequestBody User user) {
         LOG.info("Register user = {}", user.toString());
         authService.registerUser(user);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("login")
-    public ResponseEntity<String> loginUser(@RequestBody UserDTO user) {
-        LOG.info("Login user = {}", user.toString());
-        authService.loginUser(user);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
+        LOG.info("Login user = {}", userLoginDTO.toString());
+        String token = authService.loginUser(userLoginDTO);
+        return ResponseEntity.ok(token);
     }
 
 }

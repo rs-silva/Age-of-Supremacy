@@ -22,6 +22,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public void addUserToDatabase(User newUser) {
+        User user = userRepository.findByUsername(newUser.getUsername());
+
+        if (user != null) {
+            throw new ResourceAlreadyExistsException(
+                    String.format(AuthConstants.USER_ALREADY_EXISTS_EXCEPTION, newUser.getUsername()));
+        }
+
+        userRepository.save(newUser);
+        LOG.info("Added user {} to database!", newUser.getUsername());
+    }
+
     public User findByUsername(String username) {
         User user = userRepository.findByUsername(username);
 
@@ -32,17 +44,5 @@ public class UserService {
 
         LOG.info("Found user = {}", user);
         return user;
-    }
-
-    public void addUserToDatabase(User newUser) {
-        User user = userRepository.findByUsername(newUser.getUsername());
-
-        if (user != null) {
-            throw new ResourceAlreadyExistsException(
-                    String.format(AuthConstants.USER_ALREADY_EXISTS_EXCEPTION, newUser.getUsername()));
-        }
-
-        LOG.info("Added user {} to database!", newUser.getUsername());
-        userRepository.save(newUser);
     }
 }
