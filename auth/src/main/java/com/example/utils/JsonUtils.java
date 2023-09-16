@@ -2,7 +2,7 @@ package com.example.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonUtils {
+public abstract class JsonUtils {
 
     public static String asJsonString(final Object obj) {
         try {
