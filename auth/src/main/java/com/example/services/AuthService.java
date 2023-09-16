@@ -47,5 +47,4 @@ public class AuthService {
     private boolean validateLoginCredentials(String loginPassword, String databasePassword) {
         return passwordEncoder.matches(loginPassword, databasePassword);
     }
-
 }
