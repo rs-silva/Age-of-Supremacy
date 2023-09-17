@@ -1,6 +1,6 @@
 package com.example.utils;
 
-public abstract class DatabaseConstants {
+public abstract class AccountOperationsConstants {
 
     public static final String USER_NOT_FOUND_EXCEPTION = "User with username %s was not found!";
 

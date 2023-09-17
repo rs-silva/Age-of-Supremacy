@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DatabaseApplication {
+public class AccountOperationsApplication {
     public static void main(String[] args) {
-        SpringApplication.run(DatabaseApplication.class, args);
+        SpringApplication.run(AccountOperationsApplication.class, args);
         System.out.println("DatabaseApplication is online!");
     }
 }

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class DatabaseExceptionHandler {
+public class AccountOperationsExceptionHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DatabaseExceptionHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AccountOperationsExceptionHandler.class);
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
