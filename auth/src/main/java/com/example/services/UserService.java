@@ -7,7 +7,6 @@ import com.example.repositories.UserRepository;
 import com.example.utils.AuthConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,29 +16,28 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public void addUserToDatabase(User newUser) {
-        User user = userRepository.findByUsername(newUser.getUsername());
+        User user = userRepository.findByEmail(newUser.getEmail());
 
         if (user != null) {
             throw new ResourceAlreadyExistsException(
-                    String.format(AuthConstants.USER_ALREADY_EXISTS_EXCEPTION, newUser.getUsername()));
+                    String.format(AuthConstants.USER_ALREADY_EXISTS_EXCEPTION, newUser.getEmail()));
         }
 
         userRepository.save(newUser);
-        LOG.info("Added user {} to database!", newUser.getUsername());
+        LOG.info("Added user {} to database!", newUser.getEmail());
     }
 
-    public User findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
 
         if (user == null) {
             throw new ResourceNotFoundException(
-                    String.format(AuthConstants.USER_NOT_FOUND_EXCEPTION, username));
+                    String.format(AuthConstants.USER_NOT_FOUND_EXCEPTION, email));
         }
 
         LOG.info("Found user = {}", user);

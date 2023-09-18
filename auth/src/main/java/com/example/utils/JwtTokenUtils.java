@@ -27,7 +27,7 @@ public class JwtTokenUtils {
 
         return Jwts.builder()
                 .setClaims(roles)
-                .setSubject(user.getUsername())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(getExpirationDate())
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)

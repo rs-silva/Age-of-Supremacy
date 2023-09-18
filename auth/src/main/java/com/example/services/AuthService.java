@@ -22,7 +22,6 @@ public class AuthService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthService.class);
 
-    @Autowired
     public AuthService(UserService userService, PasswordUtils passwordUtils, JwtTokenUtils jwtTokenUtils) {
         this.userService = userService;
         this.passwordUtils = passwordUtils;
@@ -35,7 +34,7 @@ public class AuthService {
     }
 
     public String loginUser(UserLoginDTO loginUser) {
-        User user = userService.findByUsername(loginUser.getUsername());
+        User user = userService.findByEmail(loginUser.getEmail());
         boolean areCredentialsValid = passwordUtils.validateLoginCredentials(loginUser.getPassword(), user.getPassword());
 
         if (!areCredentialsValid) {

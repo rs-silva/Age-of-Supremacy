@@ -9,7 +9,6 @@ public class PasswordUtils {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
     public PasswordUtils(BCryptPasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
