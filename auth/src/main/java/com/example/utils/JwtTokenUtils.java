@@ -20,7 +20,7 @@ public class JwtTokenUtils {
     @Value("${jwt.secret}")
     private String secret;
 
-    private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60;
+    private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 1000;
 
     public String generateToken(User user) {
         Map<String, Set<GrantedAuthority>> roles = new HashMap<>();

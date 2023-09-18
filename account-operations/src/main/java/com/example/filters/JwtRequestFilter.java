@@ -56,7 +56,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             if (jwtTokenUtil.validateToken(jwtToken)) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        email, null, jwtTokenUtil.getRolesFromToken(jwtToken));
+                        email, null, jwtTokenUtil.getAuthoritiesFromToken(jwtToken));
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 // After setting the Authentication in the context, we specify
