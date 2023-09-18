@@ -1,5 +1,6 @@
 package com.example.config;
 
+import com.example.filters.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,16 +10,20 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.Arrays;
-
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 @EnableWebSecurity
 //@EnableMethodSecurity
 public class SecurityConfig {
+
+    private final JwtRequestFilter jwtRequestFilter;
+
+    public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
 
     private static final String[] PUBLIC_MATCHERS = {
             "/api/users/*"
@@ -36,7 +41,6 @@ public class SecurityConfig {
                 .requestMatchers(antMatcher("/h2-console/**")).permitAll()
                 .requestMatchers(antMatcher("/error")).permitAll()
                 //.requestMatchers(antMatcher()).permitAll()
-                .requestMatchers(antMatcher("/api/users")).permitAll()
                 .requestMatchers(antMatcher("/api/users/*")).permitAll()
             .anyRequest().authenticated()
             );
@@ -54,6 +58,7 @@ public class SecurityConfig {
             .exceptionHandling()
             .accessDeniedPage("/denied");*/
 
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

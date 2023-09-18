@@ -9,14 +9,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
@@ -35,5 +35,14 @@ public class User {
     private String password;
 
     @ElementCollection
-    private List<String> roles;
+    private Set<GrantedAuthority> authorities = new HashSet<>();
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public void addRole(GrantedAuthority grantedAuthority) {
+        this.authorities.add(grantedAuthority);
+    }
 }

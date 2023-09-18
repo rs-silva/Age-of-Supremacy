@@ -5,13 +5,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Component
 public class JwtTokenUtils {
@@ -22,8 +23,8 @@ public class JwtTokenUtils {
     private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60;
 
     public String generateToken(User user) {
-        Map<String, List<String>> roles = new HashMap<>();
-        roles.put("ROLES", user.getRoles());
+        Map<String, Set<GrantedAuthority>> roles = new HashMap<>();
+        roles.put("ROLES", user.getAuthorities());
 
         return Jwts.builder()
                 .setClaims(roles)
