@@ -29,6 +29,7 @@ public class AuthConfig {
         List<User> userList = new ArrayList<>();
 
         User user1 = new User("user@gmail.com", passwordUtils.encodePassword("password"));
+        user1.addRole(new SimpleGrantedAuthority("ROLE_ADMIN"));
         user1.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         userList.add(user1);
 

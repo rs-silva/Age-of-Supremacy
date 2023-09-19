@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.dto.TokenResponseDTO;
 import com.example.dto.UserLoginDTO;
 import com.example.models.User;
 import com.example.services.AuthService;
@@ -27,18 +28,22 @@ public class AuthController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody User user) {
+    public ResponseEntity<TokenResponseDTO> registerUser(@Valid @RequestBody User user) {
         LOG.info("Register user = {}", user.toString());
         user.addRole(new SimpleGrantedAuthority("ROLE_USER"));
-        authService.registerUser(user);
-        return ResponseEntity.ok().build();
+        String token = authService.registerUser(user);
+        TokenResponseDTO response = new TokenResponseDTO(user.getEmail(), token);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("login")
-    public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<TokenResponseDTO> loginUser(@Valid @RequestBody UserLoginDTO userLoginDTO) {
         LOG.info("Login user = {}", userLoginDTO.toString());
         String token = authService.loginUser(userLoginDTO);
-        return ResponseEntity.ok(token);
+        TokenResponseDTO response = new TokenResponseDTO(userLoginDTO.getEmail(), token);
+
+        return ResponseEntity.ok(response);
     }
 
 }

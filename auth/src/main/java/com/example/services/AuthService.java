@@ -27,9 +27,10 @@ public class AuthService {
         this.jwtTokenUtils = jwtTokenUtils;
     }
 
-    public void registerUser(User user) {
+    public String registerUser(User user) {
         user.setPassword(passwordUtils.encodePassword(user.getPassword()));
         userService.addUserToDatabase(user);
+        return jwtTokenUtils.generateToken(user);
     }
 
     public String loginUser(UserLoginDTO loginUser) {
@@ -39,6 +40,7 @@ public class AuthService {
         if (!areCredentialsValid) {
             throw new UnauthorizedException(AuthConstants.WRONG_LOGIN_CREDENTIALS);
         }
+
         return jwtTokenUtils.generateToken(user);
     }
 

@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -37,43 +38,29 @@ public class JwtTokenUtils {
 
     public Set<GrantedAuthority> getAuthoritiesFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
-        LOG.info("claims = {}", claims.toString());
-        LOG.info("token = {}", token);
-        LOG.info("email = {}", getEmailFromToken(token));
 
-        List<String> rolesTest = (List<String>) claims.get("ROLES");
-        LOG.info("rolesTest = {}", rolesTest);
+        List<LinkedHashMap<String, String>> rolesLinkedHashMap = (List<LinkedHashMap<String, String>>) claims.get("ROLES");
 
-        /*Set<GrantedAuthority> roles = rolesTest.stream()
+        Set<GrantedAuthority> roles = new HashSet<>();/*= rolesLinkedHashMap.stream()
+                .map(roleMap -> roleMap.get("authority"))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());*/
 
-        Set<GrantedAuthority> roles = rolesTest.stream()
-                .filter(role -> role instanceof String)
-                .map(role -> new SimpleGrantedAuthority((String) role))
-                .collect(Collectors.toSet());
-
-
-        /*if (claims.containsKey("ROLES")) {
-            List<String> roleStrings = (List<String>) claims.get("ROLES");
-
-            // Convert role strings to GrantedAuthority objects
-            roles = roleStrings.stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toSet());
-        }*/
+        for (LinkedHashMap<String, String> role : rolesLinkedHashMap) {
+            String roleString = role.get("authority");
+            roles.add(new SimpleGrantedAuthority(roleString));
+        }
 
         LOG.info("roles = {}", roles);
         return roles;
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromToken(token);
+        Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        LOG.info("secret size = {}", secret.length());
         return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
     }
 
@@ -87,7 +74,7 @@ public class JwtTokenUtils {
     }
 
     private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
+        Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
