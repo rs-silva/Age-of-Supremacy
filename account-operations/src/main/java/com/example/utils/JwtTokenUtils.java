@@ -13,7 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -41,15 +40,10 @@ public class JwtTokenUtils {
 
         List<LinkedHashMap<String, String>> rolesLinkedHashMap = (List<LinkedHashMap<String, String>>) claims.get("ROLES");
 
-        Set<GrantedAuthority> roles = new HashSet<>();/*= rolesLinkedHashMap.stream()
-                .map(roleMap -> roleMap.get("authority"))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toSet());*/
-
-        for (LinkedHashMap<String, String> role : rolesLinkedHashMap) {
-            String roleString = role.get("authority");
-            roles.add(new SimpleGrantedAuthority(roleString));
-        }
+        Set<GrantedAuthority> roles = rolesLinkedHashMap.stream()
+            .map(roleMap -> roleMap.get("authority"))
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toSet());
 
         LOG.info("roles = {}", roles);
         return roles;

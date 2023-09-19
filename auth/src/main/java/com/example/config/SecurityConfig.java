@@ -29,7 +29,6 @@ public class SecurityConfig {
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests(auth -> auth
-                //.requestMatchers("/").permitAll()
                 .requestMatchers(antMatcher("/error")).permitAll()
                 .requestMatchers(antMatcher("/h2-console/**")).permitAll()
                 .requestMatchers(antMatcher("/api/auth/**")).permitAll()
@@ -55,30 +54,6 @@ public class SecurityConfig {
     public static BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
-    /*@Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailService)
-            throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailService)
-                .passwordEncoder(bCryptPasswordEncoder)
-                .and()
-                .build();
-    }*/
-
-    /*@Bean
-    public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        /*manager.createUser(User.withUsername("user")
-                .password(bCryptPasswordEncoder.encode("userPass"))
-                .roles("USER")
-                .build());
-        manager.createUser(User.withUsername("admin")
-                .password(bCryptPasswordEncoder.encode("adminPass"))
-                .roles("USER", "ADMIN")
-                .build());
-    return manager;
-    }*/
 
 }
 
