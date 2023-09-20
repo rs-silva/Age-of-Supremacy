@@ -1,7 +1,7 @@
 package com.example.controllers;
 
 import com.example.dto.TokenResponseDTO;
-import com.example.dto.UserLoginDTO;
+import com.example.dto.UserLoginResponseDTO;
 import com.example.models.User;
 import com.example.services.AuthService;
 
@@ -38,10 +38,10 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<TokenResponseDTO> loginUser(@Valid @RequestBody UserLoginDTO userLoginDTO) {
-        LOG.info("Login user = {}", userLoginDTO.toString());
-        String token = authService.loginUser(userLoginDTO);
-        TokenResponseDTO response = new TokenResponseDTO(userLoginDTO.getEmail(), token);
+    public ResponseEntity<TokenResponseDTO> loginUser(@Valid @RequestBody UserLoginResponseDTO userLoginResponseDTO) {
+        LOG.info("Login user = {}", userLoginResponseDTO.toString());
+        String token = authService.loginUser(userLoginResponseDTO);
+        TokenResponseDTO response = new TokenResponseDTO(userLoginResponseDTO.getEmail(), token);
 
         return ResponseEntity.ok(response);
     }

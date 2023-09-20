@@ -1,6 +1,6 @@
 package com.example.services;
 
-import com.example.dto.UserLoginDTO;
+import com.example.dto.UserLoginResponseDTO;
 import com.example.exceptions.UnauthorizedException;
 import com.example.models.User;
 import com.example.utils.AuthConstants;
@@ -33,7 +33,7 @@ public class AuthService {
         return jwtTokenUtils.generateToken(user);
     }
 
-    public String loginUser(UserLoginDTO loginUser) {
+    public String loginUser(UserLoginResponseDTO loginUser) {
         User user = userService.findByEmail(loginUser.getEmail());
         boolean areCredentialsValid = passwordUtils.validateLoginCredentials(loginUser.getPassword(), user.getPassword());
 

@@ -3,6 +3,7 @@ package com.example.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,17 @@ public class JwtTokenUtils {
     @Value("${jwt.secret}")
     private String secret;
 
+    private final HttpServletRequest request;
+
+    public JwtTokenUtils(HttpServletRequest request) {
+        this.request = request;
+    }
+
+    public String retrieveTokenFromRequest() {
+        String auth = request.getHeader("Authorization");
+        return auth.substring(7);
+    }
+
     public String getEmailFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
@@ -38,15 +50,16 @@ public class JwtTokenUtils {
     public Set<GrantedAuthority> getAuthoritiesFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
 
-        List<LinkedHashMap<String, String>> rolesLinkedHashMap = (List<LinkedHashMap<String, String>>) claims.get("ROLES");
+        List<LinkedHashMap<String, String>> roles = (List<LinkedHashMap<String, String>>) claims.get("ROLES");
 
-        Set<GrantedAuthority> roles = rolesLinkedHashMap.stream()
-            .map(roleMap -> roleMap.get("authority"))
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toSet());
+        return convertRolesToAuthorities(roles);
+    }
 
-        LOG.info("roles = {}", roles);
-        return roles;
+    private Set<GrantedAuthority> convertRolesToAuthorities(List<LinkedHashMap<String, String>> roles) {
+        return roles.stream()
+                .map(roleMap -> roleMap.get("authority"))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
