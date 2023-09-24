@@ -40,7 +40,7 @@ public class UserService {
                     String.format(AuthConstants.USER_NOT_FOUND_EXCEPTION, email));
         }
 
-        LOG.info("Found user = {}", user);
+        LOG.info("Found user {}", user);
         return user;
     }
 }

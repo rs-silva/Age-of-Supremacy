@@ -1,7 +1,7 @@
 package com.example.config;
 
 import com.example.models.User;
-import com.example.services.UserService;
+import com.example.repositories.UserRepository;
 import com.example.utils.PasswordUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +14,12 @@ import java.util.List;
 @Configuration
 public class AuthConfig {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     private final PasswordUtils passwordUtils;
 
-    public AuthConfig(UserService userService, PasswordUtils passwordUtils) {
-        this.userService = userService;
+    public AuthConfig(UserRepository userRepository, PasswordUtils passwordUtils) {
+        this.userRepository = userRepository;
         this.passwordUtils = passwordUtils;
     }
 
@@ -36,7 +36,7 @@ public class AuthConfig {
         user2.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         userList.add(user2);
 
-        userList.forEach(userService::addUserToDatabase);
+        userRepository.saveAll(userList);
     }
 
 }

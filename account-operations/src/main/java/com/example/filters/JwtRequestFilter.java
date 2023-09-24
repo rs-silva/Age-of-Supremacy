@@ -21,10 +21,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JwtRequestFilter.class);
 
-    private final JwtTokenUtils jwtTokenUtil;
+    private final JwtTokenUtils jwtTokenUtils;
 
     public JwtRequestFilter(JwtTokenUtils jwtTokenUtil) {
-        this.jwtTokenUtil = jwtTokenUtil;
+        this.jwtTokenUtils = jwtTokenUtil;
     }
 
     @Override
@@ -38,9 +38,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7);
+            jwtToken = jwtTokenUtils.retrieveTokenFromRequest();
             try {
-                email = jwtTokenUtil.getEmailFromToken(jwtToken);
+                email = jwtTokenUtils.retrieveEmailFromRequestToken();
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
@@ -55,10 +55,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (jwtTokenUtil.validateToken(jwtToken)) {
+            if (jwtTokenUtils.validateToken(jwtToken)) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        email, null, jwtTokenUtil.getAuthoritiesFromToken(jwtToken));
+                        email, null, jwtTokenUtils.getAuthoritiesFromToken(jwtToken));
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 // After setting the Authentication in the context, we specify

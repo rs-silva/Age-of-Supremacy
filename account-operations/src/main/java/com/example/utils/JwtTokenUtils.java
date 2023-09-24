@@ -34,12 +34,17 @@ public class JwtTokenUtils {
         this.request = request;
     }
 
+    public String retrieveEmailFromRequestToken() {
+        String token = retrieveTokenFromRequest();
+        return getEmailFromToken(token);
+    }
+
     public String retrieveTokenFromRequest() {
         String auth = request.getHeader("Authorization");
         return auth.substring(7);
     }
 
-    public String getEmailFromToken(String token) {
+    private String getEmailFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
