@@ -1,0 +1,366 @@
+{
+	"info": {
+		"_postman_id": "55da5f9a-37b5-4f9d-a06b-0139da74ca61",
+		"name": "Banking Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25912313"
+	},
+	"item": [
+		{
+			"name": "account-operations",
+			"item": [
+				{
+					"name": "Customer",
+					"item": [
+						{
+							"name": "createCustomerAccount",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"firstName\" : \"John\",\r\n   \"lastName\" : \"Doe\",\r\n   \"email\" : \"user@gmail.com\",\r\n   \"dateOfBirth\" : \"2000-02-25\",\r\n   \"gender\" : \"Male\",\r\n   \"phone\" : \"123456789\",\r\n   \"address\" : {\r\n       \"street\" : \"street name\",\r\n       \"city\" : \"Lisboa\",\r\n       \"state\" : \"Lisboa\",\r\n       \"postalCode\" : \"1234-567\",\r\n       \"country\"  : \"Portugal\"\r\n   }\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST_DB}}/api/customer/create",
+									"host": [
+										"{{LOCALHOST_DB}}"
+									],
+									"path": [
+										"api",
+										"customer",
+										"create"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "CurrentAccount",
+					"item": [
+						{
+							"name": "createCurrentAccount",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var response = pm.response.json();\r",
+											"\r",
+											"var accountNumber = response.accountNumber;\r",
+											"\r",
+											"pm.environment.set(\"CURRENT_ACCOUNT_NUMBER\", accountNumber);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{LOCALHOST_DB}}/api/current_account",
+									"host": [
+										"{{LOCALHOST_DB}}"
+									],
+									"path": [
+										"api",
+										"current_account"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "depositFunds",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{LOCALHOST_DB}}/api/current_account/deposit?accountNumber={{CURRENT_ACCOUNT_NUMBER}}&amount=50",
+									"host": [
+										"{{LOCALHOST_DB}}"
+									],
+									"path": [
+										"api",
+										"current_account",
+										"deposit"
+									],
+									"query": [
+										{
+											"key": "accountNumber",
+											"value": "{{CURRENT_ACCOUNT_NUMBER}}"
+										},
+										{
+											"key": "amount",
+											"value": "50"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "withdrawFunds",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{LOCALHOST_DB}}/api/current_account/withdraw?accountNumber={{CURRENT_ACCOUNT_NUMBER}}&amount=70",
+									"host": [
+										"{{LOCALHOST_DB}}"
+									],
+									"path": [
+										"api",
+										"current_account",
+										"withdraw"
+									],
+									"query": [
+										{
+											"key": "accountNumber",
+											"value": "{{CURRENT_ACCOUNT_NUMBER}}"
+										},
+										{
+											"key": "amount",
+											"value": "70"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getBalance",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCALHOST_DB}}/api/current_account/balance?accountNumber={{CURRENT_ACCOUNT_NUMBER}}",
+									"host": [
+										"{{LOCALHOST_DB}}"
+									],
+									"path": [
+										"api",
+										"current_account",
+										"balance"
+									],
+									"query": [
+										{
+											"key": "accountNumber",
+											"value": "{{CURRENT_ACCOUNT_NUMBER}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAccountNumber",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var response = pm.response.json();\r",
+											"\r",
+											"var accountNumber = response.accountNumber;\r",
+											"\r",
+											"pm.environment.set(\"CURRENT_ACCOUNT_NUMBER\", accountNumber);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCALHOST_DB}}/api/current_account/accountNumber?email=user@gmail.com",
+									"host": [
+										"{{LOCALHOST_DB}}"
+									],
+									"path": [
+										"api",
+										"current_account",
+										"accountNumber"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "user@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "registerUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"var accessToken = response.accessToken;\r",
+									"\r",
+									"pm.environment.set(\"ACCESS_TOKEN\", accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\" : \"user4@gmail.com\",\r\n   \"password\" : \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALHOST_AUTH}}/api/auth/register",
+							"host": [
+								"{{LOCALHOST_AUTH}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"var accessToken = response.accessToken;\r",
+									"\r",
+									"pm.environment.set(\"ACCESS_TOKEN\", accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\" : \"user@gmail.com\",\r\n   \"password\" : \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALHOST_AUTH}}/api/auth/login",
+							"host": [
+								"{{LOCALHOST_AUTH}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "ACCESS_TOKEN",
+			"value": ""
+		}
+	]
+}
