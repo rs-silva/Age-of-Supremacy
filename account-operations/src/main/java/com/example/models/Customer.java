@@ -1,6 +1,5 @@
 package com.example.models;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -46,6 +45,9 @@ public class Customer {
 
     @NotNull
     private String gender;
+
+    @NotNull
+    private String phone;
 
     @NotNull
     @Embedded

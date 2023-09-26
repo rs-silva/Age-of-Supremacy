@@ -57,7 +57,7 @@ public class CustomerService {
         return customerRepository.findByEmail(email);
     }
 
-    private void validateTokenEmail(String email) {
+    public void validateTokenEmail(String email) {
         String emailFromToken = jwtTokenUtils.retrieveEmailFromRequestToken();
 
         if (!emailFromToken.equals(email)) {

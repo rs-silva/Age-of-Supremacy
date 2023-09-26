@@ -41,6 +41,7 @@ public class AccountOperationsConfig {
                 .email("user@gmail.com")
                 .dateOfBirth(new GregorianCalendar(2000, Calendar.FEBRUARY, 25).getTime())
                 .gender("Male")
+                .phone("123456789")
                 .address(address1)
                 .build();
 
