@@ -147,7 +147,7 @@ class AuthControllerIntegratedTests {
         User testUser = getTestUser();
         User updatedUser = new User("test2@mail.com", "1234");
 
-        String result = mockMvc.perform(put("/api/auth/user/" + userId)
+        String result = mockMvc.perform(put("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", testUser.getEmail())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -172,7 +172,7 @@ class AuthControllerIntegratedTests {
         User testUser = getTestUser();
         User updatedUser = new User("test2@mail.com", "1234");
 
-        mockMvc.perform(put("/api/auth/user/9876543210")
+        mockMvc.perform(put("/api/user/9876543210")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", testUser.getEmail())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -187,7 +187,7 @@ class AuthControllerIntegratedTests {
         LOG.info(CLASS_NAME + "::updateUserUsingInvalidEmailInRequestParameter");
         User updatedUser = new User("test2@mail.com", "1234");
 
-        String response = mockMvc.perform(put("/api/auth/user/" + userId)
+        String response = mockMvc.perform(put("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", "wrongEmail@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -207,7 +207,7 @@ class AuthControllerIntegratedTests {
         String invalidAccessToken = "eyJhbGciOiJIUzUxMiJ9.eyJST0xFUyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJzdWIiOiJ1c2VyQG1haWwuY29tIiwiaWF0IjoxNjk2ODA3ODM3LCJleHAiOjkyMjMzNzIwMzY4NTQ3NzV9.RFgN8mxlhwHTHDMlvGfyTi-U0H7p7V8aesZG_xhpUt95C0MERWhk_fmLNV528T3vsgMHhydPl4hPqsGnhfMDeg";
         User updatedUser = new User("test2@mail.com", "1234");
 
-        String response = mockMvc.perform(put("/api/auth/user/" + userId)
+        String response = mockMvc.perform(put("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + invalidAccessToken)
                         .param("currentUserEmail", "test2@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -225,7 +225,7 @@ class AuthControllerIntegratedTests {
     void deleteUser() throws Exception {
         LOG.info(CLASS_NAME + "::deleteUser");
 
-        mockMvc.perform(delete("/api/auth/user/" + userId)
+        mockMvc.perform(delete("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", "test2@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -241,7 +241,7 @@ class AuthControllerIntegratedTests {
     void deleteUserUsingInvalidEmail() throws Exception {
         LOG.info(CLASS_NAME + "::deleteUserUsingInvalidEmail");
 
-        mockMvc.perform(delete("/api/auth/user/" + userId)
+        mockMvc.perform(delete("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", "test2@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)

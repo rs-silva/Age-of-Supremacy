@@ -1,10 +1,14 @@
 package com.example.services;
 
+import com.example.dto.TokenResponseDTO;
+import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceAlreadyExistsException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.User;
 import com.example.repositories.UserRepository;
 import com.example.utils.AuthConstants;
+import com.example.utils.JwtTokenUtils;
+import com.example.utils.PasswordUtils;
 import com.example.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +23,58 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final JwtTokenUtils jwtTokenUtils;
+
+    private final PasswordUtils passwordUtils;
+
+    public UserService(UserRepository userRepository, JwtTokenUtils jwtTokenUtils, PasswordUtils passwordUtils) {
         this.userRepository = userRepository;
+        this.jwtTokenUtils = jwtTokenUtils;
+        this.passwordUtils = passwordUtils;
+    }
+
+    public TokenResponseDTO updateUser(String userId, String currentUserEmail, User updatedUser) {
+        User userFromId = findById(Long.valueOf(userId));
+
+        validateUserEmailFromRequestParam(userFromId, currentUserEmail);
+        validateTokenEmail(currentUserEmail);
+
+        updatedUser.setPassword(passwordUtils.encodePassword(updatedUser.getPassword()));
+        User newUser = UserUtils.updateUser(userFromId, updatedUser);
+        User databaseUser = userRepository.save(newUser);
+
+        String accessToken = jwtTokenUtils.generateToken(databaseUser);
+        return new TokenResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
+    }
+
+    public void deleteUser(String userId, String currentUserEmail) {
+        User userFromId = findById(Long.valueOf(userId));
+
+        validateUserEmailFromRequestParam(userFromId, currentUserEmail);
+        validateTokenEmail(currentUserEmail);
+
+        userRepository.deleteById(Long.valueOf(userId));
+
+    }
+
+    private void validateUserEmailFromRequestParam(User userFromId, String email) {
+        String emailFromId = userFromId.getEmail();
+
+        if (!emailFromId.equals(email)) {
+            LOG.error("User email from given id does not match the email from the request parameter! Email from given id = " + emailFromId + " | Email from Request Parameter = " + email);
+            throw new ForbiddenException(
+                    String.format(AuthConstants.USER_EMAIL_FROM_GIVEN_ID_DOES_NOT_MATCH_EMAIL_FROM_REQUEST_PARAM));
+        }
+    }
+
+    private void validateTokenEmail(String email) {
+        String emailFromToken = jwtTokenUtils.retrieveEmailFromRequestToken();
+
+        if (!emailFromToken.equals(email)) {
+            LOG.error("Email from Customer request = " + email + " | Email from token = " + emailFromToken);
+            throw new ForbiddenException(
+                    String.format(AuthConstants.CUSTOMER_EMAIL_DIFFERENT_FROM_TOKEN_EMAIL));
+        }
     }
 
     public User addUserToDatabase(User newUser) {
@@ -59,12 +113,4 @@ public class UserService {
         return user;
     }
 
-    public User updateUser(User currentUser, User updatedUser) {
-        User newUser = UserUtils.updateUser(currentUser, updatedUser);
-        return userRepository.save(newUser);
-    }
-
-    public void deleteUser(String id) {
-        userRepository.deleteById(Long.valueOf(id));
-    }
 }
