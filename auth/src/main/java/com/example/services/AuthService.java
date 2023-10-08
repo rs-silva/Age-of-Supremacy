@@ -35,7 +35,7 @@ public class AuthService {
 
     public String loginUser(UserLoginResponseDTO loginUser) {
         User user = userService.findByEmail(loginUser.getEmail());
-        boolean areCredentialsValid = passwordUtils.validateLoginCredentials(loginUser.getPassword(), user.getPassword());
+        boolean areCredentialsValid = passwordUtils.validateLoginPassword(loginUser.getPassword(), user.getPassword());
 
         if (!areCredentialsValid) {
             throw new UnauthorizedException(AuthConstants.WRONG_LOGIN_CREDENTIALS);

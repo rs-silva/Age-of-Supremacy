@@ -16,7 +16,7 @@ public class PasswordUtils {
         return passwordEncoder.encode(password);
     }
 
-    public boolean validateLoginCredentials(String loginPassword, String databasePassword) {
+    public boolean validateLoginPassword(String loginPassword, String databasePassword) {
         return passwordEncoder.matches(loginPassword, databasePassword);
     }
 }
