@@ -63,4 +63,8 @@ public class UserService {
         User newUser = UserUtils.updateUser(currentUser, updatedUser);
         return userRepository.save(newUser);
     }
+
+    public void deleteUser(String id) {
+        userRepository.deleteById(Long.valueOf(id));
+    }
 }

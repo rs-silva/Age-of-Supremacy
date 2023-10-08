@@ -29,6 +29,7 @@ public class JwtTokenUtils {
 
     private final HttpServletRequest request;
 
+    /* 15 minutes */
     private static final long JWT_TOKEN_VALIDITY = 15 * 60 * 1000;
 
     public JwtTokenUtils(HttpServletRequest request) {

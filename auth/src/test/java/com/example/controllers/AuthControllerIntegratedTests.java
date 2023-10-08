@@ -1,8 +1,10 @@
 package com.example.controllers;
 
 import com.example.dto.TokenResponseDTO;
+import com.example.exceptions.ErrorMessage;
 import com.example.models.User;
 import com.example.repositories.UserRepository;
+import com.example.utils.AuthConstants;
 import com.example.utils.JsonUtils;
 import com.example.utils.PasswordUtils;
 import org.junit.jupiter.api.Assertions;
@@ -21,8 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -146,7 +147,7 @@ class AuthControllerIntegratedTests {
         User testUser = getTestUser();
         User updatedUser = new User("test2@mail.com", "1234");
 
-        String result = mockMvc.perform(put("/api/auth/updateUser/" + userId)
+        String result = mockMvc.perform(put("/api/auth/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", testUser.getEmail())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -159,6 +160,9 @@ class AuthControllerIntegratedTests {
         Assertions.assertEquals(responseDTO.getEmail(), updatedUser.getEmail());
         Assertions.assertNotNull(responseDTO.getId());
         Assertions.assertNotNull(responseDTO.getAccessToken());
+
+        /* Set Access Token */
+        accessToken = responseDTO.getAccessToken();
     }
 
     @Test
@@ -168,7 +172,7 @@ class AuthControllerIntegratedTests {
         User testUser = getTestUser();
         User updatedUser = new User("test2@mail.com", "1234");
 
-        mockMvc.perform(put("/api/auth/updateUser/9876543210")
+        mockMvc.perform(put("/api/auth/user/9876543210")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", testUser.getEmail())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -183,30 +187,66 @@ class AuthControllerIntegratedTests {
         LOG.info(CLASS_NAME + "::updateUserUsingInvalidEmailInRequestParameter");
         User updatedUser = new User("test2@mail.com", "1234");
 
-        mockMvc.perform(put("/api/auth/updateUser/" + userId)
+        String response = mockMvc.perform(put("/api/auth/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", "wrongEmail@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(updatedUser)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andReturn().getResponse().getContentAsString();
+
+        ErrorMessage responseDTO = (ErrorMessage) JsonUtils.asObject(response, ErrorMessage.class);
+        Assertions.assertEquals(responseDTO.getMessage(), AuthConstants.USER_EMAIL_FROM_GIVEN_ID_DOES_NOT_MATCH_EMAIL_FROM_REQUEST_PARAM);
     }
 
     @Test
     @Order(8)
     void updateUserUsingTokenWithDifferentEmail() throws Exception {
         LOG.info(CLASS_NAME + "::updateUserUsingTokenWithDifferentEmail");
-        User testUser = getTestUser();
-        String invalidAccessToken = "eyJhbGciOiJIUzUxMiJ9.eyJST0xFUyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJzdWIiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTY5Njc5ODU3MSwiZXhwIjoxNjk2Nzk5NDcxfQ.l5gRtP7eo_eoSUorD1zQ5CoDxpWx2H7Kj0Ze0L-5cfUp1CyYYGjriPFU7YmJEPIvW6PIScCTPqICD-8G7vtjbQ";
+        String invalidAccessToken = "eyJhbGciOiJIUzUxMiJ9.eyJST0xFUyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJzdWIiOiJ1c2VyQG1haWwuY29tIiwiaWF0IjoxNjk2ODA3ODM3LCJleHAiOjkyMjMzNzIwMzY4NTQ3NzV9.RFgN8mxlhwHTHDMlvGfyTi-U0H7p7V8aesZG_xhpUt95C0MERWhk_fmLNV528T3vsgMHhydPl4hPqsGnhfMDeg";
         User updatedUser = new User("test2@mail.com", "1234");
 
-        mockMvc.perform(put("/api/auth/updateUser/" + userId)
+        String response = mockMvc.perform(put("/api/auth/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + invalidAccessToken)
                         .param("currentUserEmail", "test2@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(updatedUser)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andReturn().getResponse().getContentAsString();
+
+        ErrorMessage responseDTO = (ErrorMessage) JsonUtils.asObject(response, ErrorMessage.class);
+        Assertions.assertEquals(responseDTO.getMessage(), AuthConstants.CUSTOMER_EMAIL_DIFFERENT_FROM_TOKEN_EMAIL);
+    }
+
+    @Test
+    @Order(9)
+    void deleteUser() throws Exception {
+        LOG.info(CLASS_NAME + "::deleteUser");
+
+        mockMvc.perform(delete("/api/auth/user/" + userId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .param("currentUserEmail", "test2@mail.com")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        /* Confirm that the user was successfully deleted */
+        Assertions.assertNull(userRepository.findByEmail("test2@mail.com"));
+    }
+
+    @Test
+    @Order(10)
+    void deleteUserUsingInvalidEmail() throws Exception {
+        LOG.info(CLASS_NAME + "::deleteUserUsingInvalidEmail");
+
+        mockMvc.perform(delete("/api/auth/user/" + userId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .param("currentUserEmail", "test2@mail.com")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     private User getTestUser() {

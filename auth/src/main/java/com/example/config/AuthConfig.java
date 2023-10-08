@@ -28,11 +28,11 @@ public class AuthConfig {
     public void populateDB() {
         List<User> userList = new ArrayList<>();
 
-        User user1 = new User("admin@gmail.com", passwordUtils.encodePassword("123"));
+        User user1 = new User("admin@mail.com", passwordUtils.encodePassword("123"));
         user1.addRole(new SimpleGrantedAuthority("ROLE_ADMIN"));
         userList.add(user1);
 
-        User user2 = new User("user@gmail.com", passwordUtils.encodePassword("123"));
+        User user2 = new User("user@mail.com", passwordUtils.encodePassword("123"));
         user2.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         userList.add(user2);
 

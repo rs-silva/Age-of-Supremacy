@@ -62,6 +62,15 @@ public class AuthService {
         return new TokenResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
     }
 
+    public void deleteUser(String userId, String currentUserEmail) {
+        User userFromId = userService.findById(Long.valueOf(userId));
+
+        validateUserEmailFromRequestParam(userFromId, currentUserEmail);
+        validateTokenEmail(currentUserEmail);
+
+        userService.deleteUser(userId);
+    }
+
     private void validateUserEmailFromRequestParam(User userFromId, String email) {
         String emailFromId = userFromId.getEmail();
 
