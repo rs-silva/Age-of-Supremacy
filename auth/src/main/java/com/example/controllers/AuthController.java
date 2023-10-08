@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,11 +44,12 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateUser/{currentUserEmail}")
-    public ResponseEntity<TokenResponseDTO> updateUser(@Valid @RequestBody User user,
-                                             @PathVariable String currentUserEmail) {
-        LOG.info("Update user = {} with {}", currentUserEmail, user.toString());
-        TokenResponseDTO response = authService.updateUser(currentUserEmail, user);
+    @PutMapping("/updateUser/{userId}")
+    public ResponseEntity<TokenResponseDTO> updateUser(@Valid @RequestBody User updatedUser,
+                                                       @PathVariable String userId,
+                                                       @RequestParam String currentUserEmail) {
+        LOG.info("Update user = {} with {}", currentUserEmail, updatedUser.toString());
+        TokenResponseDTO response = authService.updateUser(userId, currentUserEmail, updatedUser);
 
         return ResponseEntity.ok(response);
     }

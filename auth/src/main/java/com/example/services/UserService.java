@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -33,12 +35,24 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
+    public User findById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    String.format(AuthConstants.USER_WITH_ID_NOT_FOUND_EXCEPTION, id));
+        }
+
+        LOG.info("Found user {}", user);
+        return user.get();
+    }
+
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email);
 
         if (user == null) {
             throw new ResourceNotFoundException(
-                    String.format(AuthConstants.USER_NOT_FOUND_EXCEPTION, email));
+                    String.format(AuthConstants.USER_WITH_EMAIL_NOT_FOUND_EXCEPTION, email));
         }
 
         LOG.info("Found user {}", user);

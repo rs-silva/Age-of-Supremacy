@@ -26,20 +26,30 @@ public class AuthExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException ex) {
+    public ResponseEntity<ErrorMessage> handleUnauthorizedException(UnauthorizedException ex) {
         LOG.error(ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    public ResponseEntity<ErrorMessage> handleResourceNotFoundException(ResourceNotFoundException ex) {
         LOG.error(ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<String> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
+    public ResponseEntity<ErrorMessage> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
         LOG.error(ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorMessage> handleForbiddenException(ForbiddenException ex) {
+        LOG.error(ex.getMessage());
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
+    }
+
+    private ErrorMessage buildErrorMessage(RuntimeException ex) {
+        return new ErrorMessage(ex.getClass().getSimpleName(), ex.getMessage());
     }
 }

@@ -1,7 +1,7 @@
 package com.example.services;
 
 import com.example.dto.TokenResponseDTO;
-import com.example.exceptions.InternalServerErrorException;
+import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.UnauthorizedException;
 import com.example.models.User;
 import com.example.utils.AuthConstants;
@@ -38,37 +38,48 @@ public class AuthService {
     }
 
     public TokenResponseDTO loginUser(User loginUser) {
-        User user = userService.findByEmail(loginUser.getEmail());
-        boolean areCredentialsValid = passwordUtils.validateLoginPassword(loginUser.getPassword(), user.getPassword());
+        User databaseUser = userService.findByEmail(loginUser.getEmail());
+        boolean areCredentialsValid = passwordUtils.validateLoginPassword(loginUser.getPassword(), databaseUser.getPassword());
 
         if (!areCredentialsValid) {
             throw new UnauthorizedException(AuthConstants.WRONG_LOGIN_CREDENTIALS);
         }
 
-        String accessToken = jwtTokenUtils.generateToken(user);
-        return new TokenResponseDTO(user.getId(), user.getEmail(), accessToken);
+        String accessToken = jwtTokenUtils.generateToken(databaseUser);
+        return new TokenResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
     }
 
-    public TokenResponseDTO updateUser(String currentEmail, User updatedUser) {
-        User currentUser = userService.findByEmail(currentEmail);
-        validateTokenEmail(currentEmail);
+    public TokenResponseDTO updateUser(String userId, String currentUserEmail, User updatedUser) {
+        User userFromId = userService.findById(Long.valueOf(userId));
+
+        validateUserEmailFromRequestParam(userFromId, currentUserEmail);
+        validateTokenEmail(currentUserEmail);
 
         updatedUser.setPassword(passwordUtils.encodePassword(updatedUser.getPassword()));
-        User databaseUser = userService.updateUser(currentUser, updatedUser);
+        User databaseUser = userService.updateUser(userFromId, updatedUser);
 
         String accessToken = jwtTokenUtils.generateToken(databaseUser);
         return new TokenResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
     }
 
-    public void validateTokenEmail(String email) {
+    private void validateUserEmailFromRequestParam(User userFromId, String email) {
+        String emailFromId = userFromId.getEmail();
+
+        if (!emailFromId.equals(email)) {
+            LOG.error("User email from given id does not match the email from the request parameter! Email from given id = " + emailFromId + " | Email from Request Parameter = " + email);
+            throw new ForbiddenException(
+                    String.format(AuthConstants.USER_EMAIL_FROM_GIVEN_ID_DOES_NOT_MATCH_EMAIL_FROM_REQUEST_PARAM));
+        }
+    }
+
+    private void validateTokenEmail(String email) {
         String emailFromToken = jwtTokenUtils.retrieveEmailFromRequestToken();
 
         if (!emailFromToken.equals(email)) {
             LOG.error("Email from Customer request = " + email + " | Email from token = " + emailFromToken);
-            throw new InternalServerErrorException(
+            throw new ForbiddenException(
                     String.format(AuthConstants.CUSTOMER_EMAIL_DIFFERENT_FROM_TOKEN_EMAIL));
         }
-
     }
 
 }
