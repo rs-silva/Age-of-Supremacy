@@ -16,12 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -45,26 +46,26 @@ class AuthControllerIntegratedTests {
     /* Pre-generated encoded password for the user */
     private String preEncodedPassword = "$2a$10$ifVMES9Y3Mrd5e96KPF2VuZIlh6cRJbHQY/GEflRx/KJV2PKqXwae";
 
+    private static String accessToken;
+
     @Test
     @Order(0)
     void registerTest() throws Exception {
         User testUser = getTestUser();
-        /* Confirm that the user doesn't already exist */
-        Assertions.assertNull(userRepository.findByEmail(testUser.getEmail()));
 
-        MvcResult result = mockMvc.perform(post("/api/auth/register")
+        String result = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(testUser)))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andReturn().getResponse().getContentAsString();
 
-        String responseString = result.getResponse().getContentAsString();
-        TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(responseString, TokenResponseDTO.class);
+        TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(result, TokenResponseDTO.class);
         LOG.info("responseDTO = {}", responseDTO.toString());
         boolean validatePassword = passwordUtils.validateLoginPassword(testUser.getPassword(), preEncodedPassword);
         Assertions.assertTrue(validatePassword);
         Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
+        Assertions.assertNotNull(responseDTO.getId());
         Assertions.assertNotNull(responseDTO.getAccessToken());
         /* Confirm that the user was successfully created */
         Assertions.assertNotNull(userRepository.findByEmail(testUser.getEmail()));
@@ -75,17 +76,20 @@ class AuthControllerIntegratedTests {
     void loginTest() throws Exception {
         User testUser = getTestUser();
 
-        MvcResult result = mockMvc.perform(post("/api/auth/login")
+        String result = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(testUser)))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andReturn().getResponse().getContentAsString();
 
-        String responseString = result.getResponse().getContentAsString();
-        TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(responseString, TokenResponseDTO.class);
+        TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(result, TokenResponseDTO.class);
         Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
+        Assertions.assertNotNull(responseDTO.getId());
         Assertions.assertNotNull(responseDTO.getAccessToken());
+
+        /* Set Access Token */
+        accessToken = responseDTO.getAccessToken();
     }
 
     @Test
@@ -122,6 +126,26 @@ class AuthControllerIntegratedTests {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(testUser)))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @Order(5)
+    void updateUser() throws Exception {
+        User testUser = getTestUser();
+        User updatedUser = new User("test2@mail.com", "1234");
+
+        String result = mockMvc.perform(put("/api/auth/updateUser/" + testUser.getEmail())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.asJsonString(updatedUser)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(result, TokenResponseDTO.class);
+        Assertions.assertEquals(responseDTO.getEmail(), updatedUser.getEmail());
+        Assertions.assertNotNull(responseDTO.getId());
+        Assertions.assertNotNull(responseDTO.getAccessToken());
     }
 
     private User getTestUser() {

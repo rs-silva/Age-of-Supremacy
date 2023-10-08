@@ -8,4 +8,6 @@ public abstract class AuthConstants {
 
     public static final String WRONG_LOGIN_CREDENTIALS = "Invalid login credentials!";
 
+    public static final String CUSTOMER_EMAIL_DIFFERENT_FROM_TOKEN_EMAIL = "There was an error in the request while validating the token's email!";
+
 }

@@ -1,6 +1,7 @@
 package com.example.services;
 
-import com.example.dto.UserLoginResponseDTO;
+import com.example.dto.TokenResponseDTO;
+import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.UnauthorizedException;
 import com.example.models.User;
 import com.example.utils.AuthConstants;
@@ -8,6 +9,7 @@ import com.example.utils.JwtTokenUtils;
 import com.example.utils.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,13 +29,15 @@ public class AuthService {
         this.jwtTokenUtils = jwtTokenUtils;
     }
 
-    public String registerUser(User user) {
+    public TokenResponseDTO registerUser(User user) {
         user.setPassword(passwordUtils.encodePassword(user.getPassword()));
-        userService.addUserToDatabase(user);
-        return jwtTokenUtils.generateToken(user);
+        user.addRole(new SimpleGrantedAuthority("ROLE_USER"));
+        User databaseUser = userService.addUserToDatabase(user);
+        String accessToken = jwtTokenUtils.generateToken(user);
+        return new TokenResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
     }
 
-    public String loginUser(UserLoginResponseDTO loginUser) {
+    public TokenResponseDTO loginUser(User loginUser) {
         User user = userService.findByEmail(loginUser.getEmail());
         boolean areCredentialsValid = passwordUtils.validateLoginPassword(loginUser.getPassword(), user.getPassword());
 
@@ -41,7 +45,30 @@ public class AuthService {
             throw new UnauthorizedException(AuthConstants.WRONG_LOGIN_CREDENTIALS);
         }
 
-        return jwtTokenUtils.generateToken(user);
+        String accessToken = jwtTokenUtils.generateToken(user);
+        return new TokenResponseDTO(user.getId(), user.getEmail(), accessToken);
+    }
+
+    public TokenResponseDTO updateUser(String currentEmail, User updatedUser) {
+        User currentUser = userService.findByEmail(currentEmail);
+        validateTokenEmail(currentEmail);
+
+        updatedUser.setPassword(passwordUtils.encodePassword(updatedUser.getPassword()));
+        User databaseUser = userService.updateUser(currentUser, updatedUser);
+
+        String accessToken = jwtTokenUtils.generateToken(databaseUser);
+        return new TokenResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
+    }
+
+    public void validateTokenEmail(String email) {
+        String emailFromToken = jwtTokenUtils.retrieveEmailFromRequestToken();
+
+        if (!emailFromToken.equals(email)) {
+            LOG.error("Email from Customer request = " + email + " | Email from token = " + emailFromToken);
+            throw new InternalServerErrorException(
+                    String.format(AuthConstants.CUSTOMER_EMAIL_DIFFERENT_FROM_TOKEN_EMAIL));
+        }
+
     }
 
 }

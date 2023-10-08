@@ -5,6 +5,7 @@ import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.User;
 import com.example.repositories.UserRepository;
 import com.example.utils.AuthConstants;
+import com.example.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void addUserToDatabase(User newUser) {
+    public User addUserToDatabase(User newUser) {
         User user = userRepository.findByEmail(newUser.getEmail());
 
         if (user != null) {
@@ -28,8 +29,8 @@ public class UserService {
                     String.format(AuthConstants.USER_ALREADY_EXISTS_EXCEPTION, newUser.getEmail()));
         }
 
-        userRepository.save(newUser);
         LOG.info("Added user {} to database!", newUser.getEmail());
+        return userRepository.save(newUser);
     }
 
     public User findByEmail(String email) {
@@ -42,5 +43,10 @@ public class UserService {
 
         LOG.info("Found user {}", user);
         return user;
+    }
+
+    public User updateUser(User currentUser, User updatedUser) {
+        User newUser = UserUtils.updateUser(currentUser, updatedUser);
+        return userRepository.save(newUser);
     }
 }
