@@ -66,7 +66,7 @@ class AuthControllerIntegratedTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(testUser)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
         TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(result, TokenResponseDTO.class);
