@@ -1,7 +1,6 @@
 package com.example.services;
 
 import com.example.dto.TokenResponseDTO;
-import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.UnauthorizedException;
 import com.example.models.User;
 import com.example.utils.AuthConstants;

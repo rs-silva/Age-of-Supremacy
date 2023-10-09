@@ -20,8 +20,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -247,6 +250,38 @@ class AuthControllerIntegratedTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @WithMockUser(authorities = "ROLE_ADMIN")
+    @Test
+    @Order(11)
+    void findAllUsers() throws Exception {
+        /* Add user to database to test */
+        userRepository.save(getTestUser());
+
+        LOG.info(CLASS_NAME + "::findAllUsers");
+
+        String response = mockMvc.perform(get("/api/user/findAll")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        List<User> usersList = (List<User>)(Object) JsonUtils.asObjectList(response, User.class);
+        Assertions.assertEquals(1, usersList.size());
+        Assertions.assertEquals(getTestUser().getEmail(), usersList.get(0).getEmail());
+    }
+
+    @Test
+    @Order(12)
+    void findAllUsersWithoutAdminRole() throws Exception {
+        LOG.info(CLASS_NAME + "::findAllUsersWithoutAdminRole");
+
+        mockMvc.perform(get("/api/user/findAll")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 
     private User getTestUser() {

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -111,6 +112,10 @@ public class UserService {
 
         LOG.info("Found user {}", user);
         return user;
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
 }
