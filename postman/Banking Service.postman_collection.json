@@ -278,8 +278,10 @@
 									"var response = pm.response.json();\r",
 									"\r",
 									"var accessToken = response.accessToken;\r",
+									"var userId = response.id;\r",
 									"\r",
-									"pm.environment.set(\"ACCESS_TOKEN\", accessToken);"
+									"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+									"pm.environment.set(\"USER_ID\", userId);"
 								],
 								"type": "text/javascript"
 							}
@@ -290,7 +292,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \"email\" : \"user4@gmail.com\",\r\n   \"password\" : \"123\"\r\n}",
+							"raw": "{\r\n   \"email\" : \"test@mail.com\",\r\n   \"password\" : \"123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -321,8 +323,10 @@
 									"var response = pm.response.json();\r",
 									"\r",
 									"var accessToken = response.accessToken;\r",
+									"var userId = response.id;\r",
 									"\r",
-									"pm.environment.set(\"ACCESS_TOKEN\", accessToken);"
+									"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+									"pm.environment.set(\"USER_ID\", userId);"
 								],
 								"type": "text/javascript"
 							}
@@ -333,7 +337,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n   \"email\" : \"user@gmail.com\",\r\n   \"password\" : \"123\"\r\n}",
+							"raw": "{\r\n   \"email\" : \"user@mail.com\",\r\n   \"password\" : \"123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -349,6 +353,153 @@
 								"api",
 								"auth",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"var accessToken = response.accessToken;\r",
+									"\r",
+									"pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\" : \"test3@mail.com\",\r\n   \"password\" : \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALHOST_AUTH}}/api/user/{{USER_ID}}?currentUserEmail=test@mail.com",
+							"host": [
+								"{{LOCALHOST_AUTH}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{USER_ID}}"
+							],
+							"query": [
+								{
+									"key": "currentUserEmail",
+									"value": "test@mail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"email\" : \"test3@mail.com\",\r\n   \"password\" : \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALHOST_AUTH}}/api/user/findAll",
+							"host": [
+								"{{LOCALHOST_AUTH}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"findAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCALHOST_AUTH}}/api/user/{{USER_ID}}?currentUserEmail=test3@mail.com",
+							"host": [
+								"{{LOCALHOST_AUTH}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{USER_ID}}"
+							],
+							"query": [
+								{
+									"key": "currentUserEmail",
+									"value": "test3@mail.com"
+								}
 							]
 						}
 					},
