@@ -55,7 +55,6 @@ public class UserService {
         validateTokenEmail(currentUserEmail);
 
         userRepository.deleteById(Long.valueOf(userId));
-
     }
 
     private void validateUserEmailFromRequestParam(User userFromId, String email) {
