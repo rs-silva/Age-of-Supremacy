@@ -25,8 +25,8 @@ public class AuthExceptionHandler {
         return message.substring(7, message.length() - 1);
     }
 
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ErrorMessage> handleUnauthorizedException(UnauthorizedException ex) {
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorMessage> handleUnauthorizedException(InvalidCredentialsException ex) {
         LOG.error(ex.getMessage());
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.UNAUTHORIZED);
     }
@@ -45,6 +45,12 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ErrorMessage> handleForbiddenException(ForbiddenException ex) {
+        LOG.error(ex.getMessage());
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(RefreshTokenException.class)
+    public ResponseEntity<ErrorMessage> handleRefreshTokenException(RefreshTokenException ex) {
         LOG.error(ex.getMessage());
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
     }

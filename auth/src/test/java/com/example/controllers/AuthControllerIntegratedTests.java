@@ -1,6 +1,6 @@
 package com.example.controllers;
 
-import com.example.dto.TokenResponseDTO;
+import com.example.dto.LoginResponseDTO;
 import com.example.exceptions.ErrorMessage;
 import com.example.models.User;
 import com.example.repositories.UserRepository;
@@ -69,7 +69,7 @@ class AuthControllerIntegratedTests {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
-        TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(result, TokenResponseDTO.class);
+        LoginResponseDTO responseDTO = (LoginResponseDTO) JsonUtils.asObject(result, LoginResponseDTO.class);
         LOG.info("responseDTO = {}", responseDTO.toString());
         boolean validatePassword = passwordUtils.validateLoginPassword(testUser.getPassword(), preEncodedPassword);
         Assertions.assertTrue(validatePassword);
@@ -93,7 +93,7 @@ class AuthControllerIntegratedTests {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(result, TokenResponseDTO.class);
+        LoginResponseDTO responseDTO = (LoginResponseDTO) JsonUtils.asObject(result, LoginResponseDTO.class);
         Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
         Assertions.assertNotNull(responseDTO.getUserId());
         Assertions.assertNotNull(responseDTO.getAccessToken());
@@ -159,7 +159,7 @@ class AuthControllerIntegratedTests {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(result, TokenResponseDTO.class);
+        LoginResponseDTO responseDTO = (LoginResponseDTO) JsonUtils.asObject(result, LoginResponseDTO.class);
         Assertions.assertEquals(responseDTO.getEmail(), updatedUser.getEmail());
         Assertions.assertNotNull(responseDTO.getUserId());
         Assertions.assertNotNull(responseDTO.getAccessToken());

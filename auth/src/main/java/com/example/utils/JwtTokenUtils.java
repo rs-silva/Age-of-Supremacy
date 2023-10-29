@@ -29,8 +29,8 @@ public class JwtTokenUtils {
 
     private final HttpServletRequest request;
 
-    /* 15 minutes */
-    private static final long JWT_TOKEN_VALIDITY = 15 * 60 * 1000;
+    @Value("{jwt.accessTokenExpirationMs}")
+    private long JWT_ACCESS_TOKEN_VALIDITY;
 
     public JwtTokenUtils(HttpServletRequest request) {
         this.request = request;
@@ -50,7 +50,7 @@ public class JwtTokenUtils {
     }
 
     private Date getExpirationDate() {
-        return new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY);
+        return new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY);
     }
 
     private Key getSigningKey() {

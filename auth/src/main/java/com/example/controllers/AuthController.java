@@ -1,6 +1,7 @@
 package com.example.controllers;
 
-import com.example.dto.TokenResponseDTO;
+import com.example.dto.LoginResponseDTO;
+import com.example.dto.RefreshTokenDTO;
 import com.example.models.User;
 import com.example.services.AuthService;
 
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,27 +29,28 @@ public class AuthController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<TokenResponseDTO> registerUser(@Valid @RequestBody User user) {
+    public ResponseEntity<LoginResponseDTO> registerUser(@Valid @RequestBody User user) {
         LOG.info("Register user = {}", user.toString());
-        TokenResponseDTO response = authService.registerUser(user);
+        LoginResponseDTO response = authService.registerUser(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("login")
-    public ResponseEntity<TokenResponseDTO> loginUser(@Valid @RequestBody User user) {
+    public ResponseEntity<LoginResponseDTO> loginUser(@Valid @RequestBody User user) {
         LOG.info("Login user = {}", user.toString());
-        TokenResponseDTO response = authService.loginUser(user);
+        LoginResponseDTO response = authService.loginUser(user);
 
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("refreshToken")
-    public ResponseEntity<TokenResponseDTO> refreshToken() {
-        LOG.info("Refreshing Token");
-        TokenResponseDTO response = authService.loginUser(user);
+    public ResponseEntity<RefreshTokenDTO> refreshToken(@RequestParam String userEmail,
+                                                        @RequestParam String refreshToken) {
+        LOG.info("Refreshing Token {} from user {}", refreshToken, userEmail);
+        RefreshTokenDTO response = authService.refreshToken(userEmail, refreshToken);
 
-        return ResponseEntity.ok(response)
+        return ResponseEntity.ok(response);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.example.services;
 
-import com.example.dto.TokenResponseDTO;
-import com.example.exceptions.UnauthorizedException;
+import com.example.dto.LoginResponseDTO;
+import com.example.dto.RefreshTokenDTO;
+import com.example.exceptions.InvalidCredentialsException;
+import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.utils.AuthConstants;
 import com.example.utils.JwtTokenUtils;
@@ -16,39 +18,46 @@ public class AuthService {
 
     private final UserService userService;
 
+    private final RefreshTokenService refreshTokenService;
+
     private final PasswordUtils passwordUtils;
 
     private final JwtTokenUtils jwtTokenUtils;
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthService.class);
 
-    public AuthService(UserService userService, PasswordUtils passwordUtils, JwtTokenUtils jwtTokenUtils) {
+    public AuthService(UserService userService, RefreshTokenService refreshTokenService, PasswordUtils passwordUtils, JwtTokenUtils jwtTokenUtils) {
         this.userService = userService;
+        this.refreshTokenService = refreshTokenService;
         this.passwordUtils = passwordUtils;
         this.jwtTokenUtils = jwtTokenUtils;
     }
 
-    public TokenResponseDTO registerUser(User user) {
+    public LoginResponseDTO registerUser(User user) {
         user.setPassword(passwordUtils.encodePassword(user.getPassword()));
         user.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         User databaseUser = userService.addUserToDatabase(user);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(databaseUser.getId());
         String accessToken = jwtTokenUtils.generateToken(user);
-        return new TokenResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
+        return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
-    public TokenResponseDTO loginUser(User loginUser) {
+    public LoginResponseDTO loginUser(User loginUser) {
         User databaseUser = userService.findByEmail(loginUser.getEmail());
         boolean areCredentialsValid = passwordUtils.validateLoginPassword(loginUser.getPassword(), databaseUser.getPassword());
 
         if (!areCredentialsValid) {
-            throw new UnauthorizedException(AuthConstants.WRONG_LOGIN_CREDENTIALS);
+            LOG.error("Wrong credentials for user {}", loginUser);
+            throw new InvalidCredentialsException(AuthConstants.WRONG_LOGIN_CREDENTIALS);
         }
 
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(databaseUser.getId());
         String accessToken = jwtTokenUtils.generateToken(databaseUser);
-        return new TokenResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
+        return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
-    public TokenResponseDTO refreshToken() {
+    public RefreshTokenDTO refreshToken(String userEmail, String token) {
+        RefreshToken refreshToken = refreshTokenService.findByToken(token);
 
     }
 
