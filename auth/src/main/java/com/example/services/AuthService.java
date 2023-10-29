@@ -48,4 +48,8 @@ public class AuthService {
         return new TokenResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
     }
 
+    public TokenResponseDTO refreshToken() {
+
+    }
+
 }
