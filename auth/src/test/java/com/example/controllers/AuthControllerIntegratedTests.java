@@ -74,7 +74,7 @@ class AuthControllerIntegratedTests {
         boolean validatePassword = passwordUtils.validateLoginPassword(testUser.getPassword(), preEncodedPassword);
         Assertions.assertTrue(validatePassword);
         Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
-        Assertions.assertNotNull(responseDTO.getId());
+        Assertions.assertNotNull(responseDTO.getUserId());
         Assertions.assertNotNull(responseDTO.getAccessToken());
         /* Confirm that the user was successfully created */
         Assertions.assertNotNull(userRepository.findByEmail(testUser.getEmail()));
@@ -95,13 +95,13 @@ class AuthControllerIntegratedTests {
 
         TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(result, TokenResponseDTO.class);
         Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
-        Assertions.assertNotNull(responseDTO.getId());
+        Assertions.assertNotNull(responseDTO.getUserId());
         Assertions.assertNotNull(responseDTO.getAccessToken());
 
         /* Set Access Token */
         accessToken = responseDTO.getAccessToken();
         /* Set userId */
-        userId = responseDTO.getId();
+        userId = responseDTO.getUserId();
     }
 
     @Test
@@ -161,7 +161,7 @@ class AuthControllerIntegratedTests {
 
         TokenResponseDTO responseDTO = (TokenResponseDTO) JsonUtils.asObject(result, TokenResponseDTO.class);
         Assertions.assertEquals(responseDTO.getEmail(), updatedUser.getEmail());
-        Assertions.assertNotNull(responseDTO.getId());
+        Assertions.assertNotNull(responseDTO.getUserId());
         Assertions.assertNotNull(responseDTO.getAccessToken());
 
         /* Set Access Token */
