@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 public class RefreshTokenService {
 
-    @Value("${jwt.jwtRefreshExpirationMs}")
+    @Value("${jwt.refreshTokenExpirationMs}")
     private Long JWT_REFRESH_TOKEN_VALIDITY;
 
     private final RefreshTokenRepository refreshTokenRepository;
@@ -54,19 +54,17 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
-    public RefreshToken verifyExpiration(RefreshToken token) {
+    public void verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().after(new Date())) {
             refreshTokenRepository.delete(token);
             throw new RefreshTokenException(AuthConstants.REFRESH_TOKEN_EXPIRED);
         }
-
-        return token;
     }
 
     @Transactional
-    public int deleteByUserId(Long userId) {
+    public void deleteByUserId(Long userId) {
         User user = userService.findById(userId);
-        return refreshTokenRepository.deleteByUser(user);
+        refreshTokenRepository.deleteByUser(user);
     }
 
     private Date getExpirationDate() {

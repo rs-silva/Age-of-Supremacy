@@ -4,6 +4,7 @@ import com.example.dto.LoginResponseDTO;
 import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceAlreadyExistsException;
 import com.example.exceptions.ResourceNotFoundException;
+import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.repositories.UserRepository;
 import com.example.utils.AuthConstants;
@@ -34,7 +35,7 @@ public class UserService {
         this.passwordUtils = passwordUtils;
     }
 
-    public LoginResponseDTO updateUser(String userId, String currentUserEmail, User updatedUser) {
+    public User updateUser(String userId, String currentUserEmail, User updatedUser) {
         User userFromId = findById(Long.valueOf(userId));
 
         validateUserEmailFromRequestParam(userFromId, currentUserEmail);
@@ -42,10 +43,7 @@ public class UserService {
 
         updatedUser.setPassword(passwordUtils.encodePassword(updatedUser.getPassword()));
         User newUser = UserUtils.updateUser(userFromId, updatedUser);
-        User databaseUser = userRepository.save(newUser);
-
-        String accessToken = jwtTokenUtils.generateToken(databaseUser);
-        return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), accessToken);
+        return userRepository.save(newUser);
     }
 
     public void deleteUser(String userId, String currentUserEmail) {

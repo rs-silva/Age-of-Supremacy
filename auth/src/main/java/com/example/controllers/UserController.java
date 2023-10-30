@@ -1,7 +1,9 @@
 package com.example.controllers;
 
 import com.example.dto.LoginResponseDTO;
+import com.example.models.RefreshToken;
 import com.example.models.User;
+import com.example.services.RefreshTokenService;
 import com.example.services.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -27,8 +29,11 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final RefreshTokenService refreshTokenService;
+
+    public UserController(UserService userService, RefreshTokenService refreshTokenService) {
         this.userService = userService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PutMapping("{userId}")
@@ -36,7 +41,8 @@ public class UserController {
                                                        @PathVariable String userId,
                                                        @RequestParam String currentUserEmail) {
         LOG.info("Update user = {} with {}", currentUserEmail, updatedUser.toString());
-        LoginResponseDTO response = userService.updateUser(userId, currentUserEmail, updatedUser);
+        User databaseUser = userService.updateUser(userId, currentUserEmail, updatedUser);
+
 
         return ResponseEntity.ok(response);
     }

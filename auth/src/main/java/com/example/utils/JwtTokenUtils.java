@@ -30,13 +30,13 @@ public class JwtTokenUtils {
     private final HttpServletRequest request;
 
     @Value("{jwt.accessTokenExpirationMs}")
-    private long JWT_ACCESS_TOKEN_VALIDITY;
+    private String JWT_ACCESS_TOKEN_VALIDITY;
 
     public JwtTokenUtils(HttpServletRequest request) {
         this.request = request;
     }
 
-    public String generateToken(User user) {
+    public String generateAccessToken(User user) {
         Map<String, Set<GrantedAuthority>> roles = new HashMap<>();
         roles.put("ROLES", user.getAuthorities());
 
@@ -50,7 +50,7 @@ public class JwtTokenUtils {
     }
 
     private Date getExpirationDate() {
-        return new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY);
+        return new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY));
     }
 
     private Key getSigningKey() {

@@ -1,8 +1,9 @@
 package com.example.services;
 
 import com.example.dto.LoginResponseDTO;
-import com.example.dto.RefreshTokenDTO;
+import com.example.dto.RefreshTokenResponseDTO;
 import com.example.exceptions.InvalidCredentialsException;
+import com.example.exceptions.RefreshTokenException;
 import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.utils.AuthConstants;
@@ -38,7 +39,7 @@ public class AuthService {
         user.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         User databaseUser = userService.addUserToDatabase(user);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(databaseUser.getId());
-        String accessToken = jwtTokenUtils.generateToken(user);
+        String accessToken = jwtTokenUtils.generateAccessToken(user);
         return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
@@ -52,13 +53,33 @@ public class AuthService {
         }
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(databaseUser.getId());
-        String accessToken = jwtTokenUtils.generateToken(databaseUser);
+        String accessToken = jwtTokenUtils.generateAccessToken(databaseUser);
         return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
-    public RefreshTokenDTO refreshToken(String userEmail, String token) {
+    public RefreshTokenResponseDTO refreshToken(String userEmail, String token) {
         RefreshToken refreshToken = refreshTokenService.findByToken(token);
+        User user = validateUserFromRequest(userEmail, refreshToken);
+        refreshTokenService.verifyExpiration(refreshToken);
+        String accessToken = jwtTokenUtils.generateAccessToken(user);
+        return new RefreshTokenResponseDTO(accessToken);
+    }
 
+    public LoginResponseDTO generateRefreshAndAccessTokens(User user) {
+        refreshTokenService.deleteByUserId(user.getId());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(databaseUser.getId());
+
+    }
+
+    private User validateUserFromRequest(String userEmail, RefreshToken refreshToken) {
+        User user = refreshToken.getUser();
+
+        if (!userEmail.equals(user.getEmail())) {
+            LOG.error("Token {} does not belong to the user with email {}", refreshToken.getToken(), user.getEmail());
+            throw new RefreshTokenException(AuthConstants.REFRESH_TOKEN_DOES_NOT_BELONG_TO_USER);
+        }
+
+        return user;
     }
 
 }

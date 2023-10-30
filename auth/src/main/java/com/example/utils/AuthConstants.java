@@ -17,4 +17,6 @@ public abstract class AuthConstants {
     public static final String REFRESH_TOKEN_EXPIRED = "Refresh token has expired. Please login again.";
 
     public static final String REFRESH_TOKEN_NOT_FOUND = "Refresh token was not found. Please login again";
+
+    public static final String REFRESH_TOKEN_DOES_NOT_BELONG_TO_USER = "The refresh token provided does not belong to the user with the provided email.";
 }

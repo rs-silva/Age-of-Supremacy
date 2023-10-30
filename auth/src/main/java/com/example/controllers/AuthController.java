@@ -1,7 +1,7 @@
 package com.example.controllers;
 
 import com.example.dto.LoginResponseDTO;
-import com.example.dto.RefreshTokenDTO;
+import com.example.dto.RefreshTokenResponseDTO;
 import com.example.models.User;
 import com.example.services.AuthService;
 
@@ -45,10 +45,10 @@ public class AuthController {
     }
 
     @PostMapping("refreshToken")
-    public ResponseEntity<RefreshTokenDTO> refreshToken(@RequestParam String userEmail,
-                                                        @RequestParam String refreshToken) {
-        LOG.info("Refreshing Token {} from user {}", refreshToken, userEmail);
-        RefreshTokenDTO response = authService.refreshToken(userEmail, refreshToken);
+    public ResponseEntity<RefreshTokenResponseDTO> refreshToken(@RequestParam String userEmail,
+                                                                @RequestParam String refreshToken) {
+        LOG.info("Refreshing token {} from user {}", refreshToken, userEmail);
+        RefreshTokenResponseDTO response = authService.refreshToken(userEmail, refreshToken);
 
         return ResponseEntity.ok(response);
     }
