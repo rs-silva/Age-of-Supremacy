@@ -23,13 +23,10 @@ public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private final UserService userService;
-
     private static final Logger LOG = LoggerFactory.getLogger(RefreshTokenService.class);
 
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserService userService) {
+    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
-        this.userService = userService;
     }
 
     public RefreshToken findByToken(String token) {
@@ -43,10 +40,10 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
-    public RefreshToken createRefreshToken(Long userId) {
+    public RefreshToken generateRefreshToken(User user) {
         RefreshToken refreshToken = new RefreshToken();
 
-        refreshToken.setUser(userService.findById(userId));
+        refreshToken.setUser(user);
         refreshToken.setExpiryDate(getExpirationDate());
         refreshToken.setToken(generateToken());
 
@@ -62,8 +59,7 @@ public class RefreshTokenService {
     }
 
     @Transactional
-    public void deleteByUserId(Long userId) {
-        User user = userService.findById(userId);
+    public void deleteByUser(User user) {
         refreshTokenRepository.deleteByUser(user);
     }
 

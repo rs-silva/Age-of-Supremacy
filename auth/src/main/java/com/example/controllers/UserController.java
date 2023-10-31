@@ -5,6 +5,7 @@ import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.services.RefreshTokenService;
 import com.example.services.UserService;
+import com.example.utils.JwtTokenUtils;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,12 @@ public class UserController {
 
     private final RefreshTokenService refreshTokenService;
 
-    public UserController(UserService userService, RefreshTokenService refreshTokenService) {
+    private final JwtTokenUtils jwtTokenUtils;
+
+    public UserController(UserService userService, RefreshTokenService refreshTokenService, JwtTokenUtils jwtTokenUtils) {
         this.userService = userService;
         this.refreshTokenService = refreshTokenService;
+        this.jwtTokenUtils = jwtTokenUtils;
     }
 
     @PutMapping("{userId}")
@@ -41,9 +45,7 @@ public class UserController {
                                                        @PathVariable String userId,
                                                        @RequestParam String currentUserEmail) {
         LOG.info("Update user = {} with {}", currentUserEmail, updatedUser.toString());
-        User databaseUser = userService.updateUser(userId, currentUserEmail, updatedUser);
-
-
+        LoginResponseDTO response = userService.updateUser(userId, currentUserEmail, updatedUser);
         return ResponseEntity.ok(response);
     }
 

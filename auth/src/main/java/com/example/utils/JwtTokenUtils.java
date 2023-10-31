@@ -29,7 +29,7 @@ public class JwtTokenUtils {
 
     private final HttpServletRequest request;
 
-    @Value("{jwt.accessTokenExpirationMs}")
+    @Value("${jwt.accessTokenExpirationMs}")
     private String JWT_ACCESS_TOKEN_VALIDITY;
 
     public JwtTokenUtils(HttpServletRequest request) {

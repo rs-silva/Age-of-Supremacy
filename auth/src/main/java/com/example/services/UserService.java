@@ -29,13 +29,16 @@ public class UserService {
 
     private final PasswordUtils passwordUtils;
 
-    public UserService(UserRepository userRepository, JwtTokenUtils jwtTokenUtils, PasswordUtils passwordUtils) {
+    private final RefreshTokenService refreshTokenService;
+
+    public UserService(UserRepository userRepository, JwtTokenUtils jwtTokenUtils, PasswordUtils passwordUtils, RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
         this.jwtTokenUtils = jwtTokenUtils;
         this.passwordUtils = passwordUtils;
+        this.refreshTokenService = refreshTokenService;
     }
 
-    public User updateUser(String userId, String currentUserEmail, User updatedUser) {
+    public LoginResponseDTO updateUser(String userId, String currentUserEmail, User updatedUser) {
         User userFromId = findById(Long.valueOf(userId));
 
         validateUserEmailFromRequestParam(userFromId, currentUserEmail);
@@ -43,7 +46,12 @@ public class UserService {
 
         updatedUser.setPassword(passwordUtils.encodePassword(updatedUser.getPassword()));
         User newUser = UserUtils.updateUser(userFromId, updatedUser);
-        return userRepository.save(newUser);
+
+        refreshTokenService.deleteByUser(newUser);
+        RefreshToken refreshToken = refreshTokenService.generateRefreshToken(newUser);
+        String accessToken = jwtTokenUtils.generateAccessToken(newUser);
+        userRepository.save(newUser);
+        return new LoginResponseDTO(newUser.getId(), newUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
     public void deleteUser(String userId, String currentUserEmail) {
@@ -52,6 +60,7 @@ public class UserService {
         validateUserEmailFromRequestParam(userFromId, currentUserEmail);
         validateTokenEmail(currentUserEmail);
 
+        refreshTokenService.deleteByUser(userFromId);
         userRepository.deleteById(Long.valueOf(userId));
     }
 

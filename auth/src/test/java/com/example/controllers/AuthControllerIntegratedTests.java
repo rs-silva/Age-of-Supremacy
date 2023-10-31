@@ -75,6 +75,7 @@ class AuthControllerIntegratedTests {
         Assertions.assertTrue(validatePassword);
         Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
         Assertions.assertNotNull(responseDTO.getUserId());
+        Assertions.assertNotNull(responseDTO.getRefreshToken());
         Assertions.assertNotNull(responseDTO.getAccessToken());
         /* Confirm that the user was successfully created */
         Assertions.assertNotNull(userRepository.findByEmail(testUser.getEmail()));
@@ -174,7 +175,6 @@ class AuthControllerIntegratedTests {
         LOG.info(CLASS_NAME + "::updateUserUsingInvalidId");
         User testUser = getTestUser();
         User updatedUser = new User("test2@mail.com", "1234");
-
         mockMvc.perform(put("/api/user/9876543210")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", testUser.getEmail())

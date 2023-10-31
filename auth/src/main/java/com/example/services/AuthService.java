@@ -38,7 +38,7 @@ public class AuthService {
         user.setPassword(passwordUtils.encodePassword(user.getPassword()));
         user.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         User databaseUser = userService.addUserToDatabase(user);
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(databaseUser.getId());
+        RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
         String accessToken = jwtTokenUtils.generateAccessToken(user);
         return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
@@ -52,7 +52,8 @@ public class AuthService {
             throw new InvalidCredentialsException(AuthConstants.WRONG_LOGIN_CREDENTIALS);
         }
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(databaseUser.getId());
+        refreshTokenService.deleteByUser(databaseUser);
+        RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
         String accessToken = jwtTokenUtils.generateAccessToken(databaseUser);
         return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
@@ -63,12 +64,6 @@ public class AuthService {
         refreshTokenService.verifyExpiration(refreshToken);
         String accessToken = jwtTokenUtils.generateAccessToken(user);
         return new RefreshTokenResponseDTO(accessToken);
-    }
-
-    public LoginResponseDTO generateRefreshAndAccessTokens(User user) {
-        refreshTokenService.deleteByUserId(user.getId());
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(databaseUser.getId());
-
     }
 
     private User validateUserFromRequest(String userEmail, RefreshToken refreshToken) {
