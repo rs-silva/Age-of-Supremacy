@@ -45,7 +45,7 @@ public class RefreshTokenService {
 
         refreshToken.setUser(user);
         refreshToken.setExpiryDate(getExpirationDate());
-        refreshToken.setToken(generateToken());
+        refreshToken.setToken(doGenerateAccessToken());
 
         refreshToken = refreshTokenRepository.save(refreshToken);
         return refreshToken;
@@ -67,7 +67,7 @@ public class RefreshTokenService {
         return new Date(System.currentTimeMillis() + JWT_REFRESH_TOKEN_VALIDITY);
     }
 
-    private String generateToken() {
+    private String doGenerateAccessToken() {
         return UUID.randomUUID().toString();
     }
 }

@@ -46,11 +46,12 @@ public class UserService {
 
         updatedUser.setPassword(passwordUtils.encodePassword(updatedUser.getPassword()));
         User newUser = UserUtils.updateUser(userFromId, updatedUser);
+        userRepository.save(newUser);
 
         refreshTokenService.deleteByUser(newUser);
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(newUser);
         String accessToken = jwtAccessTokenUtils.generateAccessToken(newUser);
-        userRepository.save(newUser);
+
         return new LoginResponseDTO(newUser.getId(), newUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 

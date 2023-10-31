@@ -38,8 +38,10 @@ public class AuthService {
         user.setPassword(passwordUtils.encodePassword(user.getPassword()));
         user.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         User databaseUser = userService.addUserToDatabase(user);
+
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
         String accessToken = jwtAccessTokenUtils.generateAccessToken(user);
+
         return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
@@ -55,6 +57,7 @@ public class AuthService {
         refreshTokenService.deleteByUser(databaseUser);
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
         String accessToken = jwtAccessTokenUtils.generateAccessToken(databaseUser);
+
         return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
@@ -62,6 +65,7 @@ public class AuthService {
         RefreshToken refreshToken = refreshTokenService.findByToken(token);
         User user = validateUserFromRequest(userEmail, refreshToken);
         refreshTokenService.verifyExpiration(refreshToken);
+
         String accessToken = jwtAccessTokenUtils.generateAccessToken(user);
         return new RefreshTokenResponseDTO(accessToken);
     }
