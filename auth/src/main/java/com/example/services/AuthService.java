@@ -7,7 +7,7 @@ import com.example.exceptions.RefreshTokenException;
 import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.utils.AuthConstants;
-import com.example.utils.JwtTokenUtils;
+import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +23,15 @@ public class AuthService {
 
     private final PasswordUtils passwordUtils;
 
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtAccessTokenUtils jwtAccessTokenUtils;
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthService.class);
 
-    public AuthService(UserService userService, RefreshTokenService refreshTokenService, PasswordUtils passwordUtils, JwtTokenUtils jwtTokenUtils) {
+    public AuthService(UserService userService, RefreshTokenService refreshTokenService, PasswordUtils passwordUtils, JwtAccessTokenUtils jwtAccessTokenUtils) {
         this.userService = userService;
         this.refreshTokenService = refreshTokenService;
         this.passwordUtils = passwordUtils;
-        this.jwtTokenUtils = jwtTokenUtils;
+        this.jwtAccessTokenUtils = jwtAccessTokenUtils;
     }
 
     public LoginResponseDTO registerUser(User user) {
@@ -39,7 +39,7 @@ public class AuthService {
         user.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         User databaseUser = userService.addUserToDatabase(user);
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
-        String accessToken = jwtTokenUtils.generateAccessToken(user);
+        String accessToken = jwtAccessTokenUtils.generateAccessToken(user);
         return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
@@ -54,7 +54,7 @@ public class AuthService {
 
         refreshTokenService.deleteByUser(databaseUser);
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
-        String accessToken = jwtTokenUtils.generateAccessToken(databaseUser);
+        String accessToken = jwtAccessTokenUtils.generateAccessToken(databaseUser);
         return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
@@ -62,7 +62,7 @@ public class AuthService {
         RefreshToken refreshToken = refreshTokenService.findByToken(token);
         User user = validateUserFromRequest(userEmail, refreshToken);
         refreshTokenService.verifyExpiration(refreshToken);
-        String accessToken = jwtTokenUtils.generateAccessToken(user);
+        String accessToken = jwtAccessTokenUtils.generateAccessToken(user);
         return new RefreshTokenResponseDTO(accessToken);
     }
 

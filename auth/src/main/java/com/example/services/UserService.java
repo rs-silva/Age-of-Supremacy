@@ -8,7 +8,7 @@ import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.repositories.UserRepository;
 import com.example.utils.AuthConstants;
-import com.example.utils.JwtTokenUtils;
+import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.PasswordUtils;
 import com.example.utils.UserUtils;
 import org.slf4j.Logger;
@@ -25,15 +25,15 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtAccessTokenUtils jwtAccessTokenUtils;
 
     private final PasswordUtils passwordUtils;
 
     private final RefreshTokenService refreshTokenService;
 
-    public UserService(UserRepository userRepository, JwtTokenUtils jwtTokenUtils, PasswordUtils passwordUtils, RefreshTokenService refreshTokenService) {
+    public UserService(UserRepository userRepository, JwtAccessTokenUtils jwtAccessTokenUtils, PasswordUtils passwordUtils, RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
-        this.jwtTokenUtils = jwtTokenUtils;
+        this.jwtAccessTokenUtils = jwtAccessTokenUtils;
         this.passwordUtils = passwordUtils;
         this.refreshTokenService = refreshTokenService;
     }
@@ -49,7 +49,7 @@ public class UserService {
 
         refreshTokenService.deleteByUser(newUser);
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(newUser);
-        String accessToken = jwtTokenUtils.generateAccessToken(newUser);
+        String accessToken = jwtAccessTokenUtils.generateAccessToken(newUser);
         userRepository.save(newUser);
         return new LoginResponseDTO(newUser.getId(), newUser.getEmail(), refreshToken.getToken(), accessToken);
     }
@@ -75,7 +75,7 @@ public class UserService {
     }
 
     private void validateTokenEmail(String email) {
-        String emailFromToken = jwtTokenUtils.retrieveEmailFromRequestToken();
+        String emailFromToken = jwtAccessTokenUtils.retrieveEmailFromRequestToken();
 
         if (!emailFromToken.equals(email)) {
             LOG.error("Email from Customer request = " + email + " | Email from token = " + emailFromToken);

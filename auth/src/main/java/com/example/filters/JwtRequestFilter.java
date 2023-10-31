@@ -1,6 +1,6 @@
 package com.example.filters;
 
-import com.example.utils.JwtTokenUtils;
+import com.example.utils.JwtAccessTokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,10 +21,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JwtRequestFilter.class);
 
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtAccessTokenUtils jwtAccessTokenUtils;
 
-    public JwtRequestFilter(JwtTokenUtils jwtTokenUtil) {
-        this.jwtTokenUtils = jwtTokenUtil;
+    public JwtRequestFilter(JwtAccessTokenUtils jwtTokenUtil) {
+        this.jwtAccessTokenUtils = jwtTokenUtil;
     }
 
     @Override
@@ -38,9 +38,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = jwtTokenUtils.retrieveTokenFromRequest();
+            jwtToken = jwtAccessTokenUtils.retrieveTokenFromRequest();
             try {
-                email = jwtTokenUtils.retrieveEmailFromRequestToken();
+                email = jwtAccessTokenUtils.retrieveEmailFromRequestToken();
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
@@ -55,10 +55,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (jwtTokenUtils.validateToken(jwtToken)) {
+            if (jwtAccessTokenUtils.validateToken(jwtToken)) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        email, null, jwtTokenUtils.getAuthoritiesFromToken(jwtToken));
+                        email, null, jwtAccessTokenUtils.getAuthoritiesFromToken(jwtToken));
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 // After setting the Authentication in the context, we specify

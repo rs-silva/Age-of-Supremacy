@@ -22,7 +22,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class JwtTokenUtils {
+public class JwtAccessTokenUtils {
 
     @Value("${jwt.secret}")
     private String secret;
@@ -32,7 +32,7 @@ public class JwtTokenUtils {
     @Value("${jwt.accessTokenExpirationMs}")
     private String JWT_ACCESS_TOKEN_VALIDITY;
 
-    public JwtTokenUtils(HttpServletRequest request) {
+    public JwtAccessTokenUtils(HttpServletRequest request) {
         this.request = request;
     }
 

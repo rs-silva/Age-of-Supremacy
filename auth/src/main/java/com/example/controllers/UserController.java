@@ -1,11 +1,10 @@
 package com.example.controllers;
 
 import com.example.dto.LoginResponseDTO;
-import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.services.RefreshTokenService;
 import com.example.services.UserService;
-import com.example.utils.JwtTokenUtils;
+import com.example.utils.JwtAccessTokenUtils;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +31,12 @@ public class UserController {
 
     private final RefreshTokenService refreshTokenService;
 
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtAccessTokenUtils jwtAccessTokenUtils;
 
-    public UserController(UserService userService, RefreshTokenService refreshTokenService, JwtTokenUtils jwtTokenUtils) {
+    public UserController(UserService userService, RefreshTokenService refreshTokenService, JwtAccessTokenUtils jwtAccessTokenUtils) {
         this.userService = userService;
         this.refreshTokenService = refreshTokenService;
-        this.jwtTokenUtils = jwtTokenUtils;
+        this.jwtAccessTokenUtils = jwtAccessTokenUtils;
     }
 
     @PutMapping("{userId}")
