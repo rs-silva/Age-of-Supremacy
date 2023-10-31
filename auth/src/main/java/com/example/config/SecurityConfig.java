@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -58,6 +59,7 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .accessDeniedPage("/denied");*/
 
+        http.exceptionHandling((exception) -> exception.authenticationEntryPoint(authenticationEntryPoint()));
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -67,5 +69,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint(){
+        return new CustomAuthenticationEntryPoint();
+    }
 }
 
