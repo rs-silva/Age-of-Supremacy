@@ -1,9 +1,13 @@
 package com.example.exceptions;
 
+import com.example.utils.AuthConstants;
+import com.example.utils.JwtAccessTokenUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
@@ -12,6 +16,15 @@ import org.springframework.web.client.HttpClientErrorException;
 public class AuthExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthExceptionHandler.class);
+
+    private final HttpServletRequest request;
+
+    private final JwtAccessTokenUtils jwtAccessTokenUtils;
+
+    public AuthExceptionHandler(HttpServletRequest request, JwtAccessTokenUtils jwtAccessTokenUtils) {
+        this.request = request;
+        this.jwtAccessTokenUtils = jwtAccessTokenUtils;
+    }
 
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<String> handleHttpClientErrorException(HttpClientErrorException ex) {
@@ -55,7 +68,18 @@ public class AuthExceptionHandler {
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorMessage> handleAccessDeniedException(AccessDeniedException ex) {
+        LOG.error(String.format(AuthConstants.ACCESS_DENIED_TO_RESOURCE,
+                jwtAccessTokenUtils.retrieveEmailFromRequestToken(),
+                request.getRequestURI()));
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
+    }
+
     private ErrorMessage buildErrorMessage(RuntimeException ex) {
-        return new ErrorMessage(ex.getClass().getSimpleName(), ex.getMessage());
+        String errorType = ex.getClass().getSimpleName().substring(0, ex.getClass().getSimpleName().length() - 9);
+        return new ErrorMessage(errorType,
+                ex.getMessage(),
+                request.getRequestURI());
     }
 }
