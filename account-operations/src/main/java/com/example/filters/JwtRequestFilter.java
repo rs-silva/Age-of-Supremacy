@@ -1,6 +1,6 @@
 package com.example.filters;
 
-import com.example.utils.JwtTokenUtils;
+import com.example.utils.JwtAccessTokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,9 +21,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JwtRequestFilter.class);
 
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtAccessTokenUtils jwtTokenUtils;
 
-    public JwtRequestFilter(JwtTokenUtils jwtTokenUtil) {
+    public JwtRequestFilter(JwtAccessTokenUtils jwtTokenUtil) {
         this.jwtTokenUtils = jwtTokenUtil;
     }
 

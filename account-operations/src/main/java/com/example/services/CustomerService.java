@@ -6,7 +6,7 @@ import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Customer;
 import com.example.repositories.CustomerRepository;
 import com.example.utils.AccountOperationsConstants;
-import com.example.utils.JwtTokenUtils;
+import com.example.utils.JwtAccessTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,9 +18,9 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtAccessTokenUtils jwtTokenUtils;
 
-    public CustomerService(CustomerRepository customerRepository, JwtTokenUtils jwtTokenUtils) {
+    public CustomerService(CustomerRepository customerRepository, JwtAccessTokenUtils jwtTokenUtils) {
         this.customerRepository = customerRepository;
         this.jwtTokenUtils = jwtTokenUtils;
     }

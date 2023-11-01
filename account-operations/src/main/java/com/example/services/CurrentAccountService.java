@@ -10,7 +10,7 @@ import com.example.models.CurrentAccount;
 import com.example.models.Customer;
 import com.example.repositories.CurrentAccountRepository;
 import com.example.utils.AccountOperationsConstants;
-import com.example.utils.JwtTokenUtils;
+import com.example.utils.JwtAccessTokenUtils;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +29,9 @@ public class CurrentAccountService {
 
     private final CustomerService customerService;
 
-    private final JwtTokenUtils jwtTokenUtils;
+    private final JwtAccessTokenUtils jwtTokenUtils;
 
-    public CurrentAccountService(CurrentAccountRepository currentAccountRepository, CustomerService customerService, JwtTokenUtils jwtTokenUtils) {
+    public CurrentAccountService(CurrentAccountRepository currentAccountRepository, CustomerService customerService, JwtAccessTokenUtils jwtTokenUtils) {
         this.currentAccountRepository = currentAccountRepository;
         this.customerService = customerService;
         this.jwtTokenUtils = jwtTokenUtils;

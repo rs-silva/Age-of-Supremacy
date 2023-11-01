@@ -1,11 +1,14 @@
 package com.example.utils;
 
 import com.example.models.User;
+import com.example.services.RefreshTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,10 +30,12 @@ public class JwtAccessTokenUtils {
     @Value("${jwt.secret}")
     private String secret;
 
+    private static final Logger LOG = LoggerFactory.getLogger(JwtAccessTokenUtils.class);
+
     private final HttpServletRequest request;
 
     @Value("${jwt.accessTokenExpirationMs}")
-    private String JWT_ACCESS_TOKEN_VALIDITY;
+    private Long JWT_ACCESS_TOKEN_VALIDITY;
 
     public JwtAccessTokenUtils(HttpServletRequest request) {
         this.request = request;
@@ -50,7 +55,7 @@ public class JwtAccessTokenUtils {
     }
 
     private Date getExpirationDate() {
-        return new Date(System.currentTimeMillis() + Long.parseLong(JWT_ACCESS_TOKEN_VALIDITY));
+        return new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY);
     }
 
     private Key getSigningKey() {

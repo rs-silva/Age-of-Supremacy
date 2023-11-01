@@ -52,7 +52,7 @@ public class RefreshTokenService {
     }
 
     public void verifyExpiration(RefreshToken token) {
-        if (token.getExpiryDate().after(new Date())) {
+        if (token.getExpiryDate().before(new Date())) {
             refreshTokenRepository.delete(token);
             throw new RefreshTokenException(AuthConstants.REFRESH_TOKEN_EXPIRED);
         }

@@ -21,16 +21,16 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class JwtTokenUtils {
+public class JwtAccessTokenUtils {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JwtTokenUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JwtAccessTokenUtils.class);
 
     @Value("${jwt.secret}")
     private String secret;
 
     private final HttpServletRequest request;
 
-    public JwtTokenUtils(HttpServletRequest request) {
+    public JwtAccessTokenUtils(HttpServletRequest request) {
         this.request = request;
     }
 
