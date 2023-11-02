@@ -1,13 +1,10 @@
 package com.example.exceptions;
 
-import com.example.utils.AuthConstants;
-import com.example.utils.JwtAccessTokenUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
@@ -19,11 +16,8 @@ public class AuthExceptionHandler {
 
     private final HttpServletRequest request;
 
-    private final JwtAccessTokenUtils jwtAccessTokenUtils;
-
-    public AuthExceptionHandler(HttpServletRequest request, JwtAccessTokenUtils jwtAccessTokenUtils) {
+    public AuthExceptionHandler(HttpServletRequest request) {
         this.request = request;
-        this.jwtAccessTokenUtils = jwtAccessTokenUtils;
     }
 
     @ExceptionHandler(HttpClientErrorException.class)
@@ -67,8 +61,6 @@ public class AuthExceptionHandler {
         LOG.error(ex.getMessage());
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
     }
-
-
 
     private ErrorMessage buildErrorMessage(RuntimeException ex) {
         String errorType = ex.getClass().getSimpleName().substring(0, ex.getClass().getSimpleName().length() - 9);

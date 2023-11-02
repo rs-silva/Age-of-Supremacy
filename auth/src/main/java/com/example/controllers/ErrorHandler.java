@@ -1,8 +1,11 @@
 package com.example.controllers;
 
 import com.example.exceptions.ErrorMessage;
+import com.example.utils.JwtAccessTokenUtils;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,6 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ErrorHandler implements ErrorController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ErrorHandler.class);
+
+    private final JwtAccessTokenUtils jwtAccessTokenUtils;
+
+    public ErrorHandler(JwtAccessTokenUtils jwtAccessTokenUtils) {
+        this.jwtAccessTokenUtils = jwtAccessTokenUtils;
+    }
 
     @RequestMapping("/error")
     public ResponseEntity<ErrorMessage> handleError(HttpServletRequest request) {
@@ -23,6 +34,16 @@ public class ErrorHandler implements ErrorController {
         int status = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
         ErrorMessage errorMessage = new ErrorMessage(error, message, requestURI);
+
+        String userEmail;
+        try {
+            userEmail = jwtAccessTokenUtils.retrieveEmailFromRequestToken();
+        }
+        catch (Exception ex) {
+            userEmail = "not logged in";
+        }
+
+        LOG.error("Error from user {} : {}", userEmail , errorMessage);
 
         return ResponseEntity.status(status).body(errorMessage);
     }
