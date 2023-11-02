@@ -68,13 +68,7 @@ public class AuthExceptionHandler {
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorMessage> handleAccessDeniedException(AccessDeniedException ex) {
-        LOG.error(String.format(AuthConstants.ACCESS_DENIED_TO_RESOURCE,
-                jwtAccessTokenUtils.retrieveEmailFromRequestToken(),
-                request.getRequestURI()));
-        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
-    }
+
 
     private ErrorMessage buildErrorMessage(RuntimeException ex) {
         String errorType = ex.getClass().getSimpleName().substring(0, ex.getClass().getSimpleName().length() - 9);

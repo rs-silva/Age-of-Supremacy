@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.dto.LoginResponseDTO;
+import com.example.dto.RefreshTokenResponseDTO;
 import com.example.exceptions.ErrorMessage;
 import com.example.models.User;
 import com.example.repositories.UserRepository;
@@ -49,8 +50,7 @@ class AuthControllerIntegratedTests {
     @Autowired
     private UserRepository userRepository;
 
-    /* Pre-generated encoded password for the user (password: 123) */
-    private final String preEncodedPassword = "$2a$10$ifVMES9Y3Mrd5e96KPF2VuZIlh6cRJbHQY/GEflRx/KJV2PKqXwae";
+    private static String refreshToken;
 
     private static String accessToken;
 
@@ -71,12 +71,17 @@ class AuthControllerIntegratedTests {
 
         LoginResponseDTO responseDTO = (LoginResponseDTO) JsonUtils.asObject(result, LoginResponseDTO.class);
         LOG.info("responseDTO = {}", responseDTO.toString());
+
+        /* Pre-generated encoded password for the user (password: 123) */
+        String preEncodedPassword = "$2a$10$ifVMES9Y3Mrd5e96KPF2VuZIlh6cRJbHQY/GEflRx/KJV2PKqXwae";
         boolean validatePassword = passwordUtils.validateLoginPassword(testUser.getPassword(), preEncodedPassword);
+
         Assertions.assertTrue(validatePassword);
         Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
         Assertions.assertNotNull(responseDTO.getUserId());
         Assertions.assertNotNull(responseDTO.getRefreshToken());
         Assertions.assertNotNull(responseDTO.getAccessToken());
+
         /* Confirm that the user was successfully created */
         Assertions.assertNotNull(userRepository.findByEmail(testUser.getEmail()));
     }
@@ -97,8 +102,11 @@ class AuthControllerIntegratedTests {
         LoginResponseDTO responseDTO = (LoginResponseDTO) JsonUtils.asObject(result, LoginResponseDTO.class);
         Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
         Assertions.assertNotNull(responseDTO.getUserId());
+        Assertions.assertNotNull(responseDTO.getRefreshToken());
         Assertions.assertNotNull(responseDTO.getAccessToken());
 
+        /* Set Refresh Token */
+        refreshToken = responseDTO.getRefreshToken();
         /* Set Access Token */
         accessToken = responseDTO.getAccessToken();
         /* Set userId */
@@ -146,6 +154,50 @@ class AuthControllerIntegratedTests {
 
     @Test
     @Order(5)
+    void refreshToken() throws Exception {
+        LOG.info(CLASS_NAME + "::refreshToken");
+        User testUser = getTestUser();
+
+        String result = mockMvc.perform(post("/api/auth/refreshToken")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .param("userEmail", testUser.getEmail())
+                        .param("refreshToken", refreshToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        RefreshTokenResponseDTO responseDTO = (RefreshTokenResponseDTO) JsonUtils.asObject(result, RefreshTokenResponseDTO.class);
+        Assertions.assertNotNull(responseDTO.getAccessToken());
+
+        /* Set Access Token */
+        accessToken = responseDTO.getAccessToken();
+    }
+
+    @Test
+    @Order(6)
+    void refreshTokenUsingExpiredRefreshToken() throws Exception {
+        LOG.info(CLASS_NAME + "::refreshTokenUsingExpiredRefreshToken");
+        User testUser = getTestUser();
+
+        String result = mockMvc.perform(post("/api/auth/refreshToken")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .param("userEmail", testUser.getEmail())
+                        .param("refreshToken", refreshToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        RefreshTokenResponseDTO responseDTO = (RefreshTokenResponseDTO) JsonUtils.asObject(result, RefreshTokenResponseDTO.class);
+        Assertions.assertNotNull(responseDTO.getAccessToken());
+
+        /* Set Access Token */
+        accessToken = responseDTO.getAccessToken();
+    }
+
+    @Test
+    @Order(7)
     void updateUser() throws Exception {
         LOG.info(CLASS_NAME + "::updateUser");
         User testUser = getTestUser();
@@ -163,6 +215,7 @@ class AuthControllerIntegratedTests {
         LoginResponseDTO responseDTO = (LoginResponseDTO) JsonUtils.asObject(result, LoginResponseDTO.class);
         Assertions.assertEquals(responseDTO.getEmail(), updatedUser.getEmail());
         Assertions.assertNotNull(responseDTO.getUserId());
+        Assertions.assertNotNull(responseDTO.getRefreshToken());
         Assertions.assertNotNull(responseDTO.getAccessToken());
 
         /* Set Access Token */

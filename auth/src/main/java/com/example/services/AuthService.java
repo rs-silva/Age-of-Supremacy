@@ -74,7 +74,7 @@ public class AuthService {
         User user = refreshToken.getUser();
 
         if (!userEmail.equals(user.getEmail())) {
-            LOG.error("Token {} does not belong to the user with email {}", refreshToken.getToken(), user.getEmail());
+            LOG.error("Refresh Token {} does not belong to the user with email {}", refreshToken.getToken(), user.getEmail());
             throw new RefreshTokenException(AuthConstants.REFRESH_TOKEN_DOES_NOT_BELONG_TO_USER);
         }
 

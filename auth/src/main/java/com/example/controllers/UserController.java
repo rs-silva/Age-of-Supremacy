@@ -50,9 +50,9 @@ public class UserController {
 
     @DeleteMapping("{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable String userId,
-                                             @RequestParam String currentUserEmail) {
+                                             @RequestParam String userEmail) {
         LOG.info("Delete user with id {}", userId);
-        userService.deleteUser(userId, currentUserEmail);
+        userService.deleteUser(userId, userEmail);
 
         return ResponseEntity.ok().build();
     }
