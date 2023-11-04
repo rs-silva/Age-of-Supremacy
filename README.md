@@ -1,3 +1,3 @@
 # Age of Supremacy
 
-Backend for Browser Modern Era Real Time Strategy game
+Backend for a Modern Era Real Time Strategy browser

@@ -13,7 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>age-of-supremacy</name>
-	<description>Backend for Browser Modern Era Real Time Strategy game</description>
+	<description>Backend for a Modern Era Real Time Strategy browser</description>
 	<modules>
 		<module>auth</module>
 		<module>coverage-report</module>
