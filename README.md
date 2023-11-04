@@ -72,3 +72,11 @@ Backend for a Modern Era Real Time Strategy browser
 and Counterintelligence.
 
 **Strategic Defense Center:** Gathering of all base defenses.
+
+## Resources Growth Formula
+
+$`100 * (1.12^2)`$
+
+$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+
+This sentence uses `$` delimiters to show math inline:  $\sqrt{3x-1}+(1+x)^2$
