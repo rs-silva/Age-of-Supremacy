@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/user")
@@ -41,7 +42,7 @@ public class UserController {
 
     @PutMapping("{userId}")
     public ResponseEntity<LoginResponseDTO> updateUser(@Valid @RequestBody User updatedUser,
-                                                       @PathVariable String userId,
+                                                       @PathVariable UUID userId,
                                                        @RequestParam String currentUserEmail) {
         LOG.info("Update user = {} with {}", currentUserEmail, updatedUser.toString());
         LoginResponseDTO response = userService.updateUser(userId, currentUserEmail, updatedUser);
@@ -49,7 +50,7 @@ public class UserController {
     }
 
     @DeleteMapping("{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable String userId,
+    public ResponseEntity<String> deleteUser(@PathVariable UUID userId,
                                              @RequestParam String userEmail) {
         LOG.info("Delete user with id {}", userId);
         userService.deleteUser(userId, userEmail);

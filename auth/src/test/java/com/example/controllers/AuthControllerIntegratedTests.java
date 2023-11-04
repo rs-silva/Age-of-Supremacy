@@ -26,6 +26,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,7 +55,7 @@ class AuthControllerIntegratedTests {
 
     private static String accessToken;
 
-    private static Long userId;
+    private static UUID userId;
 
     @Test
     @Order(0)
@@ -158,7 +159,7 @@ class AuthControllerIntegratedTests {
         LOG.info(CLASS_NAME + "::refreshToken");
         User testUser = getTestUser();
 
-        String result = mockMvc.perform(post("/api/auth/refreshToken")
+        String result = mockMvc.perform(get("/api/auth/refreshToken")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("userEmail", testUser.getEmail())
                         .param("refreshToken", refreshToken)
@@ -180,7 +181,7 @@ class AuthControllerIntegratedTests {
         LOG.info(CLASS_NAME + "::refreshTokenUsingExpiredRefreshToken");
         User testUser = getTestUser();
 
-        String result = mockMvc.perform(post("/api/auth/refreshToken")
+        String result = mockMvc.perform(get("/api/auth/refreshToken")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("userEmail", testUser.getEmail())
                         .param("refreshToken", refreshToken)
@@ -228,7 +229,7 @@ class AuthControllerIntegratedTests {
         LOG.info(CLASS_NAME + "::updateUserUsingInvalidId");
         User testUser = getTestUser();
         User updatedUser = new User("test2@mail.com", "1234");
-        mockMvc.perform(put("/api/user/9876543210")
+        mockMvc.perform(put("/api/user/" + UUID.randomUUID())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", testUser.getEmail())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -281,7 +282,7 @@ class AuthControllerIntegratedTests {
     void deleteUser() throws Exception {
         LOG.info(CLASS_NAME + "::deleteUser");
 
-        mockMvc.perform(delete("/api/user/" + userId)
+        mockMvc.perform(delete("/api/user/" + userId.toString())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("userEmail", "test2@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -299,7 +300,7 @@ class AuthControllerIntegratedTests {
 
         mockMvc.perform(delete("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                        .param("currentUserEmail", "test2@mail.com")
+                        .param("userEmail", "test2@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());

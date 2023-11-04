@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -38,8 +39,8 @@ public class UserService {
         this.refreshTokenService = refreshTokenService;
     }
 
-    public LoginResponseDTO updateUser(String userId, String currentUserEmail, User updatedUser) {
-        User userFromId = findById(Long.valueOf(userId));
+    public LoginResponseDTO updateUser(UUID userId, String currentUserEmail, User updatedUser) {
+        User userFromId = findById(userId);
 
         validateUserEmailFromRequestParam(userFromId, currentUserEmail);
         validateTokenEmail(currentUserEmail);
@@ -55,14 +56,14 @@ public class UserService {
         return new LoginResponseDTO(newUser.getId(), newUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
-    public void deleteUser(String userId, String currentUserEmail) {
-        User userFromId = findById(Long.valueOf(userId));
+    public void deleteUser(UUID userId, String currentUserEmail) {
+        User userFromId = findById(userId);
 
         validateUserEmailFromRequestParam(userFromId, currentUserEmail);
         validateTokenEmail(currentUserEmail);
 
         refreshTokenService.deleteByUser(userFromId);
-        userRepository.deleteById(Long.valueOf(userId));
+        userRepository.deleteById(userId);
     }
 
     private void validateUserEmailFromRequestParam(User userFromId, String email) {
@@ -97,7 +98,7 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public User findById(Long id) {
+    public User findById(UUID id) {
         Optional<User> user = userRepository.findById(id);
 
         if (user.isEmpty()) {
