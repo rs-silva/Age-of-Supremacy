@@ -75,7 +75,7 @@ and Counterintelligence.
 
 ## Resources Growth Formula
 
-$`100 * (1.12^2)`$
+$100 * (1.12^2)$
 
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
