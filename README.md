@@ -75,7 +75,7 @@ and Counterintelligence.
 
 ## Resources Growth Formula
 
-$100 * \times (1.12^{x})$
+$100 \times (1.12^{x})$
 
 Where x corresponds to the building level.
 
