@@ -75,8 +75,8 @@ and Counterintelligence.
 
 ## Resources Growth Formula
 
-$100 * (1.12^2)$
+$100 * (1.12^x)$
 
-$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+Where x corresponds to the building level.
 
-This sentence uses `$` delimiters to show math inline:  $\sqrt{3x-1}+(1+x)^2$
+So a level 10 building will produce $100 * (1.12^10 = 310.58)$ resources per hour.
