@@ -283,7 +283,7 @@ class AuthControllerIntegratedTests {
 
         mockMvc.perform(delete("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                        .param("currentUserEmail", "test2@mail.com")
+                        .param("userEmail", "test2@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

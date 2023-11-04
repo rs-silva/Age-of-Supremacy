@@ -9,14 +9,13 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>banking-parent</artifactId>
+	<artifactId>age-of-supremacy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>banking-parent</name>
-	<description>Demo project for a Banking Service</description>
+	<name>age-of-supremacy</name>
+	<description>Backend for Browser Modern Era Real Time Strategy game</description>
 	<modules>
 		<module>auth</module>
-		<module>account-operations</module>
 		<module>coverage-report</module>
 	</modules>
 	<properties>
