@@ -79,4 +79,4 @@ $100 * (1.12^x)$
 
 Where x corresponds to the building level.
 
-So a level 10 building will produce $100 * (1.12^(10) = 310.58)$ resources per hour.
+So a level 10 building will produce $100 * (1.12^10) = 310.58$ resources per hour.
