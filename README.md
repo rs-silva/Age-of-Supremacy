@@ -32,7 +32,7 @@ Backend for a Modern Era Real Time Strategy browser
 
 ## Resource List
 
-**Construction Materials**: Machinery can represent the manufacturing capacity of your cities. It can be used for construction and upgrading buildings and units.
+**Construction Materials**: It can be used for construction and upgrading buildings.
 
 **Steel:** Steel can be a fundamental resource for producing military units, buildings, and infrastructure. It's a vital component for modern weapons and machinery.
 
