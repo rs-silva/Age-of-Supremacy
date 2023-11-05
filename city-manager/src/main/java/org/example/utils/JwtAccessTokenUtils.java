@@ -14,10 +14,8 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,15 +30,8 @@ public class JwtAccessTokenUtils {
 
     private final HttpServletRequest request;
 
-    @Value("${jwt.accessTokenExpirationMs}")
-    private Long JWT_ACCESS_TOKEN_VALIDITY;
-
     public JwtAccessTokenUtils(HttpServletRequest request) {
         this.request = request;
-    }
-
-    private Date getExpirationDate() {
-        return new Date(System.currentTimeMillis() + JWT_ACCESS_TOKEN_VALIDITY);
     }
 
     private Key getSigningKey() {
