@@ -3,7 +3,9 @@ package com.example.controllers;
 import com.example.dto.LoginResponseDTO;
 import com.example.dto.RefreshTokenResponseDTO;
 import com.example.exceptions.ErrorMessage;
+import com.example.models.RefreshToken;
 import com.example.models.User;
+import com.example.repositories.RefreshTokenRepository;
 import com.example.repositories.UserRepository;
 import com.example.utils.AuthConstants;
 import com.example.utils.JsonUtils;
@@ -25,6 +27,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,6 +55,9 @@ class AuthControllerIntegratedTests {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
 
     private static String refreshToken;
 
@@ -120,24 +128,33 @@ class AuthControllerIntegratedTests {
         LOG.info(CLASS_NAME + "::attemptToRegisterUserThatAlreadyExists");
         User testUser = getTestUser();
 
-        mockMvc.perform(post("/api/auth/register")
+        String result = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(testUser)))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andReturn().getResponse().getContentAsString();
+
+        ErrorMessage errorMessage = (ErrorMessage) JsonUtils.asObject(result, ErrorMessage.class);
+        Assertions.assertEquals(String.format(AuthConstants.USER_ALREADY_EXISTS_EXCEPTION, testUser.getEmail()), errorMessage.getMessage());
     }
 
     @Test
     @Order(3)
     void attemptToLoginUserThatDoesNotExist() throws Exception {
         LOG.info(CLASS_NAME + "::attemptToLoginUserThatDoesNotExist");
-        User testUser = new User("unknown@mail.com", "123");
+        String unknownEmail = "unknown@mail.com";
+        User testUser = new User(unknownEmail, "123");
 
-        mockMvc.perform(post("/api/auth/login")
+        String result = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(testUser)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
+
+        ErrorMessage errorMessage = (ErrorMessage) JsonUtils.asObject(result, ErrorMessage.class);
+        Assertions.assertEquals(String.format(AuthConstants.USER_WITH_EMAIL_NOT_FOUND_EXCEPTION, unknownEmail), errorMessage.getMessage());
     }
 
     @Test
@@ -146,11 +163,15 @@ class AuthControllerIntegratedTests {
         LOG.info(CLASS_NAME + "::attemptToLoginUserUsingWrongCredentials");
         User testUser = new User("test@mail.com", "1234");
 
-        mockMvc.perform(post("/api/auth/login")
+        String result = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(testUser)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andReturn().getResponse().getContentAsString();
+
+        ErrorMessage errorMessage = (ErrorMessage) JsonUtils.asObject(result, ErrorMessage.class);
+        Assertions.assertEquals(AuthConstants.WRONG_LOGIN_CREDENTIALS, errorMessage.getMessage());
     }
 
     @Test
@@ -181,24 +202,47 @@ class AuthControllerIntegratedTests {
         LOG.info(CLASS_NAME + "::refreshTokenUsingExpiredRefreshToken");
         User testUser = getTestUser();
 
+        /* Force expire current Refresh Token for this user */
+        RefreshToken refreshTokenToExpire = refreshTokenRepository.findByToken(refreshToken);
+        Date date = new GregorianCalendar(1970, Calendar.JANUARY, 1).getTime();
+        refreshTokenToExpire.setExpiryDate(date);
+        refreshTokenRepository.save(refreshTokenToExpire);
+
         String result = mockMvc.perform(get("/api/auth/refreshToken")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("userEmail", testUser.getEmail())
                         .param("refreshToken", refreshToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isForbidden())
                 .andReturn().getResponse().getContentAsString();
 
-        RefreshTokenResponseDTO responseDTO = (RefreshTokenResponseDTO) JsonUtils.asObject(result, RefreshTokenResponseDTO.class);
-        Assertions.assertNotNull(responseDTO.getAccessToken());
-
-        /* Set Access Token */
-        accessToken = responseDTO.getAccessToken();
+        ErrorMessage errorMessage = (ErrorMessage) JsonUtils.asObject(result, ErrorMessage.class);
+        Assertions.assertEquals(AuthConstants.REFRESH_TOKEN_EXPIRED, errorMessage.getMessage());
     }
 
     @Test
     @Order(7)
+    void refreshTokenUsingInvalidRefreshToken() throws Exception {
+        LOG.info(CLASS_NAME + "::refreshTokenUsingInvalidRefreshToken");
+        User testUser = getTestUser();
+        UUID invalidRefreshToken = UUID.randomUUID();
+
+        String result = mockMvc.perform(get("/api/auth/refreshToken")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .param("userEmail", testUser.getEmail())
+                        .param("refreshToken", String.valueOf(invalidRefreshToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andReturn().getResponse().getContentAsString();
+
+        ErrorMessage errorMessage = (ErrorMessage) JsonUtils.asObject(result, ErrorMessage.class);
+        Assertions.assertEquals(AuthConstants.REFRESH_TOKEN_NOT_FOUND, errorMessage.getMessage());
+    }
+
+    @Test
+    @Order(8)
     void updateUser() throws Exception {
         LOG.info(CLASS_NAME + "::updateUser");
         User testUser = getTestUser();
@@ -224,22 +268,28 @@ class AuthControllerIntegratedTests {
     }
 
     @Test
-    @Order(6)
+    @Order(9)
     void updateUserUsingInvalidId() throws Exception {
         LOG.info(CLASS_NAME + "::updateUserUsingInvalidId");
         User testUser = getTestUser();
         User updatedUser = new User("test2@mail.com", "1234");
-        mockMvc.perform(put("/api/user/" + UUID.randomUUID())
+        UUID invalidUUID = UUID.randomUUID();
+
+        String result = mockMvc.perform(put("/api/user/" + invalidUUID)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("currentUserEmail", testUser.getEmail())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.asJsonString(updatedUser)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
+
+        ErrorMessage errorMessage = (ErrorMessage) JsonUtils.asObject(result, ErrorMessage.class);
+        Assertions.assertEquals(String.format(AuthConstants.USER_WITH_ID_NOT_FOUND_EXCEPTION, invalidUUID), errorMessage.getMessage());
     }
 
     @Test
-    @Order(7)
+    @Order(10)
     void updateUserUsingInvalidEmailInRequestParameter() throws Exception {
         LOG.info(CLASS_NAME + "::updateUserUsingInvalidEmailInRequestParameter");
         User updatedUser = new User("test2@mail.com", "1234");
@@ -258,7 +308,7 @@ class AuthControllerIntegratedTests {
     }
 
     @Test
-    @Order(8)
+    @Order(11)
     void updateUserUsingTokenWithDifferentEmail() throws Exception {
         LOG.info(CLASS_NAME + "::updateUserUsingTokenWithDifferentEmail");
         String invalidAccessToken = "eyJhbGciOiJIUzUxMiJ9.eyJST0xFUyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJzdWIiOiJ1c2VyQG1haWwuY29tIiwiaWF0IjoxNjk2ODA3ODM3LCJleHAiOjkyMjMzNzIwMzY4NTQ3NzV9.RFgN8mxlhwHTHDMlvGfyTi-U0H7p7V8aesZG_xhpUt95C0MERWhk_fmLNV528T3vsgMHhydPl4hPqsGnhfMDeg";
@@ -278,7 +328,7 @@ class AuthControllerIntegratedTests {
     }
 
     @Test
-    @Order(9)
+    @Order(12)
     void deleteUser() throws Exception {
         LOG.info(CLASS_NAME + "::deleteUser");
 
@@ -294,21 +344,25 @@ class AuthControllerIntegratedTests {
     }
 
     @Test
-    @Order(10)
-    void deleteUserUsingInvalidEmail() throws Exception {
-        LOG.info(CLASS_NAME + "::deleteUserUsingInvalidEmail");
+    @Order(13)
+    void deleteUserUsingInvalidId() throws Exception {
+        LOG.info(CLASS_NAME + "::deleteUserUsingInvalidId");
 
-        mockMvc.perform(delete("/api/user/" + userId)
+        String result = mockMvc.perform(delete("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                         .param("userEmail", "test2@mail.com")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
+
+        ErrorMessage errorMessage = (ErrorMessage) JsonUtils.asObject(result, ErrorMessage.class);
+        Assertions.assertEquals(String.format(AuthConstants.USER_WITH_ID_NOT_FOUND_EXCEPTION, userId), errorMessage.getMessage());
     }
 
     @WithMockUser(authorities = "ROLE_ADMIN")
     @Test
-    @Order(11)
+    @Order(14)
     void findAllUsers() throws Exception {
         /* Add user to database to test */
         userRepository.save(getTestUser());
@@ -327,7 +381,7 @@ class AuthControllerIntegratedTests {
     }
 
     @Test
-    @Order(12)
+    @Order(15)
     void findAllUsersWithoutAdminRole() throws Exception {
         LOG.info(CLASS_NAME + "::findAllUsersWithoutAdminRole");
 

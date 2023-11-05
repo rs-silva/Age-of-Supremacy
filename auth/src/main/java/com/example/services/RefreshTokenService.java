@@ -34,7 +34,7 @@ public class RefreshTokenService {
 
         if (refreshToken == null) {
             LOG.error("Refresh token {} was not found in the database", token);
-            throw new ResourceNotFoundException(AuthConstants.REFRESH_TOKEN_NOT_FOUND);
+            throw new RefreshTokenException(AuthConstants.REFRESH_TOKEN_NOT_FOUND);
         }
 
         return refreshToken;

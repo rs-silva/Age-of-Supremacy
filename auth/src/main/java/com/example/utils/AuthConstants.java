@@ -2,8 +2,6 @@ package com.example.utils;
 
 public abstract class AuthConstants {
 
-    public static final String ACCESS_DENIED_TO_RESOURCE = "User %s attempted to access resource %s without the required permissions.";
-
     public static final String USER_WITH_EMAIL_NOT_FOUND_EXCEPTION = "User with email %s was not found!";
 
     public static final String USER_WITH_ID_NOT_FOUND_EXCEPTION = "User with id %s was not found!";

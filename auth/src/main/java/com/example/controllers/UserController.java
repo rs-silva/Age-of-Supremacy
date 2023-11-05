@@ -30,14 +30,8 @@ public class UserController {
 
     private final UserService userService;
 
-    private final RefreshTokenService refreshTokenService;
-
-    private final JwtAccessTokenUtils jwtAccessTokenUtils;
-
-    public UserController(UserService userService, RefreshTokenService refreshTokenService, JwtAccessTokenUtils jwtAccessTokenUtils) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.refreshTokenService = refreshTokenService;
-        this.jwtAccessTokenUtils = jwtAccessTokenUtils;
     }
 
     @PutMapping("{userId}")
