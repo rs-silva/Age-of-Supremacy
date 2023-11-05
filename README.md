@@ -81,8 +81,10 @@ Where $x$ corresponds to the building level and $k$ corresponds to the server gr
 
 So in a server with growing factor 1, a level 10 building will produce $1 \times 30 \times 1.1659144^{10} = 139.25$ resources per hour.
 
-## Warehouse
+## Warehouse's capacity
 
 $k \times 1000 \times 1.230171515^{x}$
 
 Where $k$ is the server growing factor and $x$ is the warehouse's level.
+
+So in a server with growing factor 1, a level 10 warhouse will be able to store $1 \times 1000 \times 1.230171515^{10} = 7937$ of each resource.
