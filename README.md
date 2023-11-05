@@ -87,4 +87,4 @@ $k \times 1000 \times 1.230171515^{x}$
 
 Where $k$ is the server growing factor and $x$ is the warehouse's level.
 
-So in a server with growing factor 1, a level 10 warhouse will be able to store $1 \times 1000 \times 1.230171515^{10} = 7937$ of each resource.
+So in a server with growing factor 1, a level 10 warehouse will be able to store $1 \times 1000 \times 1.230171515^{10} = 7937$ of each resource.
