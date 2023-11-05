@@ -22,11 +22,6 @@ public class SecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
 
     private static final String[] PUBLIC_MATCHERS = {
-            "/api/auth/register",
-            "/api/auth/login",
-            "/api/users",
-            "/api/users/*",
-            "/error"
     };
 
     public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
@@ -41,8 +36,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers(antMatcher("/error")).permitAll()
                 .requestMatchers(antMatcher("/h2-console/**")).permitAll()
-                .requestMatchers(antMatcher("/api/auth/register")).permitAll()
-                .requestMatchers(antMatcher("/api/auth/login")).permitAll()
                 .anyRequest().authenticated()
                 );
                 /*.formLogin()
@@ -60,11 +53,6 @@ public class SecurityConfig {
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-    }
-
-    @Bean
-    public static BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
     }
 
 }
