@@ -54,5 +54,13 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("logout")
+    public ResponseEntity<RefreshTokenResponseDTO> logout(@RequestParam String userEmail) {
+        LOG.info("Logging out user {}", userEmail);
+        authService.logout(userEmail);
+
+        return ResponseEntity.ok().build();
+    }
+
 }
 

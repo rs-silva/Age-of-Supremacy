@@ -2,9 +2,7 @@ package com.example.controllers;
 
 import com.example.dto.LoginResponseDTO;
 import com.example.models.User;
-import com.example.services.RefreshTokenService;
 import com.example.services.UserService;
-import com.example.utils.JwtAccessTokenUtils;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

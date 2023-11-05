@@ -12,6 +12,8 @@ import com.example.utils.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -68,6 +70,17 @@ public class AuthService {
 
         String accessToken = jwtAccessTokenUtils.generateAccessToken(user);
         return new RefreshTokenResponseDTO(accessToken);
+    }
+
+    public void logout(String userEmail) {
+        userService.validateTokenEmail(userEmail);
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        SecurityContextHolder.clearContext();
+        context.setAuthentication(null);
+
+        User user = userService.findByEmail(userEmail);
+        refreshTokenService.deleteByUser(user);
     }
 
     private User validateUserFromRequest(String userEmail, RefreshToken refreshToken) {

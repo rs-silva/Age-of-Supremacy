@@ -5,7 +5,6 @@ import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.repositories.RefreshTokenRepository;
 import com.example.utils.AuthConstants;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,7 +55,6 @@ public class RefreshTokenService {
         }
     }
 
-    @Transactional
     public void deleteByUser(User user) {
         refreshTokenRepository.deleteByUser(user);
     }

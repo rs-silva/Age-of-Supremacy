@@ -10,6 +10,7 @@ import com.example.repositories.UserRepository;
 import com.example.services.RefreshTokenService;
 import com.example.utils.AuthConstants;
 import com.example.utils.JsonUtils;
+import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.PasswordUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
@@ -63,6 +64,9 @@ class AuthControllerIntegratedTests {
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private JwtAccessTokenUtils jwtAccessTokenUtils;
 
     private static String refreshToken;
 
@@ -294,6 +298,9 @@ class AuthControllerIntegratedTests {
         Assertions.assertNotNull(responseDTO.getRefreshToken());
         Assertions.assertNotNull(responseDTO.getAccessToken());
 
+        /* Set Refresh Token */
+        refreshToken = responseDTO.getRefreshToken();
+
         /* Set Access Token */
         accessToken = responseDTO.getAccessToken();
 
@@ -407,8 +414,8 @@ class AuthControllerIntegratedTests {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        /*LOG.info("response = {}", response);
-        List<User> usersList = (List<User>)(Object) JsonUtils.asObjectList(response, User.class);
+        LOG.info("findAllUsers response = {}", response);
+        /*List<User> usersList = (List<User>)(Object) JsonUtils.asObjectList(response, User.class);
         LOG.info("usersList = {}", usersList);
         Assertions.assertEquals(1, usersList.size());*/
     }
@@ -423,6 +430,26 @@ class AuthControllerIntegratedTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Order(17)
+    void logout() throws Exception {
+        LOG.info(CLASS_NAME + "::logout");
+        User user = getTestUser();
+        User databaseUser = userRepository.save(user);
+        String accessToken = jwtAccessTokenUtils.generateAccessToken(databaseUser);
+        RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
+
+        mockMvc.perform(post("/api/auth/logout")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .param("userEmail", "test@mail.com")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        /* Confirm that the Refresh Token was deleted */
+        Assertions.assertNull(refreshTokenRepository.findByToken(refreshToken.getToken()));
     }
 
     private User getTestUser() {
