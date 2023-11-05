@@ -1,7 +1,6 @@
 package com.example.services;
 
 import com.example.exceptions.RefreshTokenException;
-import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.repositories.RefreshTokenRepository;
@@ -47,8 +46,7 @@ public class RefreshTokenService {
         refreshToken.setExpiryDate(getExpirationDate());
         refreshToken.setToken(doGenerateAccessToken());
 
-        refreshToken = refreshTokenRepository.save(refreshToken);
-        return refreshToken;
+        return refreshTokenRepository.save(refreshToken);
     }
 
     public void verifyExpiration(RefreshToken token) {

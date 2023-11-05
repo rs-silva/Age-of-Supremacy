@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,8 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@Entity(name = "refreshtoken")
+@Entity
+@Table(name = "refresh_token")
 public class RefreshToken {
 
     @Id

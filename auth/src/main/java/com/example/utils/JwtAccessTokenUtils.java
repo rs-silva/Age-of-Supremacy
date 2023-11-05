@@ -1,7 +1,6 @@
 package com.example.utils;
 
 import com.example.models.User;
-import com.example.services.RefreshTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

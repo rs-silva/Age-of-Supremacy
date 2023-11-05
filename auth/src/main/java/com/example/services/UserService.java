@@ -11,6 +11,7 @@ import com.example.utils.AuthConstants;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.PasswordUtils;
 import com.example.utils.UserUtils;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class UserService {
         this.refreshTokenService = refreshTokenService;
     }
 
+    @Transactional
     public LoginResponseDTO updateUser(UUID userId, String currentUserEmail, User updatedUser) {
         User userFromId = findById(userId);
 
@@ -56,6 +58,7 @@ public class UserService {
         return new LoginResponseDTO(newUser.getId(), newUser.getEmail(), refreshToken.getToken(), accessToken);
     }
 
+    @Transactional
     public void deleteUser(UUID userId, String currentUserEmail) {
         User userFromId = findById(userId);
 
