@@ -80,3 +80,9 @@ $k \times 30 \times 1.1659144^{x}$
 Where $x$ corresponds to the building level and $k$ corresponds to the server growing factor (default is 1).
 
 So in a server with growing factor 1, a level 10 building will produce $1 \times 30 \times 1.1659144^{10} = 139.25$ resources per hour.
+
+## Warehouse
+
+$k \times 1000 \times 1.230171515^{x}$
+
+Where $k$ is the server growing factor and $x$ is the warehouse's level.
