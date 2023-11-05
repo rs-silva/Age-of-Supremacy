@@ -77,6 +77,6 @@ and Counterintelligence.
 
 $k \times 30 \times (1.165914^{x})$
 
-Where $x$ corresponds to the building level and $k$ corresponds to a server growing factor (default is 1).
+Where $x$ corresponds to the building level and $k$ corresponds to the server growing factor (default is 1).
 
 So in a server with growing factor 1, a level 10 building will produce $1 \times 30 \times (1.165914^{10}) = 310.58$ resources per hour.
