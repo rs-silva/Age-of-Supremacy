@@ -1,0 +1,425 @@
+{
+	"info": {
+		"_postman_id": "327ee33d-593a-4a55-b59e-e79e08b13263",
+		"name": "Age of Supremacy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25912313"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "AuthController",
+					"item": [
+						{
+							"name": "register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var response = pm.response.json();\r",
+											"\r",
+											"if (pm.response.code === 201) {\r",
+											"\r",
+											"    var userId = response.userId;\r",
+											"    var userEmail = response.email;\r",
+											"    var refreshToken = response.refreshToken;\r",
+											"    var accessToken = response.accessToken;\r",
+											"\r",
+											"    pm.environment.set(\"USER_ID\", userId);\r",
+											"    pm.environment.set(\"USER_EMAIL\", userEmail);\r",
+											"    pm.environment.set(\"REFRESH_TOKEN\", refreshToken);\r",
+											"    pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+											"\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"email\" : \"test@mail.com\",\r\n   \"password\" : \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST_AUTH}}/api/auth/register",
+									"host": [
+										"{{LOCALHOST_AUTH}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var response = pm.response.json();\r",
+											"\r",
+											"if (pm.response.code === 200) {\r",
+											"\r",
+											"    var userId = response.userId;\r",
+											"    var userEmail = response.email;\r",
+											"    var refreshToken = response.refreshToken;\r",
+											"    var accessToken = response.accessToken;\r",
+											"\r",
+											"    pm.environment.set(\"USER_ID\", userId);\r",
+											"    pm.environment.set(\"USER_EMAIL\", userEmail);\r",
+											"    pm.environment.set(\"REFRESH_TOKEN\", refreshToken);\r",
+											"    pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+											"\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"email\" : \"test@mail.com\",\r\n   \"password\" : \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST_AUTH}}/api/auth/login",
+									"host": [
+										"{{LOCALHOST_AUTH}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "refreshToken",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var response = pm.response.json();\r",
+											"\r",
+											"if (pm.response.code === 200) {\r",
+											"\r",
+											"    var accessToken = response.accessToken;\r",
+											"\r",
+											"    pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+											"\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST_AUTH}}/api/auth/refreshToken?userEmail={{USER_EMAIL}}&refreshToken={{REFRESH_TOKEN}}",
+									"host": [
+										"{{LOCALHOST_AUTH}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"refreshToken"
+									],
+									"query": [
+										{
+											"key": "userEmail",
+											"value": "{{USER_EMAIL}}"
+										},
+										{
+											"key": "refreshToken",
+											"value": "{{REFRESH_TOKEN}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {\r",
+											"\r",
+											"    pm.environment.set(\"USER_ID\", \"\");\r",
+											"    pm.environment.set(\"USER_EMAIL\", \"\");\r",
+											"    pm.environment.set(\"REFRESH_TOKEN\", \"\");\r",
+											"    pm.environment.set(\"ACCESS_TOKEN\", \"\");\r",
+											"\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST_AUTH}}/api/auth/logout?userEmail={{USER_EMAIL}}",
+									"host": [
+										"{{LOCALHOST_AUTH}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"logout"
+									],
+									"query": [
+										{
+											"key": "userEmail",
+											"value": "{{USER_EMAIL}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "UserController",
+					"item": [
+						{
+							"name": "updateUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var response = pm.response.json();\r",
+											"\r",
+											"if (pm.response.code === 200) {\r",
+											"\r",
+											"    var userId = response.userId;\r",
+											"    var userEmail = response.email;\r",
+											"    var refreshToken = response.refreshToken;\r",
+											"    var accessToken = response.accessToken;\r",
+											"\r",
+											"    pm.environment.set(\"USER_ID\", userId);\r",
+											"    pm.environment.set(\"USER_EMAIL\", userEmail);\r",
+											"    pm.environment.set(\"REFRESH_TOKEN\", refreshToken);\r",
+											"    pm.environment.set(\"ACCESS_TOKEN\", accessToken);\r",
+											"\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"email\" : \"test2@mail.com\",\r\n   \"password\" : \"1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST_AUTH}}/api/user/{{USER_ID}}?currentUserEmail={{USER_EMAIL}}",
+									"host": [
+										"{{LOCALHOST_AUTH}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"{{USER_ID}}"
+									],
+									"query": [
+										{
+											"key": "currentUserEmail",
+											"value": "{{USER_EMAIL}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteUser",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{LOCALHOST_AUTH}}/api/user/{{USER_ID}}?userEmail={{USER_EMAIL}}",
+									"host": [
+										"{{LOCALHOST_AUTH}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"{{USER_ID}}"
+									],
+									"query": [
+										{
+											"key": "userEmail",
+											"value": "{{USER_EMAIL}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findAllUsers",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST_AUTH}}/api/user/findAll",
+									"host": [
+										"{{LOCALHOST_AUTH}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"findAll"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "ACCESS_TOKEN",
+			"value": ""
+		}
+	]
+}
