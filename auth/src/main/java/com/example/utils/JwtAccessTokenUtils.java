@@ -41,14 +41,15 @@ public class JwtAccessTokenUtils {
     }
 
     public String generateAccessToken(User user) {
-        Map<String, Set<GrantedAuthority>> roles = new HashMap<>();
-        roles.put("ROLES", user.getAuthorities());
+        Map<String, Set<GrantedAuthority>> claims = new HashMap<>();
+        claims.put("ROLES", user.getAuthorities());
 
         return Jwts.builder()
-                .setClaims(roles)
+                .setClaims(claims)
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(getExpirationDate())
+                .setHeaderParam("USERNAME", user.getUsername())
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }

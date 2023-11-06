@@ -35,6 +35,9 @@ public class User {
     @NotNull
     private String password;
 
+    @NotNull
+    private String username;
+
     @ElementCollection
     private Set<GrantedAuthority> authorities = new HashSet<>();
 
