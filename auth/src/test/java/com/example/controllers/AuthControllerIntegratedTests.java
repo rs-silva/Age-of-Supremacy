@@ -9,9 +9,9 @@ import com.example.repositories.RefreshTokenRepository;
 import com.example.repositories.UserRepository;
 import com.example.services.RefreshTokenService;
 import com.example.utils.AuthConstants;
-import com.example.utils.JsonUtils;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.PasswordUtils;
+import org.example.utils.JsonUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -33,7 +33,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
