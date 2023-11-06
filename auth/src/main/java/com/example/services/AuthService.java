@@ -1,5 +1,6 @@
 package com.example.services;
 
+import com.example.dto.LoginRequestDTO;
 import com.example.dto.LoginResponseDTO;
 import com.example.dto.RefreshTokenResponseDTO;
 import com.example.exceptions.InvalidCredentialsException;
@@ -44,10 +45,10 @@ public class AuthService {
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
         String accessToken = jwtAccessTokenUtils.generateAccessToken(user);
 
-        return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
+        return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), databaseUser.getUsername(), refreshToken.getToken(), accessToken);
     }
 
-    public LoginResponseDTO loginUser(User loginUser) {
+    public LoginResponseDTO loginUser(LoginRequestDTO loginUser) {
         User databaseUser = userService.findByEmail(loginUser.getEmail());
         boolean areCredentialsValid = passwordUtils.validateLoginPassword(loginUser.getPassword(), databaseUser.getPassword());
 
@@ -60,7 +61,7 @@ public class AuthService {
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
         String accessToken = jwtAccessTokenUtils.generateAccessToken(databaseUser);
 
-        return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), refreshToken.getToken(), accessToken);
+        return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), databaseUser.getUsername(), refreshToken.getToken(), accessToken);
     }
 
     public RefreshTokenResponseDTO refreshToken(String userEmail, String token) {

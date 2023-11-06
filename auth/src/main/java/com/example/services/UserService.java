@@ -48,12 +48,12 @@ public class UserService {
         refreshTokenService.deleteByUser(userFromId);
         updatedUser.setPassword(passwordUtils.encodePassword(updatedUser.getPassword()));
         User newUser = UserUtils.updateUser(userFromId, updatedUser);
-        userRepository.save(newUser);
+        User databaseUser = updateUserInTheDatabase(newUser, userId);
 
-        RefreshToken refreshToken = refreshTokenService.generateRefreshToken(newUser);
-        String accessToken = jwtAccessTokenUtils.generateAccessToken(newUser);
+        RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
+        String accessToken = jwtAccessTokenUtils.generateAccessToken(databaseUser);
 
-        return new LoginResponseDTO(newUser.getId(), newUser.getEmail(), refreshToken.getToken(), accessToken);
+        return new LoginResponseDTO(newUser.getId(), newUser.getEmail(), newUser.getUsername(), refreshToken.getToken(), accessToken);
     }
 
     public void deleteUser(UUID userId, String currentUserEmail) {
@@ -91,14 +91,40 @@ public class UserService {
 
         if (user != null) {
             throw new ResourceAlreadyExistsException(
-                    String.format(AuthConstants.USER_ALREADY_EXISTS_EXCEPTION, newUser.getEmail()));
+                    String.format(AuthConstants.USER_WITH_EMAIL_ALREADY_EXISTS, newUser.getEmail()));
+        }
+
+        user = userRepository.findByUsername(newUser.getUsername());
+
+        if (user != null) {
+            throw new ResourceNotFoundException(
+                    String.format(AuthConstants.USER_WITH_USERNAME_ALREADY_EXISTS, newUser.getUsername()));
         }
 
         LOG.info("Added user {} to database!", newUser.getEmail());
         return userRepository.save(newUser);
     }
 
-    public User findById(UUID id) {
+    public User updateUserInTheDatabase(User newUser, UUID userId) {
+        User user = userRepository.findByEmail(newUser.getEmail());
+
+        if (user != null && !user.getId().equals(userId)) {
+            throw new ResourceAlreadyExistsException(
+                    String.format(AuthConstants.USER_WITH_EMAIL_ALREADY_EXISTS, newUser.getEmail()));
+        }
+
+        user = userRepository.findByUsername(newUser.getUsername());
+
+        if (user != null && !user.getId().equals(userId)) {
+            throw new ResourceAlreadyExistsException(
+                    String.format(AuthConstants.USER_WITH_USERNAME_ALREADY_EXISTS, newUser.getUsername()));
+        }
+
+        LOG.info("Updated user {} in the database!", newUser.getEmail());
+        return userRepository.save(newUser);
+    }
+
+    private User findById(UUID id) {
         Optional<User> user = userRepository.findById(id);
 
         if (user.isEmpty()) {

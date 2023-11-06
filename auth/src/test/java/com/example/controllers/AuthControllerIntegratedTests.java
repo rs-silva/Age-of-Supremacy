@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.dto.LoginRequestDTO;
 import com.example.dto.LoginResponseDTO;
 import com.example.dto.RefreshTokenResponseDTO;
 import com.example.exceptions.ErrorMessage;
@@ -96,6 +97,7 @@ class AuthControllerIntegratedTests {
         Assertions.assertTrue(validatePassword);
         Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
         Assertions.assertNotNull(responseDTO.getUserId());
+        Assertions.assertNotNull(responseDTO.getUsername());
         Assertions.assertNotNull(responseDTO.getRefreshToken());
         Assertions.assertNotNull(responseDTO.getAccessToken());
 
@@ -107,18 +109,19 @@ class AuthControllerIntegratedTests {
     @Order(1)
     void loginTest() throws Exception {
         LOG.info(CLASS_NAME + "::loginTest");
-        User testUser = getTestUser();
+        LoginRequestDTO request = new LoginRequestDTO(getTestUser().getEmail(), getTestUser().getPassword());
 
         String result = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(JsonUtils.asJsonString(testUser)))
+                        .content(JsonUtils.asJsonString(request)))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         LoginResponseDTO responseDTO = (LoginResponseDTO) JsonUtils.asObject(result, LoginResponseDTO.class);
-        Assertions.assertEquals(responseDTO.getEmail(), testUser.getEmail());
+        Assertions.assertEquals(responseDTO.getEmail(), request.getEmail());
         Assertions.assertNotNull(responseDTO.getUserId());
+        Assertions.assertNotNull(responseDTO.getUsername());
         Assertions.assertNotNull(responseDTO.getRefreshToken());
         Assertions.assertNotNull(responseDTO.getAccessToken());
 
@@ -134,17 +137,17 @@ class AuthControllerIntegratedTests {
     @Order(2)
     void attemptToRegisterUserThatAlreadyExists() throws Exception {
         LOG.info(CLASS_NAME + "::attemptToRegisterUserThatAlreadyExists");
-        User testUser = getTestUser();
+        User user = getTestUser();
 
         String result = mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(JsonUtils.asJsonString(testUser)))
+                        .content(JsonUtils.asJsonString(user)))
                 .andExpect(status().isConflict())
                 .andReturn().getResponse().getContentAsString();
 
         ErrorMessage errorMessage = (ErrorMessage) JsonUtils.asObject(result, ErrorMessage.class);
-        Assertions.assertEquals(String.format(AuthConstants.USER_ALREADY_EXISTS_EXCEPTION, testUser.getEmail()), errorMessage.getMessage());
+        Assertions.assertEquals(String.format(AuthConstants.USER_WITH_EMAIL_ALREADY_EXISTS, user.getEmail()), errorMessage.getMessage());
     }
 
     @Test
@@ -152,29 +155,29 @@ class AuthControllerIntegratedTests {
     void attemptToLoginUserThatDoesNotExist() throws Exception {
         LOG.info(CLASS_NAME + "::attemptToLoginUserThatDoesNotExist");
         String unknownEmail = "unknown@mail.com";
-        User testUser = new User(unknownEmail, "123");
+        LoginRequestDTO request = new LoginRequestDTO(unknownEmail, getTestUser().getPassword());
 
         String result = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(JsonUtils.asJsonString(testUser)))
+                        .content(JsonUtils.asJsonString(request)))
                 .andExpect(status().isNotFound())
                 .andReturn().getResponse().getContentAsString();
 
         ErrorMessage errorMessage = (ErrorMessage) JsonUtils.asObject(result, ErrorMessage.class);
-        Assertions.assertEquals(String.format(AuthConstants.USER_WITH_EMAIL_NOT_FOUND_EXCEPTION, unknownEmail), errorMessage.getMessage());
+        Assertions.assertEquals(String.format(AuthConstants.USER_WITH_EMAIL_NOT_FOUND_EXCEPTION, request.getEmail()), errorMessage.getMessage());
     }
 
     @Test
     @Order(4)
     void attemptToLoginUserUsingWrongCredentials() throws Exception {
         LOG.info(CLASS_NAME + "::attemptToLoginUserUsingWrongCredentials");
-        User testUser = new User("test@mail.com", "1234");
+        LoginRequestDTO request = new LoginRequestDTO(getTestUser().getEmail(), "1234");
 
         String result = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(JsonUtils.asJsonString(testUser)))
+                        .content(JsonUtils.asJsonString(request)))
                 .andExpect(status().isUnauthorized())
                 .andReturn().getResponse().getContentAsString();
 
@@ -256,6 +259,7 @@ class AuthControllerIntegratedTests {
         User testUser = getTestUser();
         User otherUser = getTestUser();
         otherUser.setEmail("other@mail.com");
+        otherUser.setUsername("other");
         otherUser.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         User databaseUser = userRepository.save(otherUser);
         LOG.error("databaseUser = {}", databaseUser);
@@ -280,7 +284,7 @@ class AuthControllerIntegratedTests {
     void updateUser() throws Exception {
         LOG.info(CLASS_NAME + "::updateUser");
         User testUser = getTestUser();
-        User updatedUser = new User("test2@mail.com", "1234");
+        User updatedUser = new User("test2@mail.com", "test2", "1234");
 
         String result = mockMvc.perform(put("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
@@ -313,7 +317,7 @@ class AuthControllerIntegratedTests {
     void updateUserUsingInvalidId() throws Exception {
         LOG.info(CLASS_NAME + "::updateUserUsingInvalidId");
         User testUser = getTestUser();
-        User updatedUser = new User("test2@mail.com", "1234");
+        User updatedUser = new User("test2@mail.com", "test2", "1234");
         UUID invalidUUID = UUID.randomUUID();
 
         String result = mockMvc.perform(put("/api/user/" + invalidUUID)
@@ -333,7 +337,7 @@ class AuthControllerIntegratedTests {
     @Order(11)
     void updateUserUsingInvalidEmailInRequestParameter() throws Exception {
         LOG.info(CLASS_NAME + "::updateUserUsingInvalidEmailInRequestParameter");
-        User updatedUser = new User("test2@mail.com", "1234");
+        User updatedUser = new User("test2@mail.com", "test2", "1234");
 
         String response = mockMvc.perform(put("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
@@ -353,7 +357,7 @@ class AuthControllerIntegratedTests {
     void updateUserUsingTokenWithDifferentEmail() throws Exception {
         LOG.info(CLASS_NAME + "::updateUserUsingTokenWithDifferentEmail");
         String invalidAccessToken = "eyJhbGciOiJIUzUxMiJ9.eyJST0xFUyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJzdWIiOiJ1c2VyQG1haWwuY29tIiwiaWF0IjoxNjk2ODA3ODM3LCJleHAiOjkyMjMzNzIwMzY4NTQ3NzV9.RFgN8mxlhwHTHDMlvGfyTi-U0H7p7V8aesZG_xhpUt95C0MERWhk_fmLNV528T3vsgMHhydPl4hPqsGnhfMDeg";
-        User updatedUser = new User("test2@mail.com", "1234");
+        User updatedUser = new User("test2@mail.com", "test2", "1234");
 
         String response = mockMvc.perform(put("/api/user/" + userId)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + invalidAccessToken)
@@ -452,7 +456,7 @@ class AuthControllerIntegratedTests {
     }
 
     private User getTestUser() {
-        return new User("test@mail.com", "123");
+        return new User("test@mail.com", "test", "123");
     }
 
 }

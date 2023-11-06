@@ -42,8 +42,9 @@ public class User {
     @ElementCollection
     private Set<GrantedAuthority> authorities = new HashSet<>();
 
-    public User(String email, String password) {
+    public User(String email, String username, String password) {
         this.email = email;
+        this.username = username;
         this.password = password;
     }
 

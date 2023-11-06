@@ -4,20 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseDTO {
-
-    private UUID userId;
+public class LoginRequestDTO {
 
     private String email;
 
-    private String username;
-
-    private String refreshToken;
-
-    private String accessToken;
+    private String password;
 }
