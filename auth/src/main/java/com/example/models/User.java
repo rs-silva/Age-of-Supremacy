@@ -32,11 +32,12 @@ public class User {
     @Email(message = "Wrong email format!")
     private String email;
 
-    @NotNull
-    private String password;
-
+    @Column(unique = true)
     @NotNull
     private String username;
+
+    @NotNull
+    private String password;
 
     @ElementCollection
     private Set<GrantedAuthority> authorities = new HashSet<>();
