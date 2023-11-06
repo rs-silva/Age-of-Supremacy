@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>com.example</groupId>
-            <artifactId>city-manager</artifactId>
+            <artifactId>base-manager</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

@@ -4,7 +4,7 @@
 
 **Steel:** Steel can be a fundamental resource for producing military units, buildings, and infrastructure. It's a vital component for modern weapons and machinery.
 
-**Fuel:** Fuel is necessary for powering military vehicles and aircraft. It can also be used for city expansion and resource transportation.
+**Fuel:** Fuel is necessary for powering military vehicles and aircraft. It can also be used for base expansion and resource transportation.
 
 **Electronics:** Electronics are essential for advanced technologies and research. They can improve unit performance and unlock advanced units and structures.
 

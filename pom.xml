@@ -17,7 +17,7 @@
 	<modules>
 		<module>auth</module>
 		<module>coverage-report</module>
-		<module>city-manager</module>
+		<module>base-manager</module>
 	</modules>
 	<properties>
 		<java.version>17</java.version>

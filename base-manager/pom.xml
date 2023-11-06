@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>city-manager</artifactId>
+    <artifactId>base-manager</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
