@@ -1,6 +1,6 @@
 package com.example.controllers;
 
-import com.example.dto.LoginResponseDTO;
+import com.example.dto.UserResponseDTO;
 import com.example.models.User;
 import com.example.services.UserService;
 import jakarta.validation.Valid;
@@ -33,11 +33,11 @@ public class UserController {
     }
 
     @PutMapping("{userId}")
-    public ResponseEntity<LoginResponseDTO> updateUser(@Valid @RequestBody User updatedUser,
-                                                       @PathVariable UUID userId,
-                                                       @RequestParam String currentUserEmail) {
+    public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody User updatedUser,
+                                                      @PathVariable UUID userId,
+                                                      @RequestParam String currentUserEmail) {
         LOG.info("Update user = {} with {}", currentUserEmail, updatedUser.toString());
-        LoginResponseDTO response = userService.updateUser(userId, currentUserEmail, updatedUser);
+        UserResponseDTO response = userService.updateUser(userId, currentUserEmail, updatedUser);
         return ResponseEntity.ok(response);
     }
 

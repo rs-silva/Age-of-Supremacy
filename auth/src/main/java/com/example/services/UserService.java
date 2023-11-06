@@ -1,6 +1,6 @@
 package com.example.services;
 
-import com.example.dto.LoginResponseDTO;
+import com.example.dto.UserResponseDTO;
 import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceAlreadyExistsException;
 import com.example.exceptions.ResourceNotFoundException;
@@ -39,7 +39,7 @@ public class UserService {
         this.refreshTokenService = refreshTokenService;
     }
 
-    public LoginResponseDTO updateUser(UUID userId, String currentUserEmail, User updatedUser) {
+    public UserResponseDTO updateUser(UUID userId, String currentUserEmail, User updatedUser) {
         User userFromId = findById(userId);
 
         validateUserEmailFromRequestParam(userFromId, currentUserEmail);
@@ -53,7 +53,7 @@ public class UserService {
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
         String accessToken = jwtAccessTokenUtils.generateAccessToken(databaseUser);
 
-        return new LoginResponseDTO(newUser.getId(), newUser.getEmail(), newUser.getUsername(), refreshToken.getToken(), accessToken);
+        return new UserResponseDTO(newUser.getId(), newUser.getEmail(), newUser.getUsername(), refreshToken.getToken(), accessToken);
     }
 
     public void deleteUser(UUID userId, String currentUserEmail) {
@@ -97,7 +97,7 @@ public class UserService {
         user = userRepository.findByUsername(newUser.getUsername());
 
         if (user != null) {
-            throw new ResourceNotFoundException(
+            throw new ResourceAlreadyExistsException(
                     String.format(AuthConstants.USER_WITH_USERNAME_ALREADY_EXISTS, newUser.getUsername()));
         }
 

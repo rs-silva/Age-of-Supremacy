@@ -1,7 +1,7 @@
 package com.example.services;
 
 import com.example.dto.LoginRequestDTO;
-import com.example.dto.LoginResponseDTO;
+import com.example.dto.UserResponseDTO;
 import com.example.dto.RefreshTokenResponseDTO;
 import com.example.exceptions.InvalidCredentialsException;
 import com.example.exceptions.RefreshTokenException;
@@ -37,7 +37,7 @@ public class AuthService {
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
     }
 
-    public LoginResponseDTO registerUser(User user) {
+    public UserResponseDTO registerUser(User user) {
         user.setPassword(passwordUtils.encodePassword(user.getPassword()));
         user.addRole(new SimpleGrantedAuthority("ROLE_USER"));
         User databaseUser = userService.addUserToDatabase(user);
@@ -45,10 +45,10 @@ public class AuthService {
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
         String accessToken = jwtAccessTokenUtils.generateAccessToken(user);
 
-        return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), databaseUser.getUsername(), refreshToken.getToken(), accessToken);
+        return new UserResponseDTO(databaseUser.getId(), databaseUser.getEmail(), databaseUser.getUsername(), refreshToken.getToken(), accessToken);
     }
 
-    public LoginResponseDTO loginUser(LoginRequestDTO loginUser) {
+    public UserResponseDTO loginUser(LoginRequestDTO loginUser) {
         User databaseUser = userService.findByEmail(loginUser.getEmail());
         boolean areCredentialsValid = passwordUtils.validateLoginPassword(loginUser.getPassword(), databaseUser.getPassword());
 
@@ -61,7 +61,7 @@ public class AuthService {
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(databaseUser);
         String accessToken = jwtAccessTokenUtils.generateAccessToken(databaseUser);
 
-        return new LoginResponseDTO(databaseUser.getId(), databaseUser.getEmail(), databaseUser.getUsername(), refreshToken.getToken(), accessToken);
+        return new UserResponseDTO(databaseUser.getId(), databaseUser.getEmail(), databaseUser.getUsername(), refreshToken.getToken(), accessToken);
     }
 
     public RefreshTokenResponseDTO refreshToken(String userEmail, String token) {

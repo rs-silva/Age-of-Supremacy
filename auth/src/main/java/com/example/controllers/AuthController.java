@@ -1,7 +1,7 @@
 package com.example.controllers;
 
 import com.example.dto.LoginRequestDTO;
-import com.example.dto.LoginResponseDTO;
+import com.example.dto.UserResponseDTO;
 import com.example.dto.RefreshTokenResponseDTO;
 import com.example.models.User;
 import com.example.services.AuthService;
@@ -31,17 +31,17 @@ public class AuthController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<LoginResponseDTO> registerUser(@Valid @RequestBody User user) {
+    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody User user) {
         LOG.info("Register user = {}", user.toString());
-        LoginResponseDTO response = authService.registerUser(user);
+        UserResponseDTO response = authService.registerUser(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("login")
-    public ResponseEntity<LoginResponseDTO> loginUser(@Valid @RequestBody LoginRequestDTO user) {
+    public ResponseEntity<UserResponseDTO> loginUser(@Valid @RequestBody LoginRequestDTO user) {
         LOG.info("Login user = {}", user.toString());
-        LoginResponseDTO response = authService.loginUser(user);
+        UserResponseDTO response = authService.loginUser(user);
 
         return ResponseEntity.ok(response);
     }
