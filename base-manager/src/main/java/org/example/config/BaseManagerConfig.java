@@ -2,14 +2,18 @@ package org.example.config;
 
 import org.example.enums.ResourceNames;
 import org.example.models.Base;
+import org.example.models.Building;
 import org.example.models.Player;
 import org.example.repositories.BaseRepository;
+import org.example.repositories.BuildingRepository;
 import org.example.repositories.PlayerRepository;
+import org.example.utils.BaseUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,9 +24,12 @@ public class BaseManagerConfig {
 
     private final BaseRepository baseRepository;
 
-    public BaseManagerConfig(PlayerRepository playerRepository, BaseRepository baseRepository) {
+    private final BuildingRepository buildingRepository;
+
+    public BaseManagerConfig(PlayerRepository playerRepository, BaseRepository baseRepository, BuildingRepository buildingRepository) {
         this.playerRepository = playerRepository;
         this.baseRepository = baseRepository;
+        this.buildingRepository = buildingRepository;
     }
 
     @Profile("test")
@@ -50,6 +57,12 @@ public class BaseManagerConfig {
                 .resources(resources)
                 .build();
         baseRepository.save(base);
+
+        List<Building> buildings = BaseUtils.generateBuildingListForNewBase();
+        for (Building building : buildings) {
+            building.setBase(base);
+            buildingRepository.save(building);
+        }
     }
 
 }
