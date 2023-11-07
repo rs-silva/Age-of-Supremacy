@@ -49,7 +49,6 @@ public class JwtAccessTokenUtils {
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(getExpirationDate())
-                .setHeaderParam("USERNAME", user.getUsername())
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }

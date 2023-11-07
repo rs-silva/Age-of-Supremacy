@@ -1,9 +1,11 @@
 package org.example.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +23,10 @@ public class Player {
 
     @Id
     private UUID id;
+
+    @NotNull
+    @Column(unique = true)
+    private String username;
 
     private Integer totalScore;
 

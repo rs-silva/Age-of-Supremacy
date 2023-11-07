@@ -30,6 +30,7 @@ public class BaseManagerConfig {
     public void populateDB() {
         Player player = new Player();
         player.setId(UUID.randomUUID());
+        player.setUsername("Player");
         player.setTotalScore(0);
         playerRepository.save(player);
 
