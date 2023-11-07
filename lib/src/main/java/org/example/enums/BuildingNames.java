@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum BuildingNames {
-    MAIN_BUILDINGS("Headquarters"),
-    BUILDING_MATERIALS_FACTORY("Masonry Workshop"),
-    STEEL_FACTORY("Steel Forge"),
-    FUEL_FACTORY("Fuel Refinery"),
-    ELECTRONICS_FACTORY("Semiconductor Factory"),
-    AMMUNITION_FACTORY("Munitions Plant"),
+    MAIN_BUILDING("Headquarters"),
+    RESOURCE_1_FACTORY("Masonry Workshop"),
+    RESOURCE_2_FACTORY("Steel Forge"),
+    RESOURCE_3_FACTORY("Fuel Refinery"),
+    RESOURCE_4_FACTORY("Semiconductor Factory"),
+    RESOURCE_5_FACTORY("Munitions Plant"),
     WAREHOUSE("Warehouse"),
     BARRACKS("Barracks"),
     MOTORIZED_VEHICLES_FACTORY("Motorized Armory Complex"),
