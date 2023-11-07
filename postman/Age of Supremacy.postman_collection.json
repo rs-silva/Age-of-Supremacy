@@ -44,7 +44,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n   \"email\" : \"test@mail.com\",\r\n   \"password\" : \"123\"\r\n}",
+									"raw": "{\r\n   \"email\" : \"test@mail.com\",\r\n   \"username\" : \"test\",\r\n   \"password\" : \"123\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -297,7 +297,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n   \"email\" : \"test2@mail.com\",\r\n   \"password\" : \"1234\"\r\n}",
+									"raw": "{\r\n   \"email\" : \"test2@mail.com\",\r\n   \"username\" : \"test2\",\r\n   \"password\" : \"1234\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -412,6 +412,40 @@
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "base-manager",
+			"item": [
+				{
+					"name": "test",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCALHOST_BASE_MANAGER}}/api/base/HelloWorld",
+							"host": [
+								"{{LOCALHOST_BASE_MANAGER}}"
+							],
+							"path": [
+								"api",
+								"base",
+								"HelloWorld"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
