@@ -37,6 +37,8 @@ public class PlayerService {
                 .build();
         playerRepository.save(player);
 
+        LOG.info("Created player = {}", player);
+
         baseService.generateBase(player);
 
         return player;

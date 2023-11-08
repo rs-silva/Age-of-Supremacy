@@ -1,16 +1,13 @@
 package org.example.services;
 
 import org.example.models.Base;
-import org.example.models.Building;
 import org.example.models.Player;
 import org.example.repositories.BaseRepository;
-import org.example.utils.BaseUtils;
 import org.example.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -23,13 +20,16 @@ public class BaseService {
 
     private final BuildingService buildingService;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService) {
+    private final ResourceUtils resourceUtils;
+
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, ResourceUtils resourceUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
+        this.resourceUtils = resourceUtils;
     }
 
     public void generateBase(Player player) {
-        Map<String, Integer> resources = ResourceUtils.generateDefaultResourcesForBase();
+        Map<String, Integer> resources = resourceUtils.generateDefaultResourcesForBase();
 
         Base base = Base.builder()
                 .name("Default Name")
@@ -41,6 +41,8 @@ public class BaseService {
                 .build();
 
         Base databaseBase = baseRepository.save(base);
+
+        LOG.info("Created base = {}", base);
 
         buildingService.generateDefaultBuildingsForNewBase(databaseBase);
     }

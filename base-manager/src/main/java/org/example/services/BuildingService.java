@@ -3,7 +3,7 @@ package org.example.services;
 import org.example.models.Base;
 import org.example.models.Building;
 import org.example.repositories.BuildingRepository;
-import org.example.utils.BuildingUtils;
+import org.example.utils.BuildingGenerationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class BuildingService {
     }
 
     public void generateDefaultBuildingsForNewBase(Base base) {
-        List<Building> buildingList = BuildingUtils.generateBuildingListForNewBase();
+        List<Building> buildingList = BuildingGenerationUtils.generateDefaultBuildingsForNewBase();
 
         for (Building building : buildingList) {
             building.setBase(base);

@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class BuildingUtils {
+public abstract class BuildingGenerationUtils {
 
-    public static List<Building> generateBuildingListForNewBase() {
+    public static List<Building> generateDefaultBuildingsForNewBase() {
         List<Building> buildingList = new ArrayList<>();
 
         /* Resource Buildings */
@@ -29,7 +29,7 @@ public abstract class BuildingUtils {
         Building resource5Producer = generateResourceProductionBuilding(BuildingNames.RESOURCE_5_FACTORY.getLabel());
         buildingList.add(resource5Producer);
 
-        Building warehouse = BuildingUtils.generateWarehouse();
+        Building warehouse = BuildingGenerationUtils.generateWarehouse();
         buildingList.add(warehouse);
 
         return buildingList;

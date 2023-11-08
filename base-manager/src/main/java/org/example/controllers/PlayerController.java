@@ -8,12 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.UUID;
 
 @Controller
 @RequestMapping("api/player")
@@ -35,5 +33,15 @@ public class PlayerController {
         Player player = playerService.createPlayer(playerDTO);
 
         return ResponseEntity.ok(player);
+    }
+
+    @GetMapping("listOfBases")
+    public ResponseEntity<Player> getListOfBases() {
+
+        //LOG.info("Retrieving player with id {} and username {}", playerDTO.getId(), playerDTO.getUsername());
+
+        //Player player = playerService.createPlayer(playerDTO);
+
+        return ResponseEntity.ok(new Player());
     }
 }
