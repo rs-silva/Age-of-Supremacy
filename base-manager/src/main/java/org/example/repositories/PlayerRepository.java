@@ -9,4 +9,6 @@ import java.util.UUID;
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, UUID> {
 
+    Player findByUsername(String username);
+
 }

@@ -36,9 +36,9 @@ public class Base {
 
     private String name;
 
-    private String x_coordinate;
+    private Integer x_coordinate;
 
-    private String y_coordinate;
+    private Integer y_coordinate;
 
     @ManyToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id")
