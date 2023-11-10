@@ -3,7 +3,7 @@ package org.example.services;
 import org.example.dto.NewPlayerDTO;
 import org.example.exceptions.ForbiddenException;
 import org.example.exceptions.ResourceAlreadyExistsException;
-import org.example.models.Base;
+import org.example.interfaces.BaseIdInterface;
 import org.example.models.Player;
 import org.example.repositories.PlayerRepository;
 import org.example.utils.Constants;
@@ -54,9 +54,9 @@ public class PlayerService {
         return player;
     }
 
-    public List<Base> getListOfBases(UUID playerId) {
+    public List<BaseIdInterface> getListOfBases(UUID playerId) {
         validateIdFromToken(playerId);
-        return playerRepository.findById(playerId).get().getBaseList();
+        return baseService.findByPlayerId(playerId);
     }
 
     private void checkIfPlayerAlreadyExists(UUID playerId, String username) {

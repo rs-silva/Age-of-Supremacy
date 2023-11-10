@@ -1,6 +1,6 @@
 package org.example.services;
 
-import org.example.exceptions.ResourceAlreadyExistsException;
+import org.example.interfaces.BaseIdInterface;
 import org.example.exceptions.ResourceNotFoundException;
 import org.example.models.Base;
 import org.example.models.Player;
@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -61,6 +62,10 @@ public class BaseService {
         }
 
         return base.get();
+    }
+
+    public List<BaseIdInterface> findByPlayerId(UUID playerId) {
+        return baseRepository.findAllByPlayerId(playerId);
     }
 
 }

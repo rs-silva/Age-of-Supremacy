@@ -1,9 +1,10 @@
 package org.example.controllers;
 
 import jakarta.validation.Valid;
+import org.example.dto.ListOfBasesDTO;
 import org.example.dto.NewPlayerDTO;
+import org.example.interfaces.BaseIdInterface;
 import org.example.mappers.PlayerMapper;
-import org.example.models.Base;
 import org.example.models.Player;
 import org.example.services.PlayerService;
 import org.slf4j.Logger;
@@ -43,11 +44,11 @@ public class PlayerController {
     }
 
     @GetMapping("/listOfBases/{playerId}")
-    public ResponseEntity<List<Base>> getListOfBases(@PathVariable UUID playerId) {
+    public ResponseEntity<ListOfBasesDTO> getListOfBases(@PathVariable UUID playerId) {
 
-        List<Base> baseList = playerService.getListOfBases(playerId);
+        List<BaseIdInterface> baseList = playerService.getListOfBases(playerId);
 
-        return ResponseEntity.ok(baseList);
+        return ResponseEntity.ok(PlayerMapper.fromEntityToListOfBasesIds(playerId, baseList));
     }
 
 }
