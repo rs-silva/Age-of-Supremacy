@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -42,8 +43,9 @@ public class BaseService {
                 .x_coordinate(new Random().nextInt(1000))
                 .y_coordinate(new Random().nextInt(1000))
                 .player(player)
-                .resources(resources)
                 .score(1)
+                .resources(resources)
+                .lastResourcesUpdate(new Date())
                 .build();
 
         baseRepository.save(base);
@@ -64,7 +66,7 @@ public class BaseService {
         return base.get();
     }
 
-    public List<BaseIdInterface> findByPlayerId(UUID playerId) {
+    public List<BaseIdInterface> findByAllPlayerId(UUID playerId) {
         return baseRepository.findAllByPlayerId(playerId);
     }
 

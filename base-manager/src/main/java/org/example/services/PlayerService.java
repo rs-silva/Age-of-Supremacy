@@ -56,7 +56,7 @@ public class PlayerService {
 
     public List<BaseIdInterface> getListOfBases(UUID playerId) {
         validateIdFromToken(playerId);
-        return baseService.findByPlayerId(playerId);
+        return baseService.findByAllPlayerId(playerId);
     }
 
     private void checkIfPlayerAlreadyExists(UUID playerId, String username) {
@@ -78,7 +78,6 @@ public class PlayerService {
             throw new ForbiddenException(
                     Constants.PLAYER_ID_FROM_REQUEST_DOES_NOT_MATCH_TOKEN_PLAYER_ID);
         }
-
     }
 
 }

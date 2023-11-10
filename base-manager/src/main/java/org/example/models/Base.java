@@ -19,6 +19,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -53,6 +54,8 @@ public class Base {
     @MapKeyColumn(name = "resource_name")
     @Column(name = "resource_quantity")
     private Map<String, Integer> resources;
+
+    private Date lastResourcesUpdate;
 
     @OneToMany(mappedBy = "base", cascade = CascadeType.ALL)
     private List<Building> buildings;
