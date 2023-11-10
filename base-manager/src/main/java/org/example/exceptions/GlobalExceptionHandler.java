@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -30,6 +29,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
         LOG.error(ex.getMessage());
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorMessage> handleForbiddenException(ForbiddenException ex) {
+        LOG.error(ex.getMessage());
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
     }
 
     private ErrorMessage buildErrorMessage(RuntimeException ex) {

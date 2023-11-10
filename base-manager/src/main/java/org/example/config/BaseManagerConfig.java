@@ -21,8 +21,8 @@ public class BaseManagerConfig {
     @Profile("test")
     @Bean
     public void populateDB() {
-        NewPlayerDTO newPlayerDTO = new NewPlayerDTO(UUID.randomUUID().toString(), "Player");
-        playerService.createPlayer(newPlayerDTO);
+        //NewPlayerDTO newPlayerDTO = new NewPlayerDTO(UUID.randomUUID().toString(), "Player");
+        //playerService.createPlayer(newPlayerDTO);
     }
 
 }
