@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.dto.NewPlayerDTO;
 import org.example.exceptions.ResourceAlreadyExistsException;
+import org.example.models.Base;
 import org.example.models.Player;
 import org.example.repositories.PlayerRepository;
 import org.example.utils.Constants;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,8 +37,9 @@ public class PlayerService {
                 .id(uuid)
                 .username(playerDTO.getUsername())
                 .totalScore(0)
+                .baseList(new ArrayList<>())
                 .build();
-        playerRepository.save(player);
+        playerRepository.saveAndFlush(player);
 
         LOG.info("Created player = {}", player);
 
@@ -52,7 +56,10 @@ public class PlayerService {
             throw new ResourceAlreadyExistsException(String.format(
                     Constants.PLAYER_ALREADY_EXISTS, playerId, username));
         }
+    }
 
+    public List<Base> getListOfBases(UUID playerId) {
+        return playerRepository.findById(playerId).get().getBaseList();
     }
 
 }

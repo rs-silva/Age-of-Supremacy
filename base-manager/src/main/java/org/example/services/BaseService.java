@@ -1,15 +1,20 @@
 package org.example.services;
 
+import org.example.exceptions.ResourceAlreadyExistsException;
+import org.example.exceptions.ResourceNotFoundException;
 import org.example.models.Base;
 import org.example.models.Player;
 import org.example.repositories.BaseRepository;
+import org.example.utils.Constants;
 import org.example.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class BaseService {
@@ -40,11 +45,22 @@ public class BaseService {
                 .score(1)
                 .build();
 
-        Base databaseBase = baseRepository.save(base);
+        baseRepository.save(base);
 
         LOG.info("Created base = {}", base);
 
-        buildingService.generateDefaultBuildingsForNewBase(databaseBase);
+        buildingService.generateDefaultBuildingsForNewBase(base);
+    }
+
+    public Base findById(UUID id) {
+        Optional<Base> base = baseRepository.findById(id);
+
+        if (base.isEmpty()) {
+            throw new ResourceNotFoundException(String.format(
+                    Constants.BASE_NOT_FOUND, id));
+        }
+
+        return base.get();
     }
 
 }

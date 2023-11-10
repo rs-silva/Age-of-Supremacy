@@ -1,5 +1,6 @@
 package org.example.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -37,6 +38,7 @@ public class Building {
 
     private Integer level;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "base_id", referencedColumnName = "id")
     private Base base;

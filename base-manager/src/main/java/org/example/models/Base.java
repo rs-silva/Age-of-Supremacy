@@ -1,5 +1,6 @@
 package org.example.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -40,6 +41,7 @@ public class Base {
 
     private Integer y_coordinate;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     private Player player;
