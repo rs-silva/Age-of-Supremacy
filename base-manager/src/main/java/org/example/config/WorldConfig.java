@@ -18,5 +18,5 @@ public class WorldConfig {
 
     private Double EXPONENTIAL;
 
-    private Integer DEFAULT_AMOUNT;
+    private Double DEFAULT_AMOUNT;
 }

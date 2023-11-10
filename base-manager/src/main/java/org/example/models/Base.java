@@ -19,7 +19,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -53,9 +53,9 @@ public class Base {
     @CollectionTable(name = "bases_resources", joinColumns = @JoinColumn(name = "base_id"))
     @MapKeyColumn(name = "resource_name")
     @Column(name = "resource_quantity")
-    private Map<String, Integer> resources;
+    private Map<String, Double> resources;
 
-    private Date lastResourcesUpdate;
+    private Timestamp lastResourcesUpdate;
 
     @OneToMany(mappedBy = "base", cascade = CascadeType.ALL)
     private List<Building> buildings;

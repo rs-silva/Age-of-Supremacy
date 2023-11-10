@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class BaseService {
     }
 
     public void generateBase(Player player) {
-        Map<String, Integer> resources = resourceUtils.generateDefaultResourcesForBase();
+        Map<String, Double> resources = resourceUtils.generateDefaultResourcesForBase();
 
         Base base = Base.builder()
                 .name("Default Name")
@@ -46,7 +47,7 @@ public class BaseService {
                 .player(player)
                 .score(1)
                 .resources(resources)
-                .lastResourcesUpdate(new Date())
+                .lastResourcesUpdate(Timestamp.from(Instant.now()))
                 .build();
 
         baseRepository.save(base);
@@ -65,7 +66,7 @@ public class BaseService {
                     Constants.BASE_NOT_FOUND, id));
         }
 
-        resourceUtils.updateBaseResources(base.get().getResources());
+        resourceUtils.updateBaseResources(base.get());
         return base.get();
     }
 
