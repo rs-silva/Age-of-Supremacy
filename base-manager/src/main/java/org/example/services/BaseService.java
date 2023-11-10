@@ -10,6 +10,7 @@ import org.example.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -55,6 +56,7 @@ public class BaseService {
         buildingService.generateDefaultBuildingsForNewBase(base);
     }
 
+    @Transactional
     public Base findById(UUID id) {
         Optional<Base> base = baseRepository.findById(id);
 
@@ -63,6 +65,7 @@ public class BaseService {
                     Constants.BASE_NOT_FOUND, id));
         }
 
+        resourceUtils.updateBaseResources(base.get().getResources());
         return base.get();
     }
 

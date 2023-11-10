@@ -28,6 +28,11 @@ public class ResourceUtils {
         return resources;
     }
 
+    public void updateBaseResources(Map<String, Integer> resources) {
+        Integer resourceAmount = resources.get(ResourceNames.RESOURCE_1.getLabel());
+        resources.put(ResourceNames.RESOURCE_1.getLabel(), resourceAmount + 100);
+    }
+
     /* WORLD_GROWING_FACTOR * BASE * (EXPONENTIAL ^ LEVEL_OF_BUILDING)*/
     public Double getAmountOfResourcesProducedForLevel(int level) {
         return worldConfig.getWORLD_GROWING_FACTOR() * worldConfig.getBASE()
