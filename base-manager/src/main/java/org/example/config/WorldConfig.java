@@ -14,9 +14,13 @@ public class WorldConfig {
     /* Resource Production */
     private Double WORLD_GROWING_FACTOR;
 
-    private Double BASE;
+    private Double RESOURCES_BASE;
 
-    private Double EXPONENTIAL;
+    private Double RESOURCES_EXPONENTIAL;
 
-    private Double DEFAULT_AMOUNT;
+    private Double RESOURCES_DEFAULT_AMOUNT;
+
+    private Double WAREHOUSE_BASE;
+
+    private Double WAREHOUSE_EXPONENTIAL;
 }

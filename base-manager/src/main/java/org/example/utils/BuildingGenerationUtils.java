@@ -29,7 +29,7 @@ public abstract class BuildingGenerationUtils {
         Building resource5Producer = generateResourceProductionBuilding(BuildingNames.RESOURCE_5_FACTORY.getLabel());
         buildingList.add(resource5Producer);
 
-        Building warehouse = BuildingGenerationUtils.generateWarehouse();
+        Building warehouse = generateWarehouse();
         buildingList.add(warehouse);
 
         return buildingList;
