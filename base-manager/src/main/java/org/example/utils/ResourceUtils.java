@@ -50,33 +50,34 @@ public class ResourceUtils {
         Map<String, Double> resources = base.getResources();
         Double resourceCurrentAmount = resources.get(resourceName);
         Timestamp lastResourcesUpdate = base.getLastResourcesUpdate();
-        List<Building> buildingList = base.getBuildings();
 
         Double hoursDifference = calculateNumberOfHoursFromTimestampToNow(lastResourcesUpdate);
 
-        for (Building building : buildingList) {
-            if (building.getType().equals(resourceBuildingName)) {
-                Integer buildingLevel = building.getLevel();
-                Double amountOfResourcesProducedPerHour = getAmountOfResourcesProducedForLevel(buildingLevel);
+        Building building = getBuilding(base, resourceBuildingName);
+        Integer buildingLevel = building.getLevel();
+        Double amountOfResourcesProducedPerHour = getAmountOfResourcesProducedForLevel(buildingLevel);
 
-                Double amountOfResourcesToAdd = hoursDifference * amountOfResourcesProducedPerHour;
-                Double totalResources = resourceCurrentAmount + amountOfResourcesToAdd;
+        Double amountOfResourcesToAdd = hoursDifference * amountOfResourcesProducedPerHour;
+        Double totalResources = resourceCurrentAmount + amountOfResourcesToAdd;
 
-                if (totalResources > warehouseCapacity) totalResources = warehouseCapacity;
+        if (totalResources > warehouseCapacity) totalResources = warehouseCapacity;
 
-                resources.put(resourceName, totalResources);
-                break;
-            }
-        }
+        resources.put(resourceName, totalResources);
     }
 
     private Double getWarehouseCapacity(Base base) {
+        Building building = getBuilding(base, BuildingNames.WAREHOUSE.getLabel());
+
+        Integer buildingLevel = building.getLevel();
+        return getWarehouseCapacityForLevel(buildingLevel);
+    }
+
+    private Building getBuilding(Base base, String buildingName) {
         List<Building> buildingList = base.getBuildings();
 
         for (Building building : buildingList) {
-            if (building.getType().equals(BuildingNames.WAREHOUSE.getLabel())) {
-                Integer buildingLevel = building.getLevel();
-                return getWarehouseCapacityForLevel(buildingLevel);
+            if (building.getType().equals(buildingName)) {
+                return building;
             }
         }
 
