@@ -29,8 +29,12 @@ public abstract class BuildingGenerationUtils {
         Building resource5Producer = generateResourceProductionBuilding(BuildingNames.RESOURCE_5_FACTORY.getLabel());
         buildingList.add(resource5Producer);
 
+        /* Other Buildings */
         Building warehouse = generateWarehouse();
         buildingList.add(warehouse);
+
+        Building mainBuilding = generateHeadquarters();
+        buildingList.add(mainBuilding);
 
         return buildingList;
     }
@@ -53,6 +57,18 @@ public abstract class BuildingGenerationUtils {
 
         return Building.builder()
                 .type(BuildingNames.WAREHOUSE.getLabel())
+                .level(1)
+                .score(1)
+                .properties(properties)
+                .build();
+    }
+
+    public static Building generateHeadquarters() {
+        Map<String, String> properties = new HashMap<>();
+        properties.put("123", "123");
+
+        return Building.builder()
+                .type(BuildingNames.MAIN_BUILDING.getLabel())
                 .level(1)
                 .score(1)
                 .properties(properties)
