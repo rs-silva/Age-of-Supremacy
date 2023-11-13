@@ -33,7 +33,7 @@ public abstract class BuildingGenerationUtils {
         Building warehouse = generateWarehouse();
         buildingList.add(warehouse);
 
-        Building mainBuilding = generateHeadquarters();
+        Building mainBuilding = generateMainBuilding();
         buildingList.add(mainBuilding);
 
         return buildingList;
@@ -63,7 +63,7 @@ public abstract class BuildingGenerationUtils {
                 .build();
     }
 
-    public static Building generateHeadquarters() {
+    public static Building generateMainBuilding() {
         Map<String, String> properties = new HashMap<>();
         properties.put("123", "123");
 
