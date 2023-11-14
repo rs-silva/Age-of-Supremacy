@@ -19,7 +19,8 @@
 		<module>coverage-report</module>
 		<module>base-manager</module>
 		<module>lib</module>
-	</modules>
+        <module>event-manager</module>
+    </modules>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
