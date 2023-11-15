@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,6 +45,11 @@ public class BuildingService {
 
     }
 
+    public Map<String, Integer> getAmountOfResourcesToUpgradeBuilding(UUID buildingId) {
+        Building building = findById(buildingId);
+
+    }
+
     public void upgradeBuilding(UUID buildingId) {
         /* TODO Validate if the building belongs to the player */
         Building building = findById(buildingId);
@@ -56,6 +62,7 @@ public class BuildingService {
         restTemplate.postForObject(url, new BuildingUpgradeEventDTO("b"), BuildingUpgradeEventDTO.class);
 
     }
+
 
     public Building findById(UUID id) {
         Optional<Building> building = buildingRepository.findById(id);
