@@ -1,0 +1,36 @@
+{
+  "buildings": [
+    {
+      "buildingName": "Masonry Workshop",
+      "levels": [
+        {
+          "level": 1,
+          "resources": [
+            {"resourceName": "Construction Materials", "quantity": 10},
+            {"resourceName": "Steel", "quantity": 5}
+          ]
+        },
+        {
+          "level": 2,
+          "resources": [
+            {"resourceName": "resource1", "quantity": 15},
+            {"resourceName": "resource2", "quantity": 8},
+            {"resourceName": "resource3", "quantity": 5}
+          ]
+        }
+      ]
+    },
+    {
+      "buildingName": "Building2",
+      "levels": [
+        {
+          "level": 1,
+          "resources": [
+            {"resourceName": "resource3", "quantity": 8},
+            {"resourceName": "resource1", "quantity": 12}
+          ]
+        }
+      ]
+    }
+  ]
+}
