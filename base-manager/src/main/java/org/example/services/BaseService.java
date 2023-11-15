@@ -6,7 +6,7 @@ import org.example.models.Base;
 import org.example.models.Player;
 import org.example.repositories.BaseRepository;
 import org.example.utils.Constants;
-import org.example.utils.ResourceUtils;
+import org.example.utils.ResourcesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,16 +29,16 @@ public class BaseService {
 
     private final BuildingService buildingService;
 
-    private final ResourceUtils resourceUtils;
+    private final ResourcesUtils resourcesUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, ResourceUtils resourceUtils) {
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, ResourcesUtils resourcesUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
-        this.resourceUtils = resourceUtils;
+        this.resourcesUtils = resourcesUtils;
     }
 
     public void generateBase(Player player) {
-        Map<String, Double> resources = resourceUtils.generateDefaultResourcesForBase();
+        Map<String, Double> resources = resourcesUtils.generateDefaultResourcesForBase();
 
         Base base = Base.builder()
                 .name("Default Name")
@@ -66,7 +66,7 @@ public class BaseService {
                     Constants.BASE_NOT_FOUND, id));
         }
 
-        resourceUtils.updateBaseResources(base.get());
+        resourcesUtils.updateBaseResources(base.get());
         return base.get();
     }
 

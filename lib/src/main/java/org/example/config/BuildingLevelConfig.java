@@ -8,7 +8,10 @@ import java.util.List;
 public class BuildingLevelConfig {
 
     private int level;
+
+    /* In seconds */
     private long constructionTime;
+
     private List<BuildingResourceConfig> resources;
 
 }

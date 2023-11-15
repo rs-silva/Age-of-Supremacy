@@ -24,12 +24,12 @@ public class BuildingController {
         this.buildingService = buildingService;
     }
 
-    @PostMapping("{buildingId}")
-    public ResponseEntity<Base> getBase(@PathVariable UUID buildingId) {
+    @PostMapping("/upgradeRequest/{buildingId}")
+    public ResponseEntity<Base> createBuildingUpgradeRequest(@PathVariable UUID buildingId) {
 
         //LOG.info("Retrieving base with id {}", baseId);
 
-        buildingService.upgradeBuilding();
+        buildingService.upgradeBuilding(buildingId);
 
         //Base base = baseService.findById(baseId);
 

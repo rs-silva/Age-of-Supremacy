@@ -8,6 +8,9 @@ import java.util.List;
 public class BuildingUpgradeConfig {
 
     private String buildingName;
+
+    private int maxLevel;
+
     private List<BuildingLevelConfig> levels;
 
 }

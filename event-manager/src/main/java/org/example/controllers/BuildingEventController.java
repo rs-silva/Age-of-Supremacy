@@ -1,7 +1,7 @@
 package org.example.controllers;
 
 import jakarta.validation.Valid;
-import org.example.dto.EventDTO;
+import org.example.dto.BuildingUpgradeEventDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("api/event")
-public class EventController {
+public class BuildingEventController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EventController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BuildingEventController.class);
 
     @PostMapping
-    public ResponseEntity<EventDTO> registerUser(@Valid @RequestBody EventDTO eventDTO) {
-        LOG.info("Registering event = {}", eventDTO);
+    public ResponseEntity<BuildingUpgradeEventDTO> registerUser(@Valid @RequestBody BuildingUpgradeEventDTO buildingUpgradeEventDTO) {
+        LOG.info("Registering event = {}", buildingUpgradeEventDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new EventDTO("Hello World"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new BuildingUpgradeEventDTO("Hello World"));
     }
 
 }

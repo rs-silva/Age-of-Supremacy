@@ -6,6 +6,7 @@ import lombok.Data;
 public class BuildingResourceConfig {
 
     private String resourceName;
+
     private int quantity;
 
 }

@@ -2,32 +2,37 @@
   "buildings": [
     {
       "buildingName": "Masonry Workshop",
+      "maxLevel": 30,
       "levels": [
         {
           "level": 1,
+          "constructionTime" : 300,
           "resources": [
-            {"resourceName": "Construction Materials", "quantity": 10},
-            {"resourceName": "Steel", "quantity": 5}
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
           ]
         },
         {
           "level": 2,
+          "constructionTime" : 500,
           "resources": [
-            {"resourceName": "resource1", "quantity": 15},
-            {"resourceName": "resource2", "quantity": 8},
-            {"resourceName": "resource3", "quantity": 5}
+            { "resourceName": "Construction Materials", "quantity": 15 },
+            { "resourceName": "Steel", "quantity": 8 },
+            { "resourceName": "Fuel", "quantity": 5 }
           ]
         }
       ]
     },
     {
-      "buildingName": "Building2",
+      "buildingName": "Steel Forge",
+      "maxLevel": 30,
       "levels": [
         {
           "level": 1,
+          "constructionTime" : 300,
           "resources": [
-            {"resourceName": "resource3", "quantity": 8},
-            {"resourceName": "resource1", "quantity": 12}
+            { "resourceName": "resource3", "quantity": 8 },
+            { "resourceName": "resource1", "quantity": 12 }
           ]
         }
       ]

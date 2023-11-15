@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class ResourceUtils {
+public class ResourcesUtils {
 
     private final WorldConfig worldConfig;
 
-    public ResourceUtils(WorldConfig worldConfig) {
+    public ResourcesUtils(WorldConfig worldConfig) {
         this.worldConfig = worldConfig;
     }
 
