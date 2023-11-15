@@ -18,8 +18,8 @@ public class EventController {
     private static final Logger LOG = LoggerFactory.getLogger(EventController.class);
 
     @PostMapping
-    public ResponseEntity<EventDTO> registerUser() {
-        //LOG.info("Registering event = {}", event);
+    public ResponseEntity<EventDTO> registerUser(@Valid @RequestBody EventDTO eventDTO) {
+        LOG.info("Registering event = {}", eventDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new EventDTO("Hello World"));
     }
