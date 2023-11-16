@@ -52,7 +52,7 @@ public class BuildingUpgradeUtils {
         return true;
     }
 
-    public Map<String, Integer> getResourceAmount(String buildingType, int buildingLevel) {
+    public Map<String, Integer> getAmountOfResourcesToUpgradeBuilding(String buildingType, int buildingLevel) {
         BuildingUpgradeConfig buildingUpgradeConfig = buildingConfig.getBuildings()
                 .stream()
                 .filter(building -> building.getBuildingName().equals(buildingType))

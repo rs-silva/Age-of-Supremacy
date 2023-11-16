@@ -52,7 +52,7 @@ public class BuildingService {
             return null;
         }
 
-        return buildingUpgradeUtils.getResourceAmount(building.getType(), building.getLevel());
+        return buildingUpgradeUtils.getAmountOfResourcesToUpgradeBuilding(building.getType(), building.getLevel());
     }
 
     public void upgradeBuilding(UUID buildingId) {
