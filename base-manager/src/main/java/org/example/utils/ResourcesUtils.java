@@ -25,36 +25,34 @@ public class ResourcesUtils {
     public Map<String, Double> generateDefaultResourcesForBase() {
         Map<String, Double> resources = new HashMap<>();
 
-        resources.put(ResourceNames.RESOURCE_1.getLabel(), worldConfig.getRESOURCES_DEFAULT_AMOUNT());
-        resources.put(ResourceNames.RESOURCE_2.getLabel(), worldConfig.getRESOURCES_DEFAULT_AMOUNT());
-        resources.put(ResourceNames.RESOURCE_3.getLabel(), worldConfig.getRESOURCES_DEFAULT_AMOUNT());
-        resources.put(ResourceNames.RESOURCE_4.getLabel(), worldConfig.getRESOURCES_DEFAULT_AMOUNT());
-        resources.put(ResourceNames.RESOURCE_5.getLabel(), worldConfig.getRESOURCES_DEFAULT_AMOUNT());
+        for (ResourceNames resourceName : ResourceNames.values()) {
+            resources.put(resourceName.getLabel(), worldConfig.getRESOURCES_DEFAULT_AMOUNT());
+        }
 
         return resources;
     }
 
     public void updateBaseResources(Base base) {
         Double warehouseCapacity = getWarehouseCapacity(base);
-
-        updateResource(base, ResourceNames.RESOURCE_1.getLabel(), BuildingNames.RESOURCE_1_FACTORY.getLabel(), warehouseCapacity);
-        updateResource(base, ResourceNames.RESOURCE_2.getLabel(), BuildingNames.RESOURCE_2_FACTORY.getLabel(), warehouseCapacity);
-        updateResource(base, ResourceNames.RESOURCE_3.getLabel(), BuildingNames.RESOURCE_3_FACTORY.getLabel(), warehouseCapacity);
-        updateResource(base, ResourceNames.RESOURCE_4.getLabel(), BuildingNames.RESOURCE_4_FACTORY.getLabel(), warehouseCapacity);
-        updateResource(base, ResourceNames.RESOURCE_5.getLabel(), BuildingNames.RESOURCE_5_FACTORY.getLabel(), warehouseCapacity);
-
-        base.setLastResourcesUpdate(Timestamp.from(Instant.now()));
-    }
-
-    private void updateResource(Base base, String resourceName, String resourceBuildingName, Double warehouseCapacity) {
-        Map<String, Double> resources = base.getResources();
-        Double resourceCurrentAmount = resources.get(resourceName);
         Timestamp lastResourcesUpdate = base.getLastResourcesUpdate();
 
         Double hoursDifference = calculateNumberOfHoursFromTimestampToNow(lastResourcesUpdate);
 
+        updateResource(base, ResourceNames.RESOURCE_1.getLabel(), BuildingNames.RESOURCE_1_FACTORY.getLabel(), hoursDifference, warehouseCapacity);
+        updateResource(base, ResourceNames.RESOURCE_2.getLabel(), BuildingNames.RESOURCE_2_FACTORY.getLabel(), hoursDifference, warehouseCapacity);
+        updateResource(base, ResourceNames.RESOURCE_3.getLabel(), BuildingNames.RESOURCE_3_FACTORY.getLabel(), hoursDifference, warehouseCapacity);
+        updateResource(base, ResourceNames.RESOURCE_4.getLabel(), BuildingNames.RESOURCE_4_FACTORY.getLabel(), hoursDifference, warehouseCapacity);
+        updateResource(base, ResourceNames.RESOURCE_5.getLabel(), BuildingNames.RESOURCE_5_FACTORY.getLabel(), hoursDifference, warehouseCapacity);
+
+        base.setLastResourcesUpdate(Timestamp.from(Instant.now()));
+    }
+
+    private void updateResource(Base base, String resourceName, String resourceBuildingName, Double hoursDifference, Double warehouseCapacity) {
+        Map<String, Double> resources = base.getResources();
+        Double resourceCurrentAmount = resources.get(resourceName);
+
         Building building = getBuilding(base, resourceBuildingName);
-        Integer buildingLevel = building.getLevel();
+        int buildingLevel = building.getLevel();
         Double amountOfResourcesProducedPerHour = getAmountOfResourcesProducedForLevel(buildingLevel);
 
         Double amountOfResourcesToAdd = hoursDifference * amountOfResourcesProducedPerHour;
@@ -68,7 +66,7 @@ public class ResourcesUtils {
     private Double getWarehouseCapacity(Base base) {
         Building building = getBuilding(base, BuildingNames.WAREHOUSE.getLabel());
 
-        Integer buildingLevel = building.getLevel();
+        int buildingLevel = building.getLevel();
         return getWarehouseCapacityForLevel(buildingLevel);
     }
 

@@ -38,16 +38,16 @@ public class Base {
 
     private String name;
 
-    private Integer x_coordinate;
+    private int x_coordinate;
 
-    private Integer y_coordinate;
+    private int y_coordinate;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     private Player player;
 
-    private Integer score;
+    private int score;
 
     @ElementCollection
     @CollectionTable(name = "bases_resources", joinColumns = @JoinColumn(name = "base_id"))

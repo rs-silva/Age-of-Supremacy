@@ -21,7 +21,7 @@ public class BuildingEventController {
     public ResponseEntity<BuildingUpgradeEventDTO> registerUser(@Valid @RequestBody BuildingUpgradeEventDTO buildingUpgradeEventDTO) {
         LOG.info("Registering event = {}", buildingUpgradeEventDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new BuildingUpgradeEventDTO("Hello World"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new BuildingUpgradeEventDTO());
     }
 
 }

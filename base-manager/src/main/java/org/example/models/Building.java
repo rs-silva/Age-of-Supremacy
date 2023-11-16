@@ -34,9 +34,9 @@ public class Building {
 
     private String type;
 
-    private Integer score;
+    private int score;
 
-    private Integer level;
+    private int level;
 
     @JsonIgnore
     @ManyToOne

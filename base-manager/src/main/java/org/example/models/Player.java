@@ -31,7 +31,7 @@ public class Player {
     @Column(unique = true)
     private String username;
 
-    private Integer totalScore;
+    private int totalScore;
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     private List<Base> baseList;

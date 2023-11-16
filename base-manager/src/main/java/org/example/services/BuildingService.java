@@ -45,9 +45,15 @@ public class BuildingService {
 
     }
 
-    public Map<String, Integer> getAmountOfResourcesToUpgradeBuilding(UUID buildingId) {
-        Building building = findById(buildingId);
+    public Map<String, Integer> getAmountOfResourcesToUpgradeBuilding(Building building) {
+        boolean isBuildingMaxLevel = buildingUpgradeUtils.checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
 
+        if (isBuildingMaxLevel) {
+            return null;
+        }
+
+        LOG.info("PASSED NULL");
+        return buildingUpgradeUtils.getAmountOfResourcesToUpgradeBuilding(building);
     }
 
     public void upgradeBuilding(UUID buildingId) {
@@ -57,12 +63,11 @@ public class BuildingService {
         buildingUpgradeUtils.upgradeBuilding(base, building);
 
 
-
+        /* TODO Remove hardcoded url */
         String url = "http://localhost:8083/api/event";
-        restTemplate.postForObject(url, new BuildingUpgradeEventDTO("b"), BuildingUpgradeEventDTO.class);
+        //restTemplate.postForObject(url, new BuildingUpgradeEventDTO("b"), BuildingUpgradeEventDTO.class);
 
     }
-
 
     public Building findById(UUID id) {
         Optional<Building> building = buildingRepository.findById(id);
