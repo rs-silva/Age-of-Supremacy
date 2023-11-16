@@ -1,6 +1,5 @@
 package org.example.services;
 
-import org.example.dto.BuildingUpgradeEventDTO;
 import org.example.exceptions.ResourceNotFoundException;
 import org.example.models.Base;
 import org.example.models.Building;
@@ -27,16 +26,19 @@ public class BuildingService {
 
     private final BuildingUpgradeUtils buildingUpgradeUtils;
 
+    private final BuildingGenerationUtils buildingGenerationUtils;
+
     private final RestTemplate restTemplate;
 
-    public BuildingService(BuildingRepository buildingRepository, BuildingUpgradeUtils buildingUpgradeUtils, RestTemplate restTemplate) {
+    public BuildingService(BuildingRepository buildingRepository, BuildingUpgradeUtils buildingUpgradeUtils, BuildingGenerationUtils buildingGenerationUtils, RestTemplate restTemplate) {
         this.buildingRepository = buildingRepository;
         this.buildingUpgradeUtils = buildingUpgradeUtils;
+        this.buildingGenerationUtils = buildingGenerationUtils;
         this.restTemplate = restTemplate;
     }
 
     public void generateDefaultBuildingsForNewBase(Base base) {
-        List<Building> buildingList = BuildingGenerationUtils.generateDefaultBuildingsForNewBase();
+        List<Building> buildingList = buildingGenerationUtils.generateDefaultBuildingsForNewBase();
 
         for (Building building : buildingList) {
             building.setBase(base);

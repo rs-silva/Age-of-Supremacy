@@ -1,16 +1,25 @@
 package org.example.utils;
 
 import org.example.enums.BuildingNames;
+import org.example.enums.BuildingsPropertiesNames;
 import org.example.models.Building;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class BuildingGenerationUtils {
+@Component
+public class BuildingGenerationUtils {
 
-    public static List<Building> generateDefaultBuildingsForNewBase() {
+    private final ResourcesUtils resourcesUtils;
+
+    public BuildingGenerationUtils(ResourcesUtils resourcesUtils) {
+        this.resourcesUtils = resourcesUtils;
+    }
+
+    public List<Building> generateDefaultBuildingsForNewBase() {
         List<Building> buildingList = new ArrayList<>();
 
         /* Resource Buildings */
@@ -39,9 +48,10 @@ public abstract class BuildingGenerationUtils {
         return buildingList;
     }
 
-    public static Building generateResourceProductionBuilding(String type) {
+    public Building generateResourceProductionBuilding(String type) {
         Map<String, String> properties = new HashMap<>();
-        properties.put("123", "123");
+        Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(1);
+        properties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
 
         return Building.builder()
                 .type(type)
@@ -51,9 +61,11 @@ public abstract class BuildingGenerationUtils {
                 .build();
     }
 
-    public static Building generateWarehouse() {
+    public Building generateWarehouse() {
         Map<String, String> properties = new HashMap<>();
-        properties.put("123", "123");
+        Double amountOfResourcesStored = resourcesUtils.getWarehouseCapacityForLevel(1);
+        properties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesStored.toString());
+
 
         return Building.builder()
                 .type(BuildingNames.WAREHOUSE.getLabel())
@@ -63,7 +75,7 @@ public abstract class BuildingGenerationUtils {
                 .build();
     }
 
-    public static Building generateMainBuilding() {
+    public Building generateMainBuilding() {
         Map<String, String> properties = new HashMap<>();
         properties.put("123", "123");
 

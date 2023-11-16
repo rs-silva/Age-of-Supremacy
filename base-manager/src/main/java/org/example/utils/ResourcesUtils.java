@@ -90,13 +90,13 @@ public class ResourcesUtils {
     }
 
     /* WORLD_GROWING_FACTOR * BASE * (EXPONENTIAL ^ LEVEL_OF_BUILDING)*/
-    private Double getAmountOfResourcesProducedForLevel(int level) {
+    public Double getAmountOfResourcesProducedForLevel(int level) {
         return worldConfig.getWORLD_GROWING_FACTOR() * worldConfig.getRESOURCES_BASE()
                 * Math.pow(worldConfig.getRESOURCES_EXPONENTIAL(), level);
     }
 
     /* WORLD_GROWING_FACTOR * BASE * (EXPONENTIAL ^ LEVEL_OF_BUILDING)*/
-    private Double getWarehouseCapacityForLevel(int level) {
+    public Double getWarehouseCapacityForLevel(int level) {
         return worldConfig.getWORLD_GROWING_FACTOR() * worldConfig.getWAREHOUSE_BASE()
                 * Math.pow(worldConfig.getWAREHOUSE_EXPONENTIAL(), level);
     }
