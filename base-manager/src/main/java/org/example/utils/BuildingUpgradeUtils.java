@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -43,35 +42,17 @@ public class BuildingUpgradeUtils {
                 .findFirst()
                 .orElse(null);
 
-        LOG.info("buildingUpgradeConfig = {}", buildingUpgradeConfig);
-
         if (buildingUpgradeConfig != null) {
             int buildingMaxLevel = buildingUpgradeConfig.getMaxLevel();
 
-            LOG.info("buildingLevel = {}", buildingLevel);
-            LOG.info("buildingMaxLevel = {}", buildingMaxLevel);
             return buildingLevel >= buildingMaxLevel;
-
         }
 
         /* TODO throw exception */
         return true;
     }
 
-    public Map<String, Integer> getAmountOfResourcesToUpgradeBuilding(Building building) {
-        Map<String, Integer> resources = new HashMap<>();
-        Integer resourceAmount;
-
-        for (ResourceNames resourceName : ResourceNames.values()) {
-            resourceAmount = getResourceAmount(building.getType(), building.getLevel(), resourceName.getLabel());
-            resources.put(resourceName.getLabel(), resourceAmount);
-        }
-
-        LOG.info("resources = {}", resources);
-        return resources;
-    }
-
-    private Integer getResourceAmount(String buildingType, int buildingLevel, String resourceName) {
+    public Map<String, Integer> getResourceAmount(String buildingType, int buildingLevel) {
         BuildingUpgradeConfig buildingUpgradeConfig = buildingConfig.getBuildings()
                 .stream()
                 .filter(building -> building.getBuildingName().equals(buildingType))
@@ -86,15 +67,16 @@ public class BuildingUpgradeUtils {
                     .orElse(null);
 
             if (buildingLevelConfig != null) {
-                BuildingResourceConfig buildingResourceConfig = buildingLevelConfig.getResources()
-                        .stream()
-                        .filter(resource -> resource.getResourceName().equals(resourceName))
-                        .findFirst()
-                        .orElse(null);
-
-                if (buildingResourceConfig != null) {
-                    return buildingResourceConfig.getQuantity();
+                Map<String, Integer> resources = new HashMap<>();
+                for (ResourceNames resourceName : ResourceNames.values()) {
+                    buildingLevelConfig.getResources()
+                            .stream()
+                            .filter(resource -> resource.getResourceName().equals(resourceName.getLabel()))
+                            .findFirst()
+                            .ifPresent(buildingResourceConfig -> resources.put(resourceName.getLabel(), buildingResourceConfig.getQuantity()));
                 }
+
+                return resources;
             }
         }
 

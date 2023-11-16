@@ -52,8 +52,7 @@ public class BuildingService {
             return null;
         }
 
-        LOG.info("PASSED NULL");
-        return buildingUpgradeUtils.getAmountOfResourcesToUpgradeBuilding(building);
+        return buildingUpgradeUtils.getResourceAmount(building.getType(), building.getLevel());
     }
 
     public void upgradeBuilding(UUID buildingId) {
