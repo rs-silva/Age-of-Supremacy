@@ -14,7 +14,6 @@ import java.util.List;
 @PropertySource(name = "Buildings Leveling Configuration", value = "file:../buildings-leveling-config.json", factory = JsonPropertySourceLoader.class)
 public class BuildingConfig {
 
-    @JsonProperty("buildings")
     private List<BuildingUpgradeConfig> buildings;
 
 }
