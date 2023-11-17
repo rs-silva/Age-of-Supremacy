@@ -2,7 +2,6 @@ package org.example.utils;
 
 import org.example.config.BuildingConfig;
 import org.example.config.BuildingLevelConfig;
-import org.example.config.BuildingResourceConfig;
 import org.example.config.BuildingUpgradeConfig;
 import org.example.enums.ResourceNames;
 import org.example.models.Base;
@@ -53,34 +52,52 @@ public class BuildingUpgradeUtils {
     }
 
     public Map<String, Integer> getAmountOfResourcesToUpgradeBuilding(String buildingType, int buildingLevel) {
-        BuildingUpgradeConfig buildingUpgradeConfig = buildingConfig.getBuildings()
+        BuildingUpgradeConfig buildingUpgradeConfig = getBuildingUpgradeConfig(buildingType);
+        BuildingLevelConfig buildingLevelConfig = getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel);
+        Map<String, Integer> buildingResourceConfig = getBuildingResourceConfig(buildingLevelConfig);
+
+        if (buildingUpgradeConfig != null) {
+            return buildingResourceConfig;
+        }
+
+        /* TODO Throw exception */
+        return null;
+    }
+
+    public BuildingUpgradeConfig getBuildingUpgradeConfig(String buildingType) {
+        return buildingConfig.getBuildings()
                 .stream()
                 .filter(building -> building.getBuildingName().equals(buildingType))
                 .findFirst()
                 .orElse(null);
+    }
 
+    public BuildingLevelConfig getBuildingLevelConfig(BuildingUpgradeConfig buildingUpgradeConfig, int buildingLevel) {
         if (buildingUpgradeConfig != null) {
-            BuildingLevelConfig buildingLevelConfig = buildingUpgradeConfig.getLevels()
+            return buildingUpgradeConfig.getLevels()
                     .stream()
                     .filter(level -> level.getLevel() == buildingLevel + 1)
                     .findFirst()
                     .orElse(null);
-
-            if (buildingLevelConfig != null) {
-                Map<String, Integer> resources = new HashMap<>();
-                for (ResourceNames resourceName : ResourceNames.values()) {
-                    buildingLevelConfig.getResources()
-                            .stream()
-                            .filter(resource -> resource.getResourceName().equals(resourceName.getLabel()))
-                            .findFirst()
-                            .ifPresent(buildingResourceConfig -> resources.put(resourceName.getLabel(), buildingResourceConfig.getQuantity()));
-                }
-
-                return resources;
-            }
         }
 
-        /* TODO Throw exception */
+        return null;
+    }
+
+    public Map<String, Integer> getBuildingResourceConfig(BuildingLevelConfig buildingLevelConfig) {
+        if (buildingLevelConfig != null) {
+            Map<String, Integer> resources = new HashMap<>();
+            for (ResourceNames resourceName : ResourceNames.values()) {
+                buildingLevelConfig.getResources()
+                        .stream()
+                        .filter(resource -> resource.getResourceName().equals(resourceName.getLabel()))
+                        .findFirst()
+                        .ifPresent(buildingResourceConfig -> resources.put(resourceName.getLabel(), buildingResourceConfig.getQuantity()));
+            }
+
+            return resources;
+        }
+
         return null;
     }
 }
