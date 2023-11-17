@@ -35,11 +35,7 @@ public class BuildingUpgradeUtils {
     }
 
     public boolean checkIfBuildingIsMaxLevel(String buildingType, Integer buildingLevel) {
-        BuildingUpgradeConfig buildingUpgradeConfig = buildingConfig.getBuildings()
-                .stream()
-                .filter(building -> building.getBuildingName().equals(buildingType))
-                .findFirst()
-                .orElse(null);
+        BuildingUpgradeConfig buildingUpgradeConfig = getBuildingUpgradeConfig(buildingType);
 
         if (buildingUpgradeConfig != null) {
             int buildingMaxLevel = buildingUpgradeConfig.getMaxLevel();

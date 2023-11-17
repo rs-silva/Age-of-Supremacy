@@ -19,4 +19,6 @@ public class BuildingDTO {
 
     private Map<String, Integer> resourcesForNextLevel;
 
+    private String constructionTime;
+
 }
