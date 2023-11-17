@@ -10,7 +10,7 @@ public class BuildingLevelConfig {
     private int level;
 
     /* In seconds */
-    private long constructionTime;
+    private int constructionTime;
 
     private List<BuildingResourceConfig> resources;
 

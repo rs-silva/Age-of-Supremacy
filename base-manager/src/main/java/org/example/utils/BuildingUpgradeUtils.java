@@ -3,7 +3,9 @@ package org.example.utils;
 import org.example.config.BuildingConfig;
 import org.example.config.BuildingLevelConfig;
 import org.example.config.BuildingUpgradeConfig;
+import org.example.dto.BuildingDTO;
 import org.example.enums.ResourceNames;
+import org.example.mappers.BuildingMapper;
 import org.example.models.Base;
 import org.example.models.Building;
 import org.slf4j.Logger;
@@ -45,6 +47,26 @@ public class BuildingUpgradeUtils {
 
         /* TODO throw exception */
         return true;
+    }
+
+    public BuildingDTO getBuildingUpgradeInformation(Building building) {
+        Map<String, Integer> resourcesToNextLevel = getAmountOfResourcesToUpgradeBuilding(building.getType(), building.getLevel());
+        int constructionTimeToNextLevel = getConstructionTimeToUpgradeBuilding(building.getType(), building.getLevel());
+
+        return BuildingMapper.buildDTO(building, resourcesToNextLevel, constructionTimeToNextLevel);
+
+    }
+
+    public int getConstructionTimeToUpgradeBuilding(String buildingType, int buildingLevel) {
+        BuildingUpgradeConfig buildingUpgradeConfig = getBuildingUpgradeConfig(buildingType);
+        BuildingLevelConfig buildingLevelConfig = getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel);
+
+        if (buildingLevelConfig != null) {
+            return buildingLevelConfig.getConstructionTime();
+        }
+
+        /* TODO throw exception */
+        return 0;
     }
 
     public Map<String, Integer> getAmountOfResourcesToUpgradeBuilding(String buildingType, int buildingLevel) {

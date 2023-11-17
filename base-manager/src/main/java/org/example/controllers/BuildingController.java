@@ -35,11 +35,11 @@ public class BuildingController {
         LOG.info("Received request to return resources needed to upgrade building with id {}", buildingId);
 
         Building building = buildingService.findById(buildingId);
-        Map<String, Integer> resourcesToUpgradeToNextLevel = buildingService.getAmountOfResourcesToUpgradeBuilding(building);
+        BuildingDTO buildingDTO = buildingService.getBuildingInformation(building);
 
         //Base base = baseService.findById(baseId);
 
-        return ResponseEntity.ok(BuildingMapper.buildDTO(building, resourcesToUpgradeToNextLevel));
+        return ResponseEntity.ok(buildingDTO);
     }
 
     @PostMapping("/upgrade/{buildingId}")

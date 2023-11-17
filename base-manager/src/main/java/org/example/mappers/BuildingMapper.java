@@ -7,12 +7,13 @@ import java.util.Map;
 
 public abstract class BuildingMapper {
 
-    public static BuildingDTO buildDTO(Building building, Map<String, Integer> resourcesForNextLevel) {
+    public static BuildingDTO buildDTO(Building building, Map<String, Integer> resourcesForNextLevel, int constructionTime) {
         return BuildingDTO.builder()
                 .type(building.getType())
                 .level(building.getLevel())
                 .properties(building.getProperties())
                 .resourcesForNextLevel(resourcesForNextLevel)
+                .constructionTimeInSeconds(String.valueOf(constructionTime))
                 .build();
     }
 

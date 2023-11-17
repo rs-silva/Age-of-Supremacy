@@ -14,7 +14,7 @@
         },
         {
           "level": 2,
-          "constructionTime" : 500,
+          "constructionTime" : 700,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 15 },
             { "resourceName": "Steel", "quantity": 8 },

@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.dto.BuildingDTO;
 import org.example.exceptions.ResourceNotFoundException;
 import org.example.models.Base;
 import org.example.models.Building;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,14 +47,14 @@ public class BuildingService {
 
     }
 
-    public Map<String, Integer> getAmountOfResourcesToUpgradeBuilding(Building building) {
+    public BuildingDTO getBuildingInformation(Building building) {
         boolean isBuildingMaxLevel = buildingUpgradeUtils.checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
 
         if (isBuildingMaxLevel) {
             return null;
         }
 
-        return buildingUpgradeUtils.getAmountOfResourcesToUpgradeBuilding(building.getType(), building.getLevel());
+        return buildingUpgradeUtils.getBuildingUpgradeInformation(building);
     }
 
     public void upgradeBuilding(UUID buildingId) {
