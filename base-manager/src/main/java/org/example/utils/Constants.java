@@ -9,4 +9,6 @@ public abstract class Constants {
     public static final String BASE_NOT_FOUND = "Base with id %s was not found";
 
     public static final String BUILDING_NOT_FOUND = "Building with id %s was not found";
+
+    public static final String BUILDING_UPGRADE_NOT_FOUND_ERROR = "There was an error while retrieving the building's upgrade configuration.";
 }

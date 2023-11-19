@@ -6,6 +6,7 @@ import org.example.config.BuildingUpgradeConfig;
 import org.example.dto.BuildingDTO;
 import org.example.enums.BuildingsPropertiesNames;
 import org.example.enums.ResourceNames;
+import org.example.exceptions.InternalServerErrorException;
 import org.example.mappers.BuildingMapper;
 import org.example.models.Base;
 import org.example.models.Building;
@@ -46,8 +47,8 @@ public class BuildingUpgradeUtils {
             return buildingLevel >= buildingMaxLevel;
         }
 
-        /* TODO throw exception */
-        return true;
+        LOG.info("There was and error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel);
+        throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
     public BuildingDTO getBuildingUpgradeInformation(Building building) {
@@ -68,8 +69,8 @@ public class BuildingUpgradeUtils {
             return buildingResourceConfig;
         }
 
-        /* TODO Throw exception */
-        return null;
+        LOG.info("There was and error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel);
+        throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
     public BuildingUpgradeConfig getBuildingUpgradeConfig(String buildingType) {
