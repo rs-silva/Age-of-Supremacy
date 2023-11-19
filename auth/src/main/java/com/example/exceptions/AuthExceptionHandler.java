@@ -1,6 +1,10 @@
 package com.example.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.exceptions.ErrorMessage;
+import org.example.exceptions.ForbiddenException;
+import org.example.exceptions.ResourceAlreadyExistsException;
+import org.example.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

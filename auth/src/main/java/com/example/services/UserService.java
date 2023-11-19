@@ -1,9 +1,6 @@
 package com.example.services;
 
 import com.example.dto.UserResponseDTO;
-import com.example.exceptions.ForbiddenException;
-import com.example.exceptions.ResourceAlreadyExistsException;
-import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.repositories.UserRepository;
@@ -11,6 +8,9 @@ import com.example.utils.AuthConstants;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.PasswordUtils;
 import com.example.utils.UserUtils;
+import org.example.exceptions.ForbiddenException;
+import org.example.exceptions.ResourceAlreadyExistsException;
+import org.example.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

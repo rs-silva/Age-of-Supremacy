@@ -3,7 +3,7 @@ package com.example.controllers;
 import com.example.dto.LoginRequestDTO;
 import com.example.dto.UserResponseDTO;
 import com.example.dto.RefreshTokenResponseDTO;
-import com.example.exceptions.ErrorMessage;
+import org.example.exceptions.ErrorMessage;
 import com.example.models.RefreshToken;
 import com.example.models.User;
 import com.example.repositories.RefreshTokenRepository;
