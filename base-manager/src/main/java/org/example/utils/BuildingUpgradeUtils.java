@@ -4,6 +4,7 @@ import org.example.config.BuildingConfig;
 import org.example.config.BuildingLevelConfig;
 import org.example.config.BuildingUpgradeConfig;
 import org.example.dto.BuildingDTO;
+import org.example.enums.BuildingsPropertiesNames;
 import org.example.enums.ResourceNames;
 import org.example.mappers.BuildingMapper;
 import org.example.models.Base;
@@ -50,31 +51,20 @@ public class BuildingUpgradeUtils {
     }
 
     public BuildingDTO getBuildingUpgradeInformation(Building building) {
-        Map<String, Integer> resourcesToNextLevel = getAmountOfResourcesToUpgradeBuilding(building.getType(), building.getLevel());
-        int constructionTimeToNextLevel = getConstructionTimeToUpgradeBuilding(building.getType(), building.getLevel());
+        Map<String, Integer> requirementsToNextLevel = getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
 
-        return BuildingMapper.buildDTO(building, resourcesToNextLevel, constructionTimeToNextLevel);
+        return BuildingMapper.buildDTO(building, requirementsToNextLevel);
 
     }
 
-    public int getConstructionTimeToUpgradeBuilding(String buildingType, int buildingLevel) {
-        BuildingUpgradeConfig buildingUpgradeConfig = getBuildingUpgradeConfig(buildingType);
-        BuildingLevelConfig buildingLevelConfig = getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel);
-
-        if (buildingLevelConfig != null) {
-            return buildingLevelConfig.getConstructionTime();
-        }
-
-        /* TODO throw exception */
-        return 0;
-    }
-
-    public Map<String, Integer> getAmountOfResourcesToUpgradeBuilding(String buildingType, int buildingLevel) {
+    public Map<String, Integer> getRequirementsToUpgradeBuilding(String buildingType, int buildingLevel) {
         BuildingUpgradeConfig buildingUpgradeConfig = getBuildingUpgradeConfig(buildingType);
         BuildingLevelConfig buildingLevelConfig = getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel);
         Map<String, Integer> buildingResourceConfig = getBuildingResourceConfig(buildingLevelConfig);
 
         if (buildingUpgradeConfig != null) {
+            buildingResourceConfig.put(
+                    BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel(), buildingLevelConfig.getConstructionTime());
             return buildingResourceConfig;
         }
 

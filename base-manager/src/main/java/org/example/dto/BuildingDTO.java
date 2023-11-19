@@ -17,8 +17,6 @@ public class BuildingDTO {
 
     private Map<String, String> properties;
 
-    private Map<String, Integer> resourcesForNextLevel;
-
-    private String constructionTimeInSeconds;
+    private Map<String, Integer> requirementsForNextLevel;
 
 }

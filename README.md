@@ -1,6 +1,6 @@
 # Age of Supremacy
 
-Backend for a Modern Era Real Time Strategy browser
+Backend for a Modern Era Real Time Strategy browser game
 
 ## Features
 
@@ -30,3 +30,7 @@ Backend for a Modern Era Real Time Strategy browser
 
 **Feedback Mechanism:** Implement a feedback system that allows players to report bugs, suggest improvements, and provide comments. This can help shape the game's development.
 
+TODO:
+
+List players' list ordered by score, bases etc, with pagination
+Create BaseDTO
