@@ -7,35 +7,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpClientErrorException;
 
 @ControllerAdvice
-public class AuthExceptionHandler {
+public class GlobalExceptionHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuthExceptionHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     private final HttpServletRequest request;
 
-    public AuthExceptionHandler(HttpServletRequest request) {
+    public GlobalExceptionHandler(HttpServletRequest request) {
         this.request = request;
-    }
-
-    @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<String> handleHttpClientErrorException(HttpClientErrorException ex) {
-        String errorMessage = formatHttpClientErrorExceptionErrorMessage(ex.getMessage());
-        LOG.error(errorMessage);
-        return new ResponseEntity<>(errorMessage, ex.getStatusCode());
-    }
-
-    private String formatHttpClientErrorExceptionErrorMessage(String message) {
-        /* Remove the 'XXX : "' in the beginning and the quotation marks in the end of the message */
-        return message.substring(7, message.length() - 1);
-    }
-
-    @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<ErrorMessage> handleUnauthorizedException(InvalidCredentialsException ex) {
-        LOG.error(ex.getMessage());
-        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -56,10 +37,10 @@ public class AuthExceptionHandler {
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(RefreshTokenException.class)
-    public ResponseEntity<ErrorMessage> handleRefreshTokenException(RefreshTokenException ex) {
+    @ExceptionHandler(InternalServerErrorException.class)
+    public ResponseEntity<ErrorMessage> handleInternalServerErrorException(InternalServerErrorException ex) {
         LOG.error(ex.getMessage());
-        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private ErrorMessage buildErrorMessage(RuntimeException ex) {
@@ -68,4 +49,5 @@ public class AuthExceptionHandler {
                 ex.getMessage(),
                 request.getRequestURI());
     }
+
 }
