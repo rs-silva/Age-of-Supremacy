@@ -71,10 +71,16 @@ public class BuildingService {
         if (isBuildingMaxLevel) {
             LOG.info("Attempted to upgrade building {}, which is already at the maximum level", building.getId());
             throw new InternalServerErrorException(Constants.BUILDING_IS_ALREADY_MAX_LEVEL);
-
         }
 
         Base base = building.getBase();
+        boolean areUpgradeRequirementsMet = buildingUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, building);
+
+        if (!areUpgradeRequirementsMet) {
+            LOG.info("Attempted to upgrade building {}, but there are no enough resources in the corresponding base.", building.getId());
+            throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
+        }
+
         buildingUpgradeUtils.upgradeBuilding(base, building);
 
 

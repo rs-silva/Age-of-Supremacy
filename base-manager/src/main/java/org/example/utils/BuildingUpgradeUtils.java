@@ -26,20 +26,45 @@ public class BuildingUpgradeUtils {
         this.buildingConfig = buildingConfig;
     }
 
-    public boolean canBuildingBeUpgraded(Building building) {
-        boolean isBuildingMaxLevel = checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
+    public void upgradeBuilding(Base base, Building building) {
+        Map<String, Double> baseResources = base.getResources();
+        Map<String, Integer> resourcesRequired = getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
 
-        if (isBuildingMaxLevel) {
-            LOG.info("Attempted to upgrade building {}, which is already at the maximum level", building.getId());
-            throw new InternalServerErrorException(Constants.BUILDING_IS_ALREADY_MAX_LEVEL);
+        /* Remove time requirement which is not needed for this (only resources) */
+        resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
+
+        for (String resourceName : resourcesRequired.keySet()) {
+            Double currentResourceAmount = baseResources.get(resourceName);
+            Integer resourceAmountRequired = resourcesRequired.get(resourceName);
+
+            baseResources.put(resourceName, currentResourceAmount - resourceAmountRequired);
         }
+
     }
 
-    public Base upgradeBuilding(Base base, Building building) {
+    public boolean checkIfThereAreEnoughResourcesToUpgradeBuilding(Base base, Building building) {
+        Map<String, Double> baseResources = base.getResources();
+        Map<String, Integer> resourcesRequired = getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
 
+        /* Remove time requirement which is not needed for this (only resources) */
+        resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
 
+        for (String resourceName : resourcesRequired.keySet()) {
+            if (baseResources.containsKey(resourceName)) {
+                Double currentResourceAmount = baseResources.get(resourceName);
+                Integer resourceAmountRequired = resourcesRequired.get(resourceName);
+                if (currentResourceAmount < resourceAmountRequired) {
+                    return false;
+                }
+            }
+            else {
+                LOG.info("There was an error while upgrading building {}\n" +
+                        "The base does not contain information about resource {}", building.getId(), resourceName);
+                throw new InternalServerErrorException(Constants.BASE_NO_INFORMATION_ABOUT_RESOURCE_AMOUNT);
+            }
+        }
 
-        return null;
+        return true;
     }
 
     public boolean checkIfBuildingIsMaxLevel(String buildingType, Integer buildingLevel) {
@@ -51,13 +76,13 @@ public class BuildingUpgradeUtils {
             return buildingLevel >= buildingMaxLevel;
         }
 
-        LOG.info("There was and error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel + 1);
+        LOG.info("There was an error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel + 1);
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
     public Map<String, Integer> getRequirementsToUpgradeBuilding(String buildingType, int buildingLevel) {
         BuildingUpgradeConfig buildingUpgradeConfig = getBuildingUpgradeConfig(buildingType);
-        BuildingLevelConfig buildingLevelConfig = getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel);
+        BuildingLevelConfig buildingLevelConfig = getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel + 1);
         Map<String, Integer> buildingResourceConfig = getBuildingResourceConfig(buildingLevelConfig);
 
         if (buildingUpgradeConfig != null) {
@@ -66,11 +91,11 @@ public class BuildingUpgradeUtils {
             return buildingResourceConfig;
         }
 
-        LOG.info("There was and error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel);
+        LOG.info("There was an error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel);
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
-    public BuildingUpgradeConfig getBuildingUpgradeConfig(String buildingType) {
+    private BuildingUpgradeConfig getBuildingUpgradeConfig(String buildingType) {
         return buildingConfig.getBuildings()
                 .stream()
                 .filter(building -> building.getBuildingName().equals(buildingType))
@@ -78,11 +103,11 @@ public class BuildingUpgradeUtils {
                 .orElse(null);
     }
 
-    public BuildingLevelConfig getBuildingLevelConfig(BuildingUpgradeConfig buildingUpgradeConfig, int buildingLevel) {
+    private BuildingLevelConfig getBuildingLevelConfig(BuildingUpgradeConfig buildingUpgradeConfig, int buildingLevel) {
         if (buildingUpgradeConfig != null) {
             return buildingUpgradeConfig.getLevels()
                     .stream()
-                    .filter(level -> level.getLevel() == buildingLevel + 1)
+                    .filter(level -> level.getLevel() == buildingLevel)
                     .findFirst()
                     .orElse(null);
         }
@@ -90,7 +115,7 @@ public class BuildingUpgradeUtils {
         return null;
     }
 
-    public Map<String, Integer> getBuildingResourceConfig(BuildingLevelConfig buildingLevelConfig) {
+    private Map<String, Integer> getBuildingResourceConfig(BuildingLevelConfig buildingLevelConfig) {
         if (buildingLevelConfig != null) {
             Map<String, Integer> resources = new HashMap<>();
             for (ResourceNames resourceName : ResourceNames.values()) {
