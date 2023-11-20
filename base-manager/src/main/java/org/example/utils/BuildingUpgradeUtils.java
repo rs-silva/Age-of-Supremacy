@@ -51,13 +51,6 @@ public class BuildingUpgradeUtils {
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
-    public BuildingDTO getBuildingUpgradeInformation(Building building) {
-        Map<String, Integer> requirementsToNextLevel = getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
-
-        return BuildingMapper.buildDTO(building, requirementsToNextLevel);
-
-    }
-
     public Map<String, Integer> getRequirementsToUpgradeBuilding(String buildingType, int buildingLevel) {
         BuildingUpgradeConfig buildingUpgradeConfig = getBuildingUpgradeConfig(buildingType);
         BuildingLevelConfig buildingLevelConfig = getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel);

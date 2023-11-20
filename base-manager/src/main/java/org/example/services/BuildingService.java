@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.dto.BuildingDTO;
 import org.example.exceptions.ResourceNotFoundException;
+import org.example.mappers.BuildingMapper;
 import org.example.models.Base;
 import org.example.models.Building;
 import org.example.repositories.BuildingRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,7 +56,8 @@ public class BuildingService {
             return null;
         }
 
-        return buildingUpgradeUtils.getBuildingUpgradeInformation(building);
+        Map<String, Integer> requirementsToNextLevel = buildingUpgradeUtils.getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
+        return BuildingMapper.buildDTO(building, requirementsToNextLevel);
     }
 
     public void upgradeBuilding(UUID buildingId) {
