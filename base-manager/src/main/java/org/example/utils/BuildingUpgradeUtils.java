@@ -26,12 +26,18 @@ public class BuildingUpgradeUtils {
         this.buildingConfig = buildingConfig;
     }
 
-    public Base upgradeBuilding(Base base, Building building) {
+    public boolean canBuildingBeUpgraded(Building building) {
         boolean isBuildingMaxLevel = checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
 
         if (isBuildingMaxLevel) {
-            /* TODO throw exception */
+            LOG.info("Attempted to upgrade building {}, which is already at the maximum level", building.getId());
+            throw new InternalServerErrorException(Constants.BUILDING_IS_ALREADY_MAX_LEVEL);
         }
+    }
+
+    public Base upgradeBuilding(Base base, Building building) {
+
+
 
         return null;
     }
@@ -45,7 +51,7 @@ public class BuildingUpgradeUtils {
             return buildingLevel >= buildingMaxLevel;
         }
 
-        LOG.info("There was and error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel);
+        LOG.info("There was and error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel + 1);
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 

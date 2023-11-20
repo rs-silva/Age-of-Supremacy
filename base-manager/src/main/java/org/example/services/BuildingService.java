@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.dto.BuildingDTO;
+import org.example.exceptions.InternalServerErrorException;
 import org.example.exceptions.ResourceNotFoundException;
 import org.example.mappers.BuildingMapper;
 import org.example.models.Base;
@@ -12,6 +13,7 @@ import org.example.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -60,9 +62,18 @@ public class BuildingService {
         return BuildingMapper.buildDTO(building, requirementsToNextLevel);
     }
 
+    @Transactional
     public void upgradeBuilding(UUID buildingId) {
-        /* TODO Validate if the building belongs to the player */
         Building building = findById(buildingId);
+        /* TODO Validate if the building belongs to the player */
+        boolean isBuildingMaxLevel = buildingUpgradeUtils.checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
+
+        if (isBuildingMaxLevel) {
+            LOG.info("Attempted to upgrade building {}, which is already at the maximum level", building.getId());
+            throw new InternalServerErrorException(Constants.BUILDING_IS_ALREADY_MAX_LEVEL);
+
+        }
+
         Base base = building.getBase();
         buildingUpgradeUtils.upgradeBuilding(base, building);
 
