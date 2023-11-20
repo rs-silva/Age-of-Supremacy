@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "resources")
-@PropertySource(value = "file:../world-config.yml", factory = YamlPropertySourceFactory.class)
+@PropertySource(value = "file:../world-config.yml", factory = YamlPropertySourceLoader.class)
 public class WorldConfig {
 
     /* Resource Production */

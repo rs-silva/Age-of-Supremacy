@@ -82,12 +82,6 @@ public class BuildingService {
         }
 
         buildingUpgradeUtils.upgradeBuilding(base, building);
-
-
-        /* TODO Remove hardcoded url */
-        String url = "http://localhost:8083/api/event";
-        //restTemplate.postForObject(url, new BuildingUpgradeEventDTO("b"), BuildingUpgradeEventDTO.class);
-
     }
 
     public Building findById(UUID id) {

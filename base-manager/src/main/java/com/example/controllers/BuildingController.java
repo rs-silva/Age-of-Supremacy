@@ -47,9 +47,7 @@ public class BuildingController {
 
         buildingService.upgradeBuilding(buildingId);
 
-        //Base base = baseService.findById(baseId);
-
-        return ResponseEntity.ok(new Base());
+        return ResponseEntity.ok().build();
     }
 
 }

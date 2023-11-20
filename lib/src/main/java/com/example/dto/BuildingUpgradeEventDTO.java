@@ -16,6 +16,6 @@ public class BuildingUpgradeEventDTO {
 
     private UUID buildingId;
 
-    private Timestamp endTime;
+    private Timestamp completionTime;
 
 }

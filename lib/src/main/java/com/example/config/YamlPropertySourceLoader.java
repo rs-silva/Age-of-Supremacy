@@ -8,7 +8,7 @@ import org.springframework.core.io.support.PropertySourceFactory;
 
 import java.util.Properties;
 
-public class YamlPropertySourceFactory implements PropertySourceFactory {
+public class YamlPropertySourceLoader implements PropertySourceFactory {
 
     @Override
     public PropertySource<?> createPropertySource(String name, EncodedResource encodedResource) {

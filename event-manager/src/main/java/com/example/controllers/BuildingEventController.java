@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.dto.BuildingUpgradeEventDTO;
+import com.example.services.BuildingEventService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +18,19 @@ public class BuildingEventController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuildingEventController.class);
 
+    private final BuildingEventService buildingEventService;
+
+    public BuildingEventController(BuildingEventService buildingEventService) {
+        this.buildingEventService = buildingEventService;
+    }
+
     @PostMapping
     public ResponseEntity<BuildingUpgradeEventDTO> registerUser(@Valid @RequestBody BuildingUpgradeEventDTO buildingUpgradeEventDTO) {
         LOG.info("Registering event = {}", buildingUpgradeEventDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new BuildingUpgradeEventDTO());
+        buildingEventService.registerEvent(buildingUpgradeEventDTO);
+
+        return ResponseEntity.ok().build();
     }
 
 }

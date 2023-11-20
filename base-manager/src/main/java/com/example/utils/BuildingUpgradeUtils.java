@@ -2,6 +2,7 @@ package com.example.utils;
 
 import com.example.config.BuildingLevelConfig;
 import com.example.config.BuildingUpgradeConfig;
+import com.example.dto.BuildingUpgradeEventDTO;
 import com.example.enums.BuildingsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.models.Base;
@@ -11,7 +12,10 @@ import com.example.enums.ResourceNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +26,11 @@ public class BuildingUpgradeUtils {
 
     private final BuildingConfig buildingConfig;
 
-    public BuildingUpgradeUtils(BuildingConfig buildingConfig) {
+    private final RestTemplate restTemplate;
+
+    public BuildingUpgradeUtils(BuildingConfig buildingConfig, RestTemplate restTemplate) {
         this.buildingConfig = buildingConfig;
+        this.restTemplate = restTemplate;
     }
 
     public void upgradeBuilding(Base base, Building building) {
@@ -31,7 +38,7 @@ public class BuildingUpgradeUtils {
         Map<String, Integer> resourcesRequired = getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
 
         /* Remove time requirement which is not needed for this (only resources) */
-        resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
+        Integer constructionTime = resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
 
         for (String resourceName : resourcesRequired.keySet()) {
             Double currentResourceAmount = baseResources.get(resourceName);
@@ -39,6 +46,17 @@ public class BuildingUpgradeUtils {
 
             baseResources.put(resourceName, currentResourceAmount - resourceAmountRequired);
         }
+
+        Timestamp endTime = Timestamp.from(Instant.now().plusMillis(constructionTime * 1000));
+
+        BuildingUpgradeEventDTO buildingUpgradeEventDTO = BuildingUpgradeEventDTO.builder()
+                .buildingId(building.getId())
+                .completionTime(endTime)
+                .build();
+
+        /* TODO Remove hardcoded url */
+        String url = "http://localhost:8083/api/event";
+        restTemplate.postForObject(url, buildingUpgradeEventDTO, BuildingUpgradeEventDTO.class);
 
     }
 
