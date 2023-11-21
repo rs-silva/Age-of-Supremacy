@@ -79,7 +79,7 @@ public class BuildingGenerationUtils {
 
     public void requestBuildingGeneration(Base base, String buildingType) {
         Map<String, Double> baseResources = base.getResources();
-        Map<String, Integer> resourcesRequired = buildingRequestUpgradeUtils.getRequirementsToUpgradeBuilding(buildingType, 0);
+        Map<String, Integer> resourcesRequired = getRequirementsToGenerateBuilding(buildingType);
 
         /* Remove time requirement which is not needed for this (only resources) */
         Integer constructionTime = resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
@@ -103,6 +103,10 @@ public class BuildingGenerationUtils {
         /* Send Building Generation Event to event-manager module */
         String url = "http://localhost:8083/api/event/building/generate";
         restTemplate.postForObject(url, buildingGenerationEventDTO, BuildingGenerationEventDTO.class);
+    }
+
+    private Map<String, Integer> getRequirementsToGenerateBuilding(String buildingType) {
+        return buildingRequestUpgradeUtils.getRequirementsToUpgradeBuilding(buildingType, 0);
     }
 
     public Building completeBuildingGeneration(Base base, String buildingType) {
