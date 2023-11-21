@@ -52,6 +52,37 @@
           ]
         }
       ]
+    },
+    {
+      "buildingName": "Warehouse",
+      "maxLevel": 30,
+      "levels": [
+        {
+          "level": 1,
+          "constructionTime" : 300,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 2,
+          "constructionTime" : 5,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 20 },
+            { "resourceName": "Steel", "quantity": 8 },
+            { "resourceName": "Fuel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 3,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
+          ]
+        }
+      ]
     }
   ]
 }

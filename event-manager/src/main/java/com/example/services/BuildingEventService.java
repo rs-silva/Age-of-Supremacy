@@ -44,7 +44,7 @@ public class BuildingEventService {
 
         /* Trigger an event that sends a call to base-manager to level up the building */
         for (BuildingUpgradeEvent buildingUpgradeEvent : buildingUpgradeEventList) {
-            LOG.info("Triggering event for building with id {}", buildingUpgradeEvent.getBuildingId());
+            LOG.info("Triggering building upgrade event for building with id {}", buildingUpgradeEvent.getBuildingId());
             /* TODO Remove hardcoded url */
             String url = "http://localhost:8082/api/building/completeUpgrade/" + buildingUpgradeEvent.getBuildingId();
             restTemplate.postForObject(url, null, String.class);
