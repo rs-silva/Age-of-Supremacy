@@ -6,6 +6,8 @@ public abstract class Constants {
 
     public static final String PLAYER_ID_FROM_REQUEST_DOES_NOT_MATCH_TOKEN_PLAYER_ID = "Player ID from request is different from the Player ID in the token";
 
+    public static final String PLAYER_NOT_FOUND = "Player with id %s was not found";
+
     public static final String BASE_NOT_FOUND = "Base with id %s was not found";
 
     public static final String BUILDING_NOT_FOUND = "Building with id %s was not found";

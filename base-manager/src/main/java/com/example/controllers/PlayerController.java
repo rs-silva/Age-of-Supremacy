@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.interfaces.PlayerIdInterface;
 import com.example.models.Player;
 import jakarta.validation.Valid;
 import com.example.dto.ListOfBasesDTO;
@@ -41,6 +42,14 @@ public class PlayerController {
         Player player = playerService.createPlayer(playerDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(PlayerMapper.fromEntityToNewPlayerDTO(player));
+    }
+
+    @GetMapping("{playerId}")
+    public ResponseEntity<PlayerIdInterface> getPlayer(@PathVariable UUID playerId) {
+
+        PlayerIdInterface player = playerService.findPlayer(playerId);
+
+        return ResponseEntity.ok(player);
     }
 
     @GetMapping("/listOfBases/{playerId}")

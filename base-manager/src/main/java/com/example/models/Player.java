@@ -1,5 +1,6 @@
 package com.example.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +33,7 @@ public class Player {
 
     private int totalScore;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     private List<Base> baseList;
 

@@ -2,6 +2,9 @@ package com.example.services;
 
 import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceAlreadyExistsException;
+import com.example.exceptions.ResourceNotFoundException;
+import com.example.interfaces.PlayerIdInterface;
+import com.example.models.Base;
 import com.example.models.Player;
 import com.example.repositories.PlayerRepository;
 import com.example.dto.NewPlayerDTO;
@@ -54,6 +57,11 @@ public class PlayerService {
         return player;
     }
 
+    public PlayerIdInterface findPlayer(UUID playerId) {
+        validateIdFromToken(playerId);
+        return findById(playerId);
+    }
+
     public List<BaseIdInterface> getListOfBases(UUID playerId) {
         validateIdFromToken(playerId);
         return baseService.findByAllPlayerId(playerId);
@@ -67,6 +75,18 @@ public class PlayerService {
             throw new ResourceAlreadyExistsException(String.format(
                     Constants.PLAYER_ALREADY_EXISTS, playerId, username));
         }
+    }
+
+    public PlayerIdInterface findById(UUID playerId) {
+        validateIdFromToken(playerId);
+        PlayerIdInterface player = playerRepository.findByPlayerId(playerId);
+
+        if (player == null) {
+            throw new ResourceNotFoundException(String.format(
+                    Constants.PLAYER_NOT_FOUND, playerId));
+        }
+
+        return player;
     }
 
     private void validateIdFromToken(UUID playerId) {
