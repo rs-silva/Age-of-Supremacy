@@ -13,5 +13,7 @@ public interface BuildingGenerationEventRepository extends JpaRepository<Buildin
 
     List<BuildingGenerationEvent> findByCompletionTimeBefore(Timestamp timestamp);
 
+    BuildingGenerationEvent findByBaseId(UUID baseId);
+
 }
 

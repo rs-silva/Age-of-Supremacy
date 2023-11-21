@@ -34,6 +34,7 @@ public class BuildingUpgradeEventService {
 
     public void registerEvent(BuildingUpgradeEventDTO buildingUpgradeEventDTO) {
         checkIfBuildingIsNotBeingUpgradedAlready(buildingUpgradeEventDTO.getBuildingId());
+
         BuildingUpgradeEvent buildingUpgradeEvent = BuildingUpgradeEventMapper.fromDtoToEntity(buildingUpgradeEventDTO);
         buildingUpgradeEventRepository.save(buildingUpgradeEvent);
     }

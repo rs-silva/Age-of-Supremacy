@@ -1,9 +1,11 @@
 package com.example.services;
 
 import com.example.dto.BuildingGenerationEventDTO;
+import com.example.exceptions.InternalServerErrorException;
 import com.example.mappers.BuildingGenerationEventMapper;
 import com.example.models.BuildingGenerationEvent;
 import com.example.repositories.BuildingGenerationEventRepository;
+import com.example.utils.EventManagerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BuildingGenerationEventService {
@@ -30,6 +33,8 @@ public class BuildingGenerationEventService {
     }
 
     public void registerEvent(BuildingGenerationEventDTO buildingGenerationEventDTO) {
+        checkIfThereAreBuildingAlreadyBeingConstructed(buildingGenerationEventDTO.getBaseId());
+
         BuildingGenerationEvent buildingGenerationEvent = BuildingGenerationEventMapper.fromDtoToEntity(buildingGenerationEventDTO);
         buildingGenerationEventRepository.save(buildingGenerationEvent);
     }
@@ -49,6 +54,15 @@ public class BuildingGenerationEventService {
             String url = "http://localhost:8082/api/base/" + buildingGenerationEvent.getBaseId() + "/finishBuilding/" + buildingGenerationEvent.getBuildingType();
             restTemplate.postForObject(url, null, String.class);
             buildingGenerationEventRepository.delete(buildingGenerationEvent);
+        }
+
+    }
+
+    private void checkIfThereAreBuildingAlreadyBeingConstructed(UUID baseId) {
+        BuildingGenerationEvent buildingGenerationEvent = buildingGenerationEventRepository.findByBaseId(baseId);
+
+        if (buildingGenerationEvent != null) {
+            throw new InternalServerErrorException(EventManagerConstants.BUILDING_GENERATION_EVENT_ALREADY_EXISTS);
         }
 
     }
