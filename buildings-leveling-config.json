@@ -16,7 +16,7 @@
           "level": 2,
           "constructionTime" : 5,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 300 },
+            { "resourceName": "Construction Materials", "quantity": 50 },
             { "resourceName": "Steel", "quantity": 8 },
             { "resourceName": "Fuel", "quantity": 5 }
           ]

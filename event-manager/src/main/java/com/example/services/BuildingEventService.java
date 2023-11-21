@@ -3,7 +3,7 @@ package com.example.services;
 import com.example.dto.BuildingUpgradeEventDTO;
 import com.example.mappers.BuildingEventMapper;
 import com.example.models.BuildingUpgradeEvent;
-import com.example.repositories.BuildingEventRepository;
+import com.example.repositories.BuildingUpgradeEventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,35 +20,35 @@ public class BuildingEventService {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuildingEventService.class);
 
-    private final BuildingEventRepository buildingEventRepository;
+    private final BuildingUpgradeEventRepository buildingUpgradeEventRepository;
 
     private final RestTemplate restTemplate;
 
-    public BuildingEventService(BuildingEventRepository buildingEventRepository, RestTemplate restTemplate) {
-        this.buildingEventRepository = buildingEventRepository;
+    public BuildingEventService(BuildingUpgradeEventRepository buildingUpgradeEventRepository, RestTemplate restTemplate) {
+        this.buildingUpgradeEventRepository = buildingUpgradeEventRepository;
         this.restTemplate = restTemplate;
     }
 
     public void registerEvent(BuildingUpgradeEventDTO buildingUpgradeEventDTO) {
         BuildingUpgradeEvent buildingUpgradeEvent = BuildingEventMapper.fromDtoToEntity(buildingUpgradeEventDTO);
-        buildingEventRepository.save(buildingUpgradeEvent);
+        buildingUpgradeEventRepository.save(buildingUpgradeEvent);
     }
 
     /* Runs once a second to check if there are any buildings, which construction time already passed */
     @Scheduled(fixedRate = 1000)
     @Transactional
     public void checkBuildingsUpgrades() {
-        LOG.info("Running scheduler");
+        //LOG.info("Running scheduler");
 
-        List<BuildingUpgradeEvent> buildingUpgradeEventList = buildingEventRepository.findByCompletionTimeBefore(Timestamp.from(Instant.now()));
+        List<BuildingUpgradeEvent> buildingUpgradeEventList = buildingUpgradeEventRepository.findByCompletionTimeBefore(Timestamp.from(Instant.now()));
 
         /* Trigger an event that sends a call to base-manager to level up the building */
         for (BuildingUpgradeEvent buildingUpgradeEvent : buildingUpgradeEventList) {
-            LOG.info("Triggering building upgrade event for building with id {}", buildingUpgradeEvent.getBuildingId());
+            LOG.info("Triggering event to complete upgrade for building with id {}", buildingUpgradeEvent.getBuildingId());
             /* TODO Remove hardcoded url */
             String url = "http://localhost:8082/api/building/completeUpgrade/" + buildingUpgradeEvent.getBuildingId();
             restTemplate.postForObject(url, null, String.class);
-            buildingEventRepository.delete(buildingUpgradeEvent);
+            buildingUpgradeEventRepository.delete(buildingUpgradeEvent);
         }
 
     }
