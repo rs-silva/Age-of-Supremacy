@@ -2,8 +2,6 @@ package com.example.services;
 
 import com.example.dto.BuildingUpgradeEventDTO;
 import com.example.exceptions.InternalServerErrorException;
-import com.example.exceptions.ResourceAlreadyExistsException;
-import com.example.exceptions.ResourceNotFoundException;
 import com.example.mappers.BuildingUpgradeEventMapper;
 import com.example.models.BuildingUpgradeEvent;
 import com.example.repositories.BuildingUpgradeEventRepository;
@@ -18,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -47,7 +44,7 @@ public class BuildingUpgradeEventService {
     public void checkBuildingsUpgradeEvents() {
         //LOG.info("Running scheduler");
 
-        List<BuildingUpgradeEvent> buildingUpgradeEventList = buildingUpgradeEventRepository.findByCompletionTimeBefore(Timestamp.from(Instant.now()));
+        List<BuildingUpgradeEvent> buildingUpgradeEventList = buildingUpgradeEventRepository.findAllByCompletionTimeBefore(Timestamp.from(Instant.now()));
 
         /* Trigger an event that sends a call to base-manager to level up the building */
         for (BuildingUpgradeEvent buildingUpgradeEvent : buildingUpgradeEventList) {
