@@ -7,8 +7,6 @@ import com.example.enums.BuildingsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.models.Base;
 import com.example.models.Building;
-import com.example.config.BuildingConfig;
-import com.example.enums.ResourceNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -24,12 +21,12 @@ public class BuildingRequestUpgradeUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuildingRequestUpgradeUtils.class);
 
-    private final BuildingConfig buildingConfig;
+    private final BuildingUpgradeConfigUtils buildingUpgradeConfigUtils;
 
     private final RestTemplate restTemplate;
 
-    public BuildingRequestUpgradeUtils(BuildingConfig buildingConfig, RestTemplate restTemplate) {
-        this.buildingConfig = buildingConfig;
+    public BuildingRequestUpgradeUtils(BuildingUpgradeConfigUtils buildingUpgradeConfigUtils, RestTemplate restTemplate) {
+        this.buildingUpgradeConfigUtils = buildingUpgradeConfigUtils;
         this.restTemplate = restTemplate;
     }
 
@@ -86,7 +83,7 @@ public class BuildingRequestUpgradeUtils {
     }
 
     public boolean checkIfBuildingIsMaxLevel(String buildingType, Integer buildingLevel) {
-        BuildingUpgradeConfig buildingUpgradeConfig = getBuildingUpgradeConfig(buildingType);
+        BuildingUpgradeConfig buildingUpgradeConfig = buildingUpgradeConfigUtils.getBuildingUpgradeConfig(buildingType);
 
         if (buildingUpgradeConfig != null) {
             int buildingMaxLevel = buildingUpgradeConfig.getMaxLevel();
@@ -99,9 +96,9 @@ public class BuildingRequestUpgradeUtils {
     }
 
     public Map<String, Integer> getRequirementsToUpgradeBuilding(String buildingType, int buildingLevel) {
-        BuildingUpgradeConfig buildingUpgradeConfig = getBuildingUpgradeConfig(buildingType);
-        BuildingLevelConfig buildingLevelConfig = getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel + 1);
-        Map<String, Integer> buildingResourceConfig = getBuildingResourceConfig(buildingLevelConfig);
+        BuildingUpgradeConfig buildingUpgradeConfig = buildingUpgradeConfigUtils.getBuildingUpgradeConfig(buildingType);
+        BuildingLevelConfig buildingLevelConfig = buildingUpgradeConfigUtils.getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel + 1);
+        Map<String, Integer> buildingResourceConfig = buildingUpgradeConfigUtils.getBuildingResourceConfig(buildingLevelConfig);
 
         if (buildingUpgradeConfig != null) {
             buildingResourceConfig.put(
@@ -113,40 +110,5 @@ public class BuildingRequestUpgradeUtils {
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
-    private BuildingUpgradeConfig getBuildingUpgradeConfig(String buildingType) {
-        return buildingConfig.getBuildings()
-                .stream()
-                .filter(building -> building.getBuildingName().equals(buildingType))
-                .findFirst()
-                .orElse(null);
-    }
 
-    private BuildingLevelConfig getBuildingLevelConfig(BuildingUpgradeConfig buildingUpgradeConfig, int buildingLevel) {
-        if (buildingUpgradeConfig != null) {
-            return buildingUpgradeConfig.getLevels()
-                    .stream()
-                    .filter(level -> level.getLevel() == buildingLevel)
-                    .findFirst()
-                    .orElse(null);
-        }
-
-        return null;
-    }
-
-    private Map<String, Integer> getBuildingResourceConfig(BuildingLevelConfig buildingLevelConfig) {
-        if (buildingLevelConfig != null) {
-            Map<String, Integer> resources = new HashMap<>();
-            for (ResourceNames resourceName : ResourceNames.values()) {
-                buildingLevelConfig.getResources()
-                        .stream()
-                        .filter(resource -> resource.getResourceName().equals(resourceName.getLabel()))
-                        .findFirst()
-                        .ifPresent(buildingResourceConfig -> resources.put(resourceName.getLabel(), buildingResourceConfig.getQuantity()));
-            }
-
-            return resources;
-        }
-
-        return null;
-    }
 }

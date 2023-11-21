@@ -6,7 +6,6 @@ import com.example.enums.BuildingsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.models.Base;
 import com.example.models.Building;
-import com.example.services.BaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
