@@ -22,7 +22,7 @@ public class BuildingGenerationUtils {
     public List<Building> generateDefaultBuildingsForNewBase() {
         List<Building> buildingList = new ArrayList<>();
 
-        /* Resource Buildings */
+        /* Resource Production Buildings */
         Building resource1Producer = generateResourceProductionBuilding(BuildingNames.RESOURCE_1_FACTORY.getLabel());
         buildingList.add(resource1Producer);
 

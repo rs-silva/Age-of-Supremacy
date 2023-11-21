@@ -1,7 +1,6 @@
 package com.example.controllers;
 
 import com.example.models.Base;
-import com.example.models.Building;
 import com.example.services.BuildingService;
 import com.example.dto.BuildingDTO;
 import org.slf4j.Logger;
@@ -32,10 +31,7 @@ public class BuildingController {
 
         LOG.info("Received request to return resources needed to upgrade building with id {}", buildingId);
 
-        Building building = buildingService.findById(buildingId);
-        BuildingDTO buildingDTO = buildingService.getBuildingInformation(building);
-
-        //Base base = baseService.findById(baseId);
+        BuildingDTO buildingDTO = buildingService.getBuildingInformation(buildingId);
 
         return ResponseEntity.ok(buildingDTO);
     }
@@ -45,7 +41,17 @@ public class BuildingController {
 
         LOG.info("Received request to upgrade building with id {}", buildingId);
 
-        buildingService.upgradeBuilding(buildingId);
+        buildingService.requestBuildingUpgrade(buildingId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/completeUpgrade/{buildingId}")
+    public ResponseEntity<Base> completeBuildingUpgrade(@PathVariable UUID buildingId) {
+
+        LOG.info("Received request to complete upgrade of building with id {}", buildingId);
+
+        buildingService.completeUpgrade(buildingId);
 
         return ResponseEntity.ok().build();
     }

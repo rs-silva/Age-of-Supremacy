@@ -1,9 +1,11 @@
 package com.example.services;
 
+import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
 import com.example.models.Player;
 import com.example.repositories.BaseRepository;
+import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import com.example.interfaces.BaseIdInterface;
 import com.example.utils.Constants;
@@ -29,11 +31,14 @@ public class BaseService {
 
     private final BuildingService buildingService;
 
+    private final JwtAccessTokenUtils jwtAccessTokenUtils;
+
     private final ResourcesUtils resourcesUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, ResourcesUtils resourcesUtils) {
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
+        this.jwtAccessTokenUtils = jwtAccessTokenUtils;
         this.resourcesUtils = resourcesUtils;
     }
 
@@ -66,8 +71,19 @@ public class BaseService {
                     Constants.BASE_NOT_FOUND, id));
         }
 
+        validateBaseOwnership(base.get().getPlayer().getId());
+
         resourcesUtils.updateBaseResources(base.get());
         return base.get();
+    }
+
+    private void validateBaseOwnership(UUID basePlayerId) {
+        UUID playerIdFromToken = jwtAccessTokenUtils.retrievePlayerIdFromToken();
+
+        if (!basePlayerId.equals(playerIdFromToken)) {
+            LOG.error("User with id {} attempted to perform an operation in a base that belong to {}", playerIdFromToken, basePlayerId);
+            throw new InternalServerErrorException(Constants.BASE_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
+        }
     }
 
     public List<BaseIdInterface> findByAllPlayerId(UUID playerId) {

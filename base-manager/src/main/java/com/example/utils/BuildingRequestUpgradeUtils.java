@@ -20,20 +20,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class BuildingUpgradeUtils {
+public class BuildingRequestUpgradeUtils {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BuildingUpgradeUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BuildingRequestUpgradeUtils.class);
 
     private final BuildingConfig buildingConfig;
 
     private final RestTemplate restTemplate;
 
-    public BuildingUpgradeUtils(BuildingConfig buildingConfig, RestTemplate restTemplate) {
+    public BuildingRequestUpgradeUtils(BuildingConfig buildingConfig, RestTemplate restTemplate) {
         this.buildingConfig = buildingConfig;
         this.restTemplate = restTemplate;
     }
 
-    public void upgradeBuilding(Base base, Building building) {
+    public void requestBuildingUpgrade(Base base, Building building) {
         Map<String, Double> baseResources = base.getResources();
         Map<String, Integer> resourcesRequired = getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
 
@@ -55,9 +55,9 @@ public class BuildingUpgradeUtils {
                 .build();
 
         /* TODO Remove hardcoded url */
+        /* Send Building Upgrade Event to event-manager module */
         String url = "http://localhost:8083/api/event";
         restTemplate.postForObject(url, buildingUpgradeEventDTO, BuildingUpgradeEventDTO.class);
-
     }
 
     public boolean checkIfThereAreEnoughResourcesToUpgradeBuilding(Base base, Building building) {

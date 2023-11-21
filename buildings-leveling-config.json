@@ -14,11 +14,19 @@
         },
         {
           "level": 2,
-          "constructionTime" : 700,
+          "constructionTime" : 5,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 500 },
+            { "resourceName": "Construction Materials", "quantity": 300 },
             { "resourceName": "Steel", "quantity": 8 },
             { "resourceName": "Fuel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 3,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
           ]
         }
       ]
