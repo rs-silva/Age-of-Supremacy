@@ -12,7 +12,7 @@ public abstract class Constants {
 
     public static final String BUILDING_UPGRADE_NOT_FOUND_ERROR = "There was an error while retrieving the building's upgrade configuration.";
 
-    public static final String BUILDING_IS_ALREADY_MAX_LEVEL = "Cannot upgrade a building is already at the maximum level";
+    public static final String BUILDING_IS_ALREADY_MAX_LEVEL = "Cannot upgrade a building that is already at the maximum level";
 
     public static final String NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING = "There are not enough resources to upgrade this building";
 

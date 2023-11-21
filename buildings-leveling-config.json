@@ -86,7 +86,7 @@
     },
     {
       "buildingName": "Strategic Defense Center",
-      "maxLevel": 30,
+      "maxLevel": 3,
       "levels": [
         {
           "level": 1,

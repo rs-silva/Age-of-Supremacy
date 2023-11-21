@@ -66,11 +66,11 @@ public class BuildingService {
 
         boolean isBuildingMaxLevel = buildingRequestUpgradeUtils.checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
 
-        if (isBuildingMaxLevel) {
-            return null;
+        Map<String, Integer> requirementsToNextLevel = null;
+        if (!isBuildingMaxLevel) {
+            requirementsToNextLevel = buildingRequestUpgradeUtils.getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
         }
 
-        Map<String, Integer> requirementsToNextLevel = buildingRequestUpgradeUtils.getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
         return BuildingMapper.buildDTO(building, requirementsToNextLevel);
     }
 
