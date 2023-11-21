@@ -1,7 +1,7 @@
 package com.example.services;
 
 import com.example.dto.BuildingUpgradeEventDTO;
-import com.example.mappers.BuildingEventMapper;
+import com.example.mappers.BuildingUpgradeEventMapper;
 import com.example.models.BuildingUpgradeEvent;
 import com.example.repositories.BuildingUpgradeEventRepository;
 import org.slf4j.Logger;
@@ -16,28 +16,28 @@ import java.time.Instant;
 import java.util.List;
 
 @Service
-public class BuildingEventService {
+public class BuildingUpgradeEventService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BuildingEventService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BuildingUpgradeEventService.class);
 
     private final BuildingUpgradeEventRepository buildingUpgradeEventRepository;
 
     private final RestTemplate restTemplate;
 
-    public BuildingEventService(BuildingUpgradeEventRepository buildingUpgradeEventRepository, RestTemplate restTemplate) {
+    public BuildingUpgradeEventService(BuildingUpgradeEventRepository buildingUpgradeEventRepository, RestTemplate restTemplate) {
         this.buildingUpgradeEventRepository = buildingUpgradeEventRepository;
         this.restTemplate = restTemplate;
     }
 
     public void registerEvent(BuildingUpgradeEventDTO buildingUpgradeEventDTO) {
-        BuildingUpgradeEvent buildingUpgradeEvent = BuildingEventMapper.fromDtoToEntity(buildingUpgradeEventDTO);
+        BuildingUpgradeEvent buildingUpgradeEvent = BuildingUpgradeEventMapper.fromDtoToEntity(buildingUpgradeEventDTO);
         buildingUpgradeEventRepository.save(buildingUpgradeEvent);
     }
 
-    /* Runs once a second to check if there are any buildings, which construction time already passed */
+    /* Runs once a second to check if there are any buildings which construction time already passed */
     @Scheduled(fixedRate = 1000)
     @Transactional
-    public void checkBuildingsUpgrades() {
+    public void checkBuildingsUpgradeEvents() {
         //LOG.info("Running scheduler");
 
         List<BuildingUpgradeEvent> buildingUpgradeEventList = buildingUpgradeEventRepository.findByCompletionTimeBefore(Timestamp.from(Instant.now()));

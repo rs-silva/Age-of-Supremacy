@@ -22,4 +22,7 @@ public abstract class Constants {
 
     public static final String BUILDING_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER = "This building does not belong to the player logged in. Cannot perform operation.";
 
+    public static final String BUILDING_ALREADY_EXISTS = "Attempted to create a building that already exists in the base";
+
+    public static final String INVALID_BUILDING_NAME = "The building you are trying to create does not exist. Please provide a valid name";
 }

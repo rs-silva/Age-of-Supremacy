@@ -29,6 +29,7 @@ public class BuildingCompleteUpgradeUtils {
             Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(building.getLevel());
             buildingProperties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
         }
+
         else if (buildingType.equals(BuildingNames.WAREHOUSE.getLabel())){
             Double amountOfResourcesStored = resourcesUtils.getWarehouseCapacityForLevel(building.getLevel());
             buildingProperties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesStored.toString());

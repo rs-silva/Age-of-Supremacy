@@ -74,6 +74,24 @@ public class BuildingService {
         return BuildingMapper.buildDTO(building, requirementsToNextLevel);
     }
 
+    public void requestBuildingGeneration(Base base, String buildingType) {
+        boolean doesBuildingAlreadyExist = buildingGenerationUtils.checkIfBuildingAlreadyExists(base, buildingType);
+
+        if (doesBuildingAlreadyExist) {
+            LOG.info("Attempted to create building {} in base {}, but this building already exists in this base.", buildingType, base.getId());
+            throw new InternalServerErrorException(Constants.BUILDING_ALREADY_EXISTS);
+        }
+
+        boolean areUpgradeRequirementsMet = buildingRequestUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, buildingType, 1);
+
+        if (!areUpgradeRequirementsMet) {
+            LOG.info("Attempted to create building {} in base {}, but there are no enough resources in the corresponding base.", buildingType, base.getId());
+            throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
+        }
+
+        buildingGenerationUtils.requestBuildingGeneration(base, buildingType);
+    }
+
     @Transactional
     public void requestBuildingUpgrade(UUID buildingId) {
         Building building = findById(buildingId);
@@ -88,7 +106,7 @@ public class BuildingService {
         }
 
         Base base = building.getBase();
-        boolean areUpgradeRequirementsMet = buildingRequestUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, building);
+        boolean areUpgradeRequirementsMet = buildingRequestUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, building.getType(), building.getLevel());
 
         if (!areUpgradeRequirementsMet) {
             LOG.info("Attempted to upgrade building {}, but there are no enough resources in the corresponding base.", building.getId());
@@ -96,6 +114,15 @@ public class BuildingService {
         }
 
         buildingRequestUpgradeUtils.requestBuildingUpgrade(base, building);
+    }
+
+    @Transactional
+    public void completeGeneration(Base base, String buildingType) {
+        resourcesUtils.updateBaseResources(base);
+
+        Building building = buildingGenerationUtils.completeBuildingGeneration(base, buildingType);
+        building.setBase(base);
+        buildingRepository.save(building);
     }
 
     @Transactional

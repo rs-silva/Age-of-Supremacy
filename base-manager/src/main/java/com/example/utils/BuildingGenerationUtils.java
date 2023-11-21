@@ -1,10 +1,19 @@
 package com.example.utils;
 
+import com.example.dto.BuildingGenerationEventDTO;
 import com.example.enums.BuildingNames;
 import com.example.enums.BuildingsPropertiesNames;
+import com.example.exceptions.InternalServerErrorException;
+import com.example.models.Base;
 import com.example.models.Building;
+import com.example.services.BaseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,10 +22,18 @@ import java.util.Map;
 @Component
 public class BuildingGenerationUtils {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BuildingGenerationUtils.class);
+
     private final ResourcesUtils resourcesUtils;
 
-    public BuildingGenerationUtils(ResourcesUtils resourcesUtils) {
+    private final BuildingRequestUpgradeUtils buildingRequestUpgradeUtils;
+
+    private final RestTemplate restTemplate;
+
+    public BuildingGenerationUtils(ResourcesUtils resourcesUtils, BuildingRequestUpgradeUtils buildingRequestUpgradeUtils, RestTemplate restTemplate) {
         this.resourcesUtils = resourcesUtils;
+        this.buildingRequestUpgradeUtils = buildingRequestUpgradeUtils;
+        this.restTemplate = restTemplate;
     }
 
     public List<Building> generateDefaultBuildingsForNewBase() {
@@ -47,6 +64,69 @@ public class BuildingGenerationUtils {
 
         return buildingList;
     }
+
+    public boolean checkIfBuildingAlreadyExists(Base base, String buildingType) {
+        List<Building> buildingList = base.getBuildings();
+
+        for (Building building : buildingList) {
+            if (building.getType().equals(buildingType)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void requestBuildingGeneration(Base base, String buildingType) {
+        Map<String, Double> baseResources = base.getResources();
+        Map<String, Integer> resourcesRequired = buildingRequestUpgradeUtils.getRequirementsToUpgradeBuilding(buildingType, 0);
+
+        /* Remove time requirement which is not needed for this (only resources) */
+        Integer constructionTime = resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
+
+        for (String resourceName : resourcesRequired.keySet()) {
+            Double currentResourceAmount = baseResources.get(resourceName);
+            Integer resourceAmountRequired = resourcesRequired.get(resourceName);
+
+            baseResources.put(resourceName, currentResourceAmount - resourceAmountRequired);
+        }
+
+        Timestamp endTime = Timestamp.from(Instant.now().plusMillis(constructionTime * 1000));
+
+        BuildingGenerationEventDTO buildingGenerationEventDTO = BuildingGenerationEventDTO.builder()
+                .baseId(base.getId())
+                .buildingType(buildingType)
+                .completionTime(endTime)
+                .build();
+
+        /* TODO Remove hardcoded url */
+        /* Send Building Generation Event to event-manager module */
+        String url = "http://localhost:8083/api/event/building/generate";
+        restTemplate.postForObject(url, buildingGenerationEventDTO, BuildingGenerationEventDTO.class);
+    }
+
+    public Building completeBuildingGeneration(Base base, String buildingType) {
+        boolean doesBuildingAlreadyExist = checkIfBuildingAlreadyExists(base, buildingType);
+
+        if (doesBuildingAlreadyExist) {
+            LOG.info("Attempted to create building {} in base {}, but this building already exists in this base.", buildingType, base.getId());
+            throw new InternalServerErrorException(Constants.BUILDING_ALREADY_EXISTS);
+        }
+
+        Building newBuilding = null;
+
+        if (buildingType.equals(BuildingNames.DEFENSE_CENTER.getLabel())) {
+            newBuilding = generateDefenseCenter();
+        }
+
+        if (newBuilding == null) {
+            LOG.info("Attempted to finish generation of building {} in base {}, but the building's name is invalid.", buildingType, base.getId());
+            throw new InternalServerErrorException(Constants.INVALID_BUILDING_NAME);
+        }
+
+        return newBuilding;
+    }
+
 
     public Building generateResourceProductionBuilding(String type) {
         Map<String, String> properties = new HashMap<>();
@@ -81,6 +161,18 @@ public class BuildingGenerationUtils {
 
         return Building.builder()
                 .type(BuildingNames.MAIN_BUILDING.getLabel())
+                .level(1)
+                .score(1)
+                .properties(properties)
+                .build();
+    }
+
+    public Building generateDefenseCenter() {
+        Map<String, String> properties = new HashMap<>();
+        properties.put("123", "123");
+
+        return Building.builder()
+                .type(BuildingNames.DEFENSE_CENTER.getLabel())
                 .level(1)
                 .score(1)
                 .properties(properties)

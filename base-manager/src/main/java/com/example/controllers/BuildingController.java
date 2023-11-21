@@ -29,7 +29,7 @@ public class BuildingController {
     @GetMapping("{buildingId}")
     public ResponseEntity<BuildingDTO> getBuilding(@PathVariable UUID buildingId) {
 
-        LOG.info("Received request to return resources needed to upgrade building with id {}", buildingId);
+        LOG.info("Received request to return information about building with id {}", buildingId);
 
         BuildingDTO buildingDTO = buildingService.getBuildingInformation(buildingId);
 

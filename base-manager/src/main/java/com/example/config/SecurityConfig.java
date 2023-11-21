@@ -40,6 +40,11 @@ public class SecurityConfig {
                 .requestMatchers(antMatcher("/api/building/completeUpgrade/**"))
                 .access((authentication, context) ->
                         new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
+
+                .requestMatchers(antMatcher("/api/base/*/finishBuilding/**"))
+                .access((authentication, context) ->
+                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
+
                 .anyRequest().authenticated()
                 );
                 /*.formLogin()

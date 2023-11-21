@@ -26,7 +26,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers(antMatcher("/error")).permitAll()
                 .requestMatchers(antMatcher("/h2-console/**")).permitAll()
-                //.requestMatchers(antMatcher("/api/event/**")).permitAll()
                 .requestMatchers(antMatcher("/api/event/**"))
                 .access((authentication, context) ->
                         new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.UUID;
@@ -32,5 +33,27 @@ public class BaseController {
         Base base = baseService.findById(baseId);
 
         return ResponseEntity.ok(base);
+    }
+
+    @PostMapping("{baseId}/createBuilding/{buildingType}")
+    public ResponseEntity<Base> createBuildingGenerationRequest(@PathVariable UUID baseId,
+                                                                @PathVariable String buildingType) {
+
+        LOG.info("Received request to create building {} in base {}", buildingType, baseId);
+
+        baseService.createNewBuildingConstructionRequest(baseId, buildingType);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("{baseId}/finishBuilding/{buildingType}")
+    public ResponseEntity<Base> completeBuildingGeneration(@PathVariable UUID baseId,
+                                                           @PathVariable String buildingType) {
+
+        LOG.info("Received request to complete generation of building {} in base {}", buildingType, baseId);
+
+        baseService.completeBuildingGeneration(baseId, buildingType);
+
+        return ResponseEntity.ok().build();
     }
 }

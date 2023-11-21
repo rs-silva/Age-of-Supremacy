@@ -56,13 +56,13 @@ public class BuildingRequestUpgradeUtils {
 
         /* TODO Remove hardcoded url */
         /* Send Building Upgrade Event to event-manager module */
-        String url = "http://localhost:8083/api/event";
+        String url = "http://localhost:8083/api/event/building/upgrade";
         restTemplate.postForObject(url, buildingUpgradeEventDTO, BuildingUpgradeEventDTO.class);
     }
 
-    public boolean checkIfThereAreEnoughResourcesToUpgradeBuilding(Base base, Building building) {
+    public boolean checkIfThereAreEnoughResourcesToUpgradeBuilding(Base base, String buildingType, int buildingLevel) {
         Map<String, Double> baseResources = base.getResources();
-        Map<String, Integer> resourcesRequired = getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
+        Map<String, Integer> resourcesRequired = getRequirementsToUpgradeBuilding(buildingType, buildingLevel);
 
         /* Remove time requirement which is not needed for this (only resources) */
         resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
@@ -76,8 +76,8 @@ public class BuildingRequestUpgradeUtils {
                 }
             }
             else {
-                LOG.info("There was an error while upgrading building {}\n" +
-                        "The base does not contain information about resource {}", building.getId(), resourceName);
+                LOG.info("There was an error while upgrading a building.\n" +
+                        "The base {} does not contain information about resource {}", base.getId(), resourceName);
                 throw new InternalServerErrorException(Constants.BASE_NO_INFORMATION_ABOUT_RESOURCE_AMOUNT);
             }
         }

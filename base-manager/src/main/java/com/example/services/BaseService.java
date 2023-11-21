@@ -63,6 +63,22 @@ public class BaseService {
     }
 
     @Transactional
+    public void createNewBuildingConstructionRequest(UUID baseId, String buildingType) {
+        Base base = findById(baseId);
+
+        validateBaseOwnership(base.getPlayer().getId());
+
+        buildingService.requestBuildingGeneration(base, buildingType);
+    }
+
+    @Transactional
+    public void completeBuildingGeneration(UUID baseId, String buildingType) {
+        Base base = findById(baseId);
+
+        buildingService.completeGeneration(base, buildingType);
+    }
+
+    @Transactional
     public Base findById(UUID id) {
         Optional<Base> base = baseRepository.findById(id);
 
@@ -70,8 +86,6 @@ public class BaseService {
             throw new ResourceNotFoundException(String.format(
                     Constants.BASE_NOT_FOUND, id));
         }
-
-        validateBaseOwnership(base.get().getPlayer().getId());
 
         resourcesUtils.updateBaseResources(base.get());
         return base.get();
