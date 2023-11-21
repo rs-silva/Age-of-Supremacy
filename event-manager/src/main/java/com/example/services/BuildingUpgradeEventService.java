@@ -1,9 +1,13 @@
 package com.example.services;
 
 import com.example.dto.BuildingUpgradeEventDTO;
+import com.example.exceptions.InternalServerErrorException;
+import com.example.exceptions.ResourceAlreadyExistsException;
+import com.example.exceptions.ResourceNotFoundException;
 import com.example.mappers.BuildingUpgradeEventMapper;
 import com.example.models.BuildingUpgradeEvent;
 import com.example.repositories.BuildingUpgradeEventRepository;
+import com.example.utils.EventManagerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class BuildingUpgradeEventService {
@@ -30,6 +36,7 @@ public class BuildingUpgradeEventService {
     }
 
     public void registerEvent(BuildingUpgradeEventDTO buildingUpgradeEventDTO) {
+        checkIfBuildingIsNotBeingUpgradedAlready(buildingUpgradeEventDTO.getBuildingId());
         BuildingUpgradeEvent buildingUpgradeEvent = BuildingUpgradeEventMapper.fromDtoToEntity(buildingUpgradeEventDTO);
         buildingUpgradeEventRepository.save(buildingUpgradeEvent);
     }
@@ -49,6 +56,15 @@ public class BuildingUpgradeEventService {
             String url = "http://localhost:8082/api/building/completeUpgrade/" + buildingUpgradeEvent.getBuildingId();
             restTemplate.postForObject(url, null, String.class);
             buildingUpgradeEventRepository.delete(buildingUpgradeEvent);
+        }
+
+    }
+
+    private void checkIfBuildingIsNotBeingUpgradedAlready(UUID id) {
+        BuildingUpgradeEvent buildingUpgradeEvent = buildingUpgradeEventRepository.findByBuildingId(id);
+
+        if (buildingUpgradeEvent != null) {
+            throw new InternalServerErrorException(EventManagerConstants.BUILDING_UPGRADE_EVENT_ALREADY_EXISTS);
         }
 
     }
