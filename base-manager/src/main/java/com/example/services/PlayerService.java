@@ -4,7 +4,6 @@ import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceAlreadyExistsException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.interfaces.PlayerIdInterface;
-import com.example.models.Base;
 import com.example.models.Player;
 import com.example.repositories.PlayerRepository;
 import com.example.dto.NewPlayerDTO;
@@ -48,7 +47,7 @@ public class PlayerService {
                 .totalScore(0)
                 .baseList(new ArrayList<>())
                 .build();
-        playerRepository.saveAndFlush(player);
+        playerRepository.save(player);
 
         LOG.info("Created player = {}", player);
 
@@ -64,7 +63,7 @@ public class PlayerService {
 
     public List<BaseIdInterface> getListOfBases(UUID playerId) {
         validateIdFromToken(playerId);
-        return baseService.findByAllPlayerId(playerId);
+        return baseService.findAllByPlayerId(playerId);
     }
 
     private void checkIfPlayerAlreadyExists(UUID playerId, String username) {

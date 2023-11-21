@@ -7,6 +7,8 @@ import java.util.UUID;
 public interface BaseIdInterface {
     UUID getId();
 
+    String getName();
+
     int getScore();
 
     @Value("#{target.x_coordinate}")

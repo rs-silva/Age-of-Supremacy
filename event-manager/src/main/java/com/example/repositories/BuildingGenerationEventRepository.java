@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface BuildingGenerationEventRepository extends JpaRepository<BuildingGenerationEvent, UUID> {
 
-    List<BuildingGenerationEvent> findByCompletionTimeBefore(Timestamp timeStamp);
+    List<BuildingGenerationEvent> findByCompletionTimeBefore(Timestamp timestamp);
 
 }
 

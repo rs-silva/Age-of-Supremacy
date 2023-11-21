@@ -1,5 +1,6 @@
 package com.example.services;
 
+import com.example.enums.BasePropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
@@ -46,7 +47,7 @@ public class BaseService {
         Map<String, Double> resources = resourcesUtils.generateDefaultResourcesForBase();
 
         Base base = Base.builder()
-                .name("Default Name")
+                .name(BasePropertiesNames.DEFAULT_NAME.getLabel())
                 .x_coordinate(new Random().nextInt(1000))
                 .y_coordinate(new Random().nextInt(1000))
                 .player(player)
@@ -100,7 +101,7 @@ public class BaseService {
         }
     }
 
-    public List<BaseIdInterface> findByAllPlayerId(UUID playerId) {
+    public List<BaseIdInterface> findAllByPlayerId(UUID playerId) {
         return baseRepository.findAllByPlayerId(playerId);
     }
 

@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Builder
 @Data
 @AllArgsConstructor
 public class BuildingDTO {
+
+    private UUID id;
 
     private String type;
 

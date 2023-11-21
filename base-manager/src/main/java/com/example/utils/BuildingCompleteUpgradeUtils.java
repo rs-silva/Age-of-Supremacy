@@ -19,6 +19,7 @@ public class BuildingCompleteUpgradeUtils {
     public void levelUpBuilding(Building building) {
         String buildingType = building.getType();
         int buildingCurrentLevel = building.getLevel();
+
         building.setLevel(buildingCurrentLevel + 1);
 
         /* Check if it is a resource production building */
