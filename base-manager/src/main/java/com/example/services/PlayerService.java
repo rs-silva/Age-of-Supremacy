@@ -3,11 +3,11 @@ package com.example.services;
 import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceAlreadyExistsException;
 import com.example.exceptions.ResourceNotFoundException;
-import com.example.interfaces.PlayerIdInterface;
+import com.example.interfaces.PlayerSimpleView;
 import com.example.models.Player;
 import com.example.repositories.PlayerRepository;
 import com.example.dto.NewPlayerDTO;
-import com.example.interfaces.BaseIdInterface;
+import com.example.interfaces.BaseSimpleView;
 import com.example.utils.Constants;
 import com.example.utils.JwtAccessTokenUtils;
 import org.slf4j.Logger;
@@ -56,12 +56,12 @@ public class PlayerService {
         return player;
     }
 
-    public PlayerIdInterface findPlayer(UUID playerId) {
+    public PlayerSimpleView findPlayer(UUID playerId) {
         validateIdFromToken(playerId);
         return findById(playerId);
     }
 
-    public List<BaseIdInterface> getListOfBases(UUID playerId) {
+    public List<BaseSimpleView> getListOfBases(UUID playerId) {
         validateIdFromToken(playerId);
         return baseService.findAllByPlayerId(playerId);
     }
@@ -76,9 +76,9 @@ public class PlayerService {
         }
     }
 
-    public PlayerIdInterface findById(UUID playerId) {
+    public PlayerSimpleView findById(UUID playerId) {
         validateIdFromToken(playerId);
-        PlayerIdInterface player = playerRepository.findByPlayerId(playerId);
+        PlayerSimpleView player = playerRepository.findByPlayerId(playerId);
 
         if (player == null) {
             throw new ResourceNotFoundException(String.format(

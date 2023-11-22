@@ -3,7 +3,7 @@ package com.example.mappers;
 import com.example.dto.ListOfBasesDTO;
 import com.example.dto.NewPlayerDTO;
 import com.example.models.Player;
-import com.example.interfaces.BaseIdInterface;
+import com.example.interfaces.BaseSimpleView;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +17,7 @@ public abstract class PlayerMapper {
                 .build();
     }
 
-    public static ListOfBasesDTO fromEntityToListOfBasesIds(UUID playerId, List<BaseIdInterface> baseList) {
+    public static ListOfBasesDTO fromEntityToListOfBasesIds(UUID playerId, List<BaseSimpleView> baseList) {
         return ListOfBasesDTO.builder()
                 .playerId(playerId.toString())
                 .baseList(baseList)

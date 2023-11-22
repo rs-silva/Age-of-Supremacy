@@ -8,7 +8,7 @@ import com.example.models.Player;
 import com.example.repositories.BaseRepository;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
-import com.example.interfaces.BaseIdInterface;
+import com.example.interfaces.BaseSimpleView;
 import com.example.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +101,7 @@ public class BaseService {
         }
     }
 
-    public List<BaseIdInterface> findAllByPlayerId(UUID playerId) {
+    public List<BaseSimpleView> findAllByPlayerId(UUID playerId) {
         return baseRepository.findAllByPlayerId(playerId);
     }
 

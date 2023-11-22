@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.UUID;
 
-public interface PlayerIdInterface {
+public interface PlayerSimpleView {
 
     UUID getId();
 
