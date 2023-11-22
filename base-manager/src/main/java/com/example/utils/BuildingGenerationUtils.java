@@ -25,13 +25,13 @@ public class BuildingGenerationUtils {
 
     private final ResourcesUtils resourcesUtils;
 
-    private final BuildingRequestUpgradeUtils buildingRequestUpgradeUtils;
+    private final BuildingUpgradeUtils buildingUpgradeUtils;
 
     private final RestTemplate restTemplate;
 
-    public BuildingGenerationUtils(ResourcesUtils resourcesUtils, BuildingRequestUpgradeUtils buildingRequestUpgradeUtils, RestTemplate restTemplate) {
+    public BuildingGenerationUtils(ResourcesUtils resourcesUtils, BuildingUpgradeUtils buildingUpgradeUtils, RestTemplate restTemplate) {
         this.resourcesUtils = resourcesUtils;
-        this.buildingRequestUpgradeUtils = buildingRequestUpgradeUtils;
+        this.buildingUpgradeUtils = buildingUpgradeUtils;
         this.restTemplate = restTemplate;
     }
 
@@ -105,7 +105,9 @@ public class BuildingGenerationUtils {
     }
 
     private Map<String, Integer> getRequirementsToGenerateBuilding(String buildingType) {
-        return buildingRequestUpgradeUtils.getRequirementsToUpgradeBuilding(buildingType, 0);
+        /* TODO Check other possible building requirements to generate a new building
+        *   such as level requirements from other buildings in the base */
+        return buildingUpgradeUtils.getRequirementsToUpgradeBuilding(buildingType, 0);
     }
 
     public Building completeBuildingGeneration(Base base, String buildingType) {
@@ -118,6 +120,7 @@ public class BuildingGenerationUtils {
 
         Building newBuilding = null;
 
+        /* TODO Call the generate method for the corresponding building */
         if (buildingType.equals(BuildingNames.DEFENSE_CENTER.getLabel())) {
             newBuilding = generateDefenseCenter();
         }
@@ -130,12 +133,11 @@ public class BuildingGenerationUtils {
         return newBuilding;
     }
 
-
     public Building generateResourceProductionBuilding(String type) {
         Map<String, String> properties = new HashMap<>();
         Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(1);
         properties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
-        int score = buildingRequestUpgradeUtils.getBuildingScoreForSpecificLevel(type, 1);
+        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(type, 1);
 
         return Building.builder()
                 .type(type)
@@ -149,7 +151,7 @@ public class BuildingGenerationUtils {
         Map<String, String> properties = new HashMap<>();
         Double amountOfResourcesStored = resourcesUtils.getWarehouseCapacityForLevel(1);
         properties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesStored.toString());
-        int score = buildingRequestUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.WAREHOUSE.getLabel(), 1);
+        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.WAREHOUSE.getLabel(), 1);
 
         return Building.builder()
                 .type(BuildingNames.WAREHOUSE.getLabel())
@@ -162,7 +164,7 @@ public class BuildingGenerationUtils {
     public Building generateMainBuilding() {
         Map<String, String> properties = new HashMap<>();
         properties.put("123", "123");
-        int score = buildingRequestUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.MAIN_BUILDING.getLabel(), 1);
+        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.MAIN_BUILDING.getLabel(), 1);
 
         return Building.builder()
                 .type(BuildingNames.MAIN_BUILDING.getLabel())
@@ -175,7 +177,7 @@ public class BuildingGenerationUtils {
     public Building generateDefenseCenter() {
         Map<String, String> properties = new HashMap<>();
         properties.put("123", "123");
-        int score = buildingRequestUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.DEFENSE_CENTER.getLabel(), 1);
+        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.DEFENSE_CENTER.getLabel(), 1);
 
         return Building.builder()
                 .type(BuildingNames.DEFENSE_CENTER.getLabel())

@@ -17,15 +17,15 @@ import java.time.Instant;
 import java.util.Map;
 
 @Component
-public class BuildingRequestUpgradeUtils {
+public class BuildingUpgradeUtils {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BuildingRequestUpgradeUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BuildingUpgradeUtils.class);
 
     private final BuildingUpgradeConfigUtils buildingUpgradeConfigUtils;
 
     private final RestTemplate restTemplate;
 
-    public BuildingRequestUpgradeUtils(BuildingUpgradeConfigUtils buildingUpgradeConfigUtils, RestTemplate restTemplate) {
+    public BuildingUpgradeUtils(BuildingUpgradeConfigUtils buildingUpgradeConfigUtils, RestTemplate restTemplate) {
         this.buildingUpgradeConfigUtils = buildingUpgradeConfigUtils;
         this.restTemplate = restTemplate;
     }

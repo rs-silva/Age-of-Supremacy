@@ -10,7 +10,7 @@ import com.example.utils.BuildingGenerationUtils;
 import com.example.utils.Constants;
 import com.example.dto.BuildingDTO;
 import com.example.mappers.BuildingMapper;
-import com.example.utils.BuildingRequestUpgradeUtils;
+import com.example.utils.BuildingUpgradeUtils;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class BuildingService {
 
     private final BuildingRepository buildingRepository;
 
-    private final BuildingRequestUpgradeUtils buildingRequestUpgradeUtils;
+    private final BuildingUpgradeUtils buildingUpgradeUtils;
 
     private final BuildingCompleteUpgradeUtils buildingCompleteUpgradeUtils;
 
@@ -43,9 +43,9 @@ public class BuildingService {
 
     private final JwtAccessTokenUtils jwtAccessTokenUtils;
 
-    public BuildingService(BuildingRepository buildingRepository, BuildingRequestUpgradeUtils buildingRequestUpgradeUtils, BuildingCompleteUpgradeUtils buildingCompleteUpgradeUtils, BuildingGenerationUtils buildingGenerationUtils, ResourcesUtils resourcesUtils, @Lazy BaseService baseService, JwtAccessTokenUtils jwtAccessTokenUtils) {
+    public BuildingService(BuildingRepository buildingRepository, BuildingUpgradeUtils buildingUpgradeUtils, BuildingCompleteUpgradeUtils buildingCompleteUpgradeUtils, BuildingGenerationUtils buildingGenerationUtils, ResourcesUtils resourcesUtils, @Lazy BaseService baseService, JwtAccessTokenUtils jwtAccessTokenUtils) {
         this.buildingRepository = buildingRepository;
-        this.buildingRequestUpgradeUtils = buildingRequestUpgradeUtils;
+        this.buildingUpgradeUtils = buildingUpgradeUtils;
         this.buildingCompleteUpgradeUtils = buildingCompleteUpgradeUtils;
         this.buildingGenerationUtils = buildingGenerationUtils;
         this.resourcesUtils = resourcesUtils;
@@ -69,11 +69,11 @@ public class BuildingService {
 
         validateBuildingOwnership(building.getBase().getPlayer().getId());
 
-        boolean isBuildingMaxLevel = buildingRequestUpgradeUtils.checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
+        boolean isBuildingMaxLevel = buildingUpgradeUtils.checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
 
         Map<String, Integer> requirementsToNextLevel = null;
         if (!isBuildingMaxLevel) {
-            requirementsToNextLevel = buildingRequestUpgradeUtils.getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
+            requirementsToNextLevel = buildingUpgradeUtils.getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
         }
 
         return BuildingMapper.buildDTO(building, requirementsToNextLevel);
@@ -89,7 +89,7 @@ public class BuildingService {
 
         resourcesUtils.updateBaseResources(base);
 
-        boolean areUpgradeRequirementsMet = buildingRequestUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, buildingType, 1);
+        boolean areUpgradeRequirementsMet = buildingUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, buildingType, 1);
 
         if (!areUpgradeRequirementsMet) {
             LOG.info("Attempted to create building {} in base {}, but there are no enough resources in the corresponding base.", buildingType, base.getId());
@@ -105,7 +105,7 @@ public class BuildingService {
 
         validateBuildingOwnership(building.getBase().getPlayer().getId());
 
-        boolean isBuildingMaxLevel = buildingRequestUpgradeUtils.checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
+        boolean isBuildingMaxLevel = buildingUpgradeUtils.checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
 
         if (isBuildingMaxLevel) {
             LOG.info("Attempted to upgrade building {}, which is already at the maximum level", building.getId());
@@ -115,14 +115,14 @@ public class BuildingService {
         Base base = building.getBase();
         resourcesUtils.updateBaseResources(base);
 
-        boolean areUpgradeRequirementsMet = buildingRequestUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, building.getType(), building.getLevel());
+        boolean areUpgradeRequirementsMet = buildingUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, building.getType(), building.getLevel());
 
         if (!areUpgradeRequirementsMet) {
             LOG.info("Attempted to upgrade building {}, but there are no enough resources in the corresponding base.", building.getId());
             throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
         }
 
-        buildingRequestUpgradeUtils.requestBuildingUpgrade(base, building);
+        buildingUpgradeUtils.requestBuildingUpgrade(base, building);
     }
 
     @Transactional
