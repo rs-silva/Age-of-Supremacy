@@ -4,6 +4,7 @@ import com.example.enums.BasePropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
+import com.example.models.Building;
 import com.example.models.Player;
 import com.example.repositories.BaseRepository;
 import com.example.utils.JwtAccessTokenUtils;
@@ -12,11 +13,13 @@ import com.example.interfaces.BaseSimpleView;
 import com.example.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,13 +39,17 @@ public class BaseService {
 
     private final ResourcesUtils resourcesUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils) {
+    private final PlayerService playerService;
+
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, @Lazy PlayerService playerService) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
         this.resourcesUtils = resourcesUtils;
+        this.playerService = playerService;
     }
 
+    @Transactional
     public void generateBase(Player player) {
         Map<String, Double> resources = resourcesUtils.generateDefaultResourcesForBase();
 
@@ -54,13 +61,17 @@ public class BaseService {
                 .score(1)
                 .resources(resources)
                 .lastResourcesUpdate(Timestamp.from(Instant.now()))
+                .buildings(new ArrayList<>())
                 .build();
 
         baseRepository.save(base);
+        player.addBase(base);
 
         LOG.info("Created base = {}", base);
 
         buildingService.generateDefaultBuildingsForNewBase(base);
+
+        updateBaseAndPlayerScore(base);
     }
 
     @Transactional
@@ -90,6 +101,18 @@ public class BaseService {
 
         resourcesUtils.updateBaseResources(base.get());
         return base.get();
+    }
+
+    public void updateBaseAndPlayerScore(Base base) {
+        List<Building> buildingList = base.getBuildings();
+        int baseScore = 0;
+
+        for (Building building : buildingList) {
+            baseScore += building.getScore();
+        }
+
+        base.setScore(baseScore);
+        playerService.updatePlayerScore(base.getPlayer());
     }
 
     private void validateBaseOwnership(UUID basePlayerId) {

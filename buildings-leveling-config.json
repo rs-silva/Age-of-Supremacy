@@ -1,11 +1,12 @@
 {
   "buildings": [
     {
-      "buildingName": "Masonry Workshop",
+      "buildingName": "Headquarters",
       "maxLevel": 30,
       "levels": [
         {
           "level": 1,
+          "score" : 10,
           "constructionTime" : 300,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 10 },
@@ -14,6 +15,7 @@
         },
         {
           "level": 2,
+          "score" : 2,
           "constructionTime" : 5,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 100 },
@@ -23,6 +25,41 @@
         },
         {
           "level": 3,
+          "score" : 3,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
+          ]
+        }
+      ]
+    },
+    {
+      "buildingName": "Masonry Workshop",
+      "maxLevel": 30,
+      "levels": [
+        {
+          "level": 1,
+          "score" : 10,
+          "constructionTime" : 300,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 2,
+          "score" : 2,
+          "constructionTime" : 5,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 100 },
+            { "resourceName": "Steel", "quantity": 8 },
+            { "resourceName": "Fuel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 3,
+          "score" : 3,
           "constructionTime" : 10,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 10 },
@@ -37,6 +74,7 @@
       "levels": [
         {
           "level": 1,
+          "score" : 1,
           "constructionTime" : 300,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 8 },
@@ -45,10 +83,113 @@
         },
         {
           "level": 2,
+          "score" : 2,
           "constructionTime" : 500,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 10 },
             { "resourceName": "Steel", "quantity": 20 }
+          ]
+        }
+      ]
+    },
+    {
+      "buildingName": "Fuel Refinery",
+      "maxLevel": 30,
+      "levels": [
+        {
+          "level": 1,
+          "score" : 10,
+          "constructionTime" : 300,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 2,
+          "score" : 2,
+          "constructionTime" : 5,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 100 },
+            { "resourceName": "Steel", "quantity": 8 },
+            { "resourceName": "Fuel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 3,
+          "score" : 3,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
+          ]
+        }
+      ]
+    },
+    {
+      "buildingName": "Semiconductor Factory",
+      "maxLevel": 30,
+      "levels": [
+        {
+          "level": 1,
+          "score" : 10,
+          "constructionTime" : 300,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 2,
+          "score" : 2,
+          "constructionTime" : 5,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 100 },
+            { "resourceName": "Steel", "quantity": 8 },
+            { "resourceName": "Fuel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 3,
+          "score" : 3,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
+          ]
+        }
+      ]
+    },
+    {
+      "buildingName": "Munitions Plant",
+      "maxLevel": 30,
+      "levels": [
+        {
+          "level": 1,
+          "score" : 10,
+          "constructionTime" : 300,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 2,
+          "score" : 2,
+          "constructionTime" : 5,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 100 },
+            { "resourceName": "Steel", "quantity": 8 },
+            { "resourceName": "Fuel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 3,
+          "score" : 3,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 10 },
+            { "resourceName": "Steel", "quantity": 5 }
           ]
         }
       ]
@@ -59,6 +200,7 @@
       "levels": [
         {
           "level": 1,
+          "score" : 1,
           "constructionTime" : 300,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 10 },
@@ -67,6 +209,7 @@
         },
         {
           "level": 2,
+          "score" : 2,
           "constructionTime" : 5,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 20 },
@@ -76,6 +219,7 @@
         },
         {
           "level": 3,
+          "score" : 3,
           "constructionTime" : 10,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 10 },
@@ -90,6 +234,7 @@
       "levels": [
         {
           "level": 1,
+          "score" : 1,
           "constructionTime" : 5,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 100 },
@@ -98,6 +243,7 @@
         },
         {
           "level": 2,
+          "score" : 2,
           "constructionTime" : 5,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 20 },
@@ -107,6 +253,7 @@
         },
         {
           "level": 3,
+          "score" : 3,
           "constructionTime" : 10,
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 10 },

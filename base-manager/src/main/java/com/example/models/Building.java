@@ -49,4 +49,14 @@ public class Building {
     @Column(name = "property_value")
     private Map<String, String> properties;
 
+    @Override
+    public String toString() {
+        return "Building{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", score=" + score +
+                ", level=" + level +
+                ", properties=" + properties +
+                '}';
+    }
 }

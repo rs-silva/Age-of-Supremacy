@@ -12,6 +12,8 @@ public class BuildingLevelConfig {
     /* In seconds */
     private int constructionTime;
 
+    private int score;
+
     private List<BuildingResourceConfig> resources;
 
 }

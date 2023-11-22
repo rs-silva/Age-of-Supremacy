@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -60,4 +61,21 @@ public class Base {
     @OneToMany(mappedBy = "base", cascade = CascadeType.ALL)
     private List<Building> buildings;
 
+    public void addBuilding(Building building) {
+        this.buildings.add(building);
+    }
+
+    @Override
+    public String toString() {
+        return "Base{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", x_coordinate=" + x_coordinate +
+                ", y_coordinate=" + y_coordinate +
+                ", score=" + score +
+                ", resources=" + resources +
+                ", lastResourcesUpdate=" + lastResourcesUpdate +
+                ", buildings=" + buildings +
+                '}';
+    }
 }

@@ -12,8 +12,11 @@ public class BuildingCompleteUpgradeUtils {
 
     private final ResourcesUtils resourcesUtils;
 
-    public BuildingCompleteUpgradeUtils(ResourcesUtils resourcesUtils) {
+    private final BuildingRequestUpgradeUtils buildingRequestUpgradeUtils;
+
+    public BuildingCompleteUpgradeUtils(ResourcesUtils resourcesUtils, BuildingRequestUpgradeUtils buildingRequestUpgradeUtils) {
         this.resourcesUtils = resourcesUtils;
+        this.buildingRequestUpgradeUtils = buildingRequestUpgradeUtils;
     }
 
     public void levelUpBuilding(Building building) {
@@ -21,6 +24,9 @@ public class BuildingCompleteUpgradeUtils {
         int buildingCurrentLevel = building.getLevel();
 
         building.setLevel(buildingCurrentLevel + 1);
+
+        int score = buildingRequestUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, building.getLevel());
+        building.setScore(score);
 
         /* Check if it is a resource production building */
         Map<String, String> buildingProperties = building.getProperties();

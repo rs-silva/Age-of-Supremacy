@@ -15,6 +15,7 @@ import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,14 +39,17 @@ public class BuildingService {
 
     private final ResourcesUtils resourcesUtils;
 
+    private final BaseService baseService;
+
     private final JwtAccessTokenUtils jwtAccessTokenUtils;
 
-    public BuildingService(BuildingRepository buildingRepository, BuildingRequestUpgradeUtils buildingRequestUpgradeUtils, BuildingCompleteUpgradeUtils buildingCompleteUpgradeUtils, BuildingGenerationUtils buildingGenerationUtils, ResourcesUtils resourcesUtils, JwtAccessTokenUtils jwtAccessTokenUtils) {
+    public BuildingService(BuildingRepository buildingRepository, BuildingRequestUpgradeUtils buildingRequestUpgradeUtils, BuildingCompleteUpgradeUtils buildingCompleteUpgradeUtils, BuildingGenerationUtils buildingGenerationUtils, ResourcesUtils resourcesUtils, @Lazy BaseService baseService, JwtAccessTokenUtils jwtAccessTokenUtils) {
         this.buildingRepository = buildingRepository;
         this.buildingRequestUpgradeUtils = buildingRequestUpgradeUtils;
         this.buildingCompleteUpgradeUtils = buildingCompleteUpgradeUtils;
         this.buildingGenerationUtils = buildingGenerationUtils;
         this.resourcesUtils = resourcesUtils;
+        this.baseService = baseService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
     }
 
@@ -55,6 +59,7 @@ public class BuildingService {
         for (Building building : buildingList) {
             building.setBase(base);
             buildingRepository.save(building);
+            base.addBuilding(building);
         }
 
     }
@@ -122,7 +127,11 @@ public class BuildingService {
 
         Building building = buildingGenerationUtils.completeBuildingGeneration(base, buildingType);
         building.setBase(base);
+
         buildingRepository.save(building);
+
+        base.addBuilding(building);
+        baseService.updateBaseAndPlayerScore(base);
     }
 
     @Transactional
@@ -133,6 +142,7 @@ public class BuildingService {
 
         buildingCompleteUpgradeUtils.levelUpBuilding(building);
 
+        baseService.updateBaseAndPlayerScore(building.getBase());
     }
 
     private void validateBuildingOwnership(UUID buildingPlayerId) {

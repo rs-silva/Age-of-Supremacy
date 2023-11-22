@@ -4,6 +4,8 @@ import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceAlreadyExistsException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.interfaces.PlayerSimpleView;
+import com.example.models.Base;
+import com.example.models.Building;
 import com.example.models.Player;
 import com.example.repositories.PlayerRepository;
 import com.example.dto.NewPlayerDTO;
@@ -13,6 +15,7 @@ import com.example.utils.JwtAccessTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,7 @@ public class PlayerService {
                 .totalScore(0)
                 .baseList(new ArrayList<>())
                 .build();
+
         playerRepository.save(player);
 
         LOG.info("Created player = {}", player);
@@ -74,6 +78,18 @@ public class PlayerService {
             throw new ResourceAlreadyExistsException(String.format(
                     Constants.PLAYER_ALREADY_EXISTS, playerId, username));
         }
+    }
+
+    public void updatePlayerScore(Player player) {
+        List<Base> baseList = player.getBaseList();
+
+        int playerScore = 0;
+        for (Base base : baseList) {
+            playerScore += base.getScore();
+        }
+
+        player.setTotalScore(playerScore);
+        playerRepository.save(player);
     }
 
     public PlayerSimpleView findById(UUID playerId) {

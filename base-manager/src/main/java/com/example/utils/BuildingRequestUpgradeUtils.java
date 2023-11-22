@@ -106,7 +106,19 @@ public class BuildingRequestUpgradeUtils {
             return buildingResourceConfig;
         }
 
-        LOG.info("There was an error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel);
+        LOG.info("There was an error while retrieving the upgrade information for {} (lv.{})", buildingType, buildingLevel);
+        throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
+    }
+
+    public int getBuildingScoreForSpecificLevel(String buildingType, int buildingLevel) {
+        BuildingUpgradeConfig buildingUpgradeConfig = buildingUpgradeConfigUtils.getBuildingUpgradeConfig(buildingType);
+        BuildingLevelConfig buildingLevelConfig = buildingUpgradeConfigUtils.getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel);
+
+        if (buildingUpgradeConfig != null) {
+            return buildingLevelConfig.getScore();
+        }
+
+        LOG.info("There was an error while retrieving the upgrade information for {} (lv.{})", buildingType, buildingLevel);
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 

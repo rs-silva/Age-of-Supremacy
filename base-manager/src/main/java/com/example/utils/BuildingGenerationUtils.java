@@ -135,11 +135,12 @@ public class BuildingGenerationUtils {
         Map<String, String> properties = new HashMap<>();
         Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(1);
         properties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
+        int score = buildingRequestUpgradeUtils.getBuildingScoreForSpecificLevel(type, 1);
 
         return Building.builder()
                 .type(type)
                 .level(1)
-                .score(1)
+                .score(score)
                 .properties(properties)
                 .build();
     }
@@ -148,12 +149,12 @@ public class BuildingGenerationUtils {
         Map<String, String> properties = new HashMap<>();
         Double amountOfResourcesStored = resourcesUtils.getWarehouseCapacityForLevel(1);
         properties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesStored.toString());
-
+        int score = buildingRequestUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.WAREHOUSE.getLabel(), 1);
 
         return Building.builder()
                 .type(BuildingNames.WAREHOUSE.getLabel())
                 .level(1)
-                .score(1)
+                .score(score)
                 .properties(properties)
                 .build();
     }
@@ -161,11 +162,12 @@ public class BuildingGenerationUtils {
     public Building generateMainBuilding() {
         Map<String, String> properties = new HashMap<>();
         properties.put("123", "123");
+        int score = buildingRequestUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.MAIN_BUILDING.getLabel(), 1);
 
         return Building.builder()
                 .type(BuildingNames.MAIN_BUILDING.getLabel())
                 .level(1)
-                .score(1)
+                .score(score)
                 .properties(properties)
                 .build();
     }
@@ -173,11 +175,12 @@ public class BuildingGenerationUtils {
     public Building generateDefenseCenter() {
         Map<String, String> properties = new HashMap<>();
         properties.put("123", "123");
+        int score = buildingRequestUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.DEFENSE_CENTER.getLabel(), 1);
 
         return Building.builder()
                 .type(BuildingNames.DEFENSE_CENTER.getLabel())
                 .level(1)
-                .score(1)
+                .score(score)
                 .properties(properties)
                 .build();
     }
