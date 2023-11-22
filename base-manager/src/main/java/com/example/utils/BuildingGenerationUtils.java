@@ -124,6 +124,9 @@ public class BuildingGenerationUtils {
         if (buildingType.equals(BuildingNames.DEFENSE_CENTER.getLabel())) {
             newBuilding = generateDefenseCenter();
         }
+        else if (buildingType.equals(BuildingNames.BARRACKS.getLabel())) {
+            newBuilding = generateBarracks();
+        }
 
         if (newBuilding == null) {
             LOG.info("Attempted to finish generation of building {} in base {}, but the building's name is invalid.", buildingType, base.getId());
@@ -181,6 +184,19 @@ public class BuildingGenerationUtils {
 
         return Building.builder()
                 .type(BuildingNames.DEFENSE_CENTER.getLabel())
+                .level(1)
+                .score(score)
+                .properties(properties)
+                .build();
+    }
+
+    public Building generateBarracks() {
+        Map<String, String> properties = new HashMap<>();
+        properties.put("123", "123");
+        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.BARRACKS.getLabel(), 1);
+
+        return Building.builder()
+                .type(BuildingNames.BARRACKS.getLabel())
                 .level(1)
                 .score(score)
                 .properties(properties)

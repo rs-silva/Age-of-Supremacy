@@ -7,29 +7,30 @@
         {
           "level": 1,
           "score" : 10,
-          "constructionTime" : 300,
+          "constructionTime" : 5,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 1 },
+            { "resourceName": "Steel", "quantity": 1 }
           ]
         },
         {
           "level": 2,
-          "score" : 2,
-          "constructionTime" : 5,
+          "score" : 14,
+          "constructionTime" : 10,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 100 },
-            { "resourceName": "Steel", "quantity": 8 },
-            { "resourceName": "Fuel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 10 },
+            { "resourceName": "Fuel", "quantity": 10 }
           ]
         },
         {
           "level": 3,
-          "score" : 3,
+          "score" : 20,
           "constructionTime" : 10,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 60 },
+            { "resourceName": "Steel", "quantity": 15 },
+            { "resourceName": "Fuel", "quantity": 15 }
           ]
         }
       ]
@@ -40,30 +41,51 @@
       "levels": [
         {
           "level": 1,
-          "score" : 10,
-          "constructionTime" : 300,
+          "score" : 5,
+          "constructionTime" : 1,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 1 },
+            { "resourceName": "Steel", "quantity": 1 }
           ]
         },
         {
           "level": 2,
-          "score" : 2,
+          "score" : 8,
           "constructionTime" : 5,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 100 },
+            { "resourceName": "Construction Materials", "quantity": 20 },
             { "resourceName": "Steel", "quantity": 8 },
             { "resourceName": "Fuel", "quantity": 5 }
           ]
         },
         {
           "level": 3,
-          "score" : 3,
+          "score" : 13,
           "constructionTime" : 10,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 30 },
+            { "resourceName": "Steel", "quantity": 12 },
+            { "resourceName": "Fuel", "quantity": 8 }
+          ]
+        },
+        {
+          "level": 4,
+          "score" : 20,
+          "constructionTime" : 15,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 40 },
+            { "resourceName": "Steel", "quantity": 20 },
+            { "resourceName": "Fuel", "quantity": 13 }
+          ]
+        },
+        {
+          "level": 5,
+          "score" : 29,
+          "constructionTime" : 20,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 30 },
+            { "resourceName": "Fuel", "quantity": 20 }
           ]
         }
       ]
@@ -74,20 +96,51 @@
       "levels": [
         {
           "level": 1,
-          "score" : 1,
-          "constructionTime" : 300,
+          "score" : 5,
+          "constructionTime" : 1,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 8 },
-            { "resourceName": "Steel", "quantity": 12 }
+            { "resourceName": "Construction Materials", "quantity": 1 },
+            { "resourceName": "Steel", "quantity": 1 }
           ]
         },
         {
           "level": 2,
-          "score" : 2,
-          "constructionTime" : 500,
+          "score" : 8,
+          "constructionTime" : 5,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 20 }
+            { "resourceName": "Construction Materials", "quantity": 20 },
+            { "resourceName": "Steel", "quantity": 8 },
+            { "resourceName": "Fuel", "quantity": 5 }
+          ]
+        },
+        {
+          "level": 3,
+          "score" : 13,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 30 },
+            { "resourceName": "Steel", "quantity": 12 },
+            { "resourceName": "Fuel", "quantity": 8 }
+          ]
+        },
+        {
+          "level": 4,
+          "score" : 20,
+          "constructionTime" : 15,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 40 },
+            { "resourceName": "Steel", "quantity": 20 },
+            { "resourceName": "Fuel", "quantity": 13 }
+          ]
+        },
+        {
+          "level": 5,
+          "score" : 29,
+          "constructionTime" : 20,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 30 },
+            { "resourceName": "Fuel", "quantity": 20 }
           ]
         }
       ]
@@ -98,30 +151,51 @@
       "levels": [
         {
           "level": 1,
-          "score" : 10,
-          "constructionTime" : 300,
+          "score" : 5,
+          "constructionTime" : 1,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 1 },
+            { "resourceName": "Steel", "quantity": 1 }
           ]
         },
         {
           "level": 2,
-          "score" : 2,
+          "score" : 8,
           "constructionTime" : 5,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 100 },
+            { "resourceName": "Construction Materials", "quantity": 20 },
             { "resourceName": "Steel", "quantity": 8 },
             { "resourceName": "Fuel", "quantity": 5 }
           ]
         },
         {
           "level": 3,
-          "score" : 3,
+          "score" : 13,
           "constructionTime" : 10,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 30 },
+            { "resourceName": "Steel", "quantity": 12 },
+            { "resourceName": "Fuel", "quantity": 8 }
+          ]
+        },
+        {
+          "level": 4,
+          "score" : 20,
+          "constructionTime" : 15,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 40 },
+            { "resourceName": "Steel", "quantity": 20 },
+            { "resourceName": "Fuel", "quantity": 13 }
+          ]
+        },
+        {
+          "level": 5,
+          "score" : 29,
+          "constructionTime" : 20,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 30 },
+            { "resourceName": "Fuel", "quantity": 20 }
           ]
         }
       ]
@@ -132,30 +206,51 @@
       "levels": [
         {
           "level": 1,
-          "score" : 10,
-          "constructionTime" : 300,
+          "score" : 5,
+          "constructionTime" : 1,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 1 },
+            { "resourceName": "Steel", "quantity": 1 }
           ]
         },
         {
           "level": 2,
-          "score" : 2,
+          "score" : 8,
           "constructionTime" : 5,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 100 },
+            { "resourceName": "Construction Materials", "quantity": 20 },
             { "resourceName": "Steel", "quantity": 8 },
             { "resourceName": "Fuel", "quantity": 5 }
           ]
         },
         {
           "level": 3,
-          "score" : 3,
+          "score" : 13,
           "constructionTime" : 10,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 30 },
+            { "resourceName": "Steel", "quantity": 12 },
+            { "resourceName": "Fuel", "quantity": 8 }
+          ]
+        },
+        {
+          "level": 4,
+          "score" : 20,
+          "constructionTime" : 15,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 40 },
+            { "resourceName": "Steel", "quantity": 20 },
+            { "resourceName": "Fuel", "quantity": 13 }
+          ]
+        },
+        {
+          "level": 5,
+          "score" : 29,
+          "constructionTime" : 20,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 30 },
+            { "resourceName": "Fuel", "quantity": 20 }
           ]
         }
       ]
@@ -166,30 +261,51 @@
       "levels": [
         {
           "level": 1,
-          "score" : 10,
-          "constructionTime" : 300,
+          "score" : 5,
+          "constructionTime" : 1,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 1 },
+            { "resourceName": "Steel", "quantity": 1 }
           ]
         },
         {
           "level": 2,
-          "score" : 2,
+          "score" : 8,
           "constructionTime" : 5,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 100 },
+            { "resourceName": "Construction Materials", "quantity": 20 },
             { "resourceName": "Steel", "quantity": 8 },
             { "resourceName": "Fuel", "quantity": 5 }
           ]
         },
         {
           "level": 3,
-          "score" : 3,
+          "score" : 13,
           "constructionTime" : 10,
           "resources": [
-            { "resourceName": "Construction Materials", "quantity": 10 },
-            { "resourceName": "Steel", "quantity": 5 }
+            { "resourceName": "Construction Materials", "quantity": 30 },
+            { "resourceName": "Steel", "quantity": 12 },
+            { "resourceName": "Fuel", "quantity": 8 }
+          ]
+        },
+        {
+          "level": 4,
+          "score" : 20,
+          "constructionTime" : 15,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 40 },
+            { "resourceName": "Steel", "quantity": 20 },
+            { "resourceName": "Fuel", "quantity": 13 }
+          ]
+        },
+        {
+          "level": 5,
+          "score" : 29,
+          "constructionTime" : 20,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 30 },
+            { "resourceName": "Fuel", "quantity": 20 }
           ]
         }
       ]
@@ -258,6 +374,42 @@
           "resources": [
             { "resourceName": "Construction Materials", "quantity": 10 },
             { "resourceName": "Steel", "quantity": 5 }
+          ]
+        }
+      ]
+    },
+    {
+      "buildingName": "Barracks",
+      "maxLevel": 30,
+      "levels": [
+        {
+          "level": 1,
+          "score" : 10,
+          "constructionTime" : 5,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 100 },
+            { "resourceName": "Ammunition", "quantity": 100 }
+          ]
+        },
+        {
+          "level": 2,
+          "score" : 15,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 80 },
+            { "resourceName": "Steel", "quantity": 130 },
+            { "resourceName": "Ammunition", "quantity": 130 }
+          ]
+        },
+        {
+          "level": 3,
+          "score" : 20,
+          "constructionTime" : 15,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 120 },
+            { "resourceName": "Steel", "quantity": 160 },
+            { "resourceName": "Ammunition", "quantity": 160 }
           ]
         }
       ]

@@ -153,7 +153,7 @@ public class BuildingService {
         UUID playerIdFromToken = jwtAccessTokenUtils.retrievePlayerIdFromToken();
 
         if (!buildingPlayerId.equals(playerIdFromToken)) {
-            LOG.error("User with id {} attempted to perform an operation in a building that belong to {}", playerIdFromToken, buildingPlayerId);
+            LOG.error("User with id {} attempted to perform an operation in a building that belong to player with id {}", playerIdFromToken, buildingPlayerId);
             throw new InternalServerErrorException(Constants.BUILDING_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
         }
     }
