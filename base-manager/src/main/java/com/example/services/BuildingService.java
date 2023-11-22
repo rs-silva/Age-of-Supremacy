@@ -87,6 +87,8 @@ public class BuildingService {
             throw new InternalServerErrorException(Constants.BUILDING_ALREADY_EXISTS);
         }
 
+        resourcesUtils.updateBaseResources(base);
+
         boolean areUpgradeRequirementsMet = buildingRequestUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, buildingType, 1);
 
         if (!areUpgradeRequirementsMet) {
@@ -111,6 +113,8 @@ public class BuildingService {
         }
 
         Base base = building.getBase();
+        resourcesUtils.updateBaseResources(base);
+
         boolean areUpgradeRequirementsMet = buildingRequestUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, building.getType(), building.getLevel());
 
         if (!areUpgradeRequirementsMet) {

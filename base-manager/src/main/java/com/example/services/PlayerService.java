@@ -5,7 +5,6 @@ import com.example.exceptions.ResourceAlreadyExistsException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.interfaces.PlayerSimpleView;
 import com.example.models.Base;
-import com.example.models.Building;
 import com.example.models.Player;
 import com.example.repositories.PlayerRepository;
 import com.example.dto.NewPlayerDTO;
@@ -15,7 +14,6 @@ import com.example.utils.JwtAccessTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +45,6 @@ public class PlayerService {
         Player player = Player.builder()
                 .id(uuid)
                 .username(playerDTO.getUsername())
-                .totalScore(0)
                 .baseList(new ArrayList<>())
                 .build();
 

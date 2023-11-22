@@ -49,7 +49,6 @@ public class BaseService {
         this.playerService = playerService;
     }
 
-    @Transactional
     public void generateBase(Player player) {
         Map<String, Double> resources = resourcesUtils.generateDefaultResourcesForBase();
 
@@ -58,7 +57,6 @@ public class BaseService {
                 .x_coordinate(new Random().nextInt(1000))
                 .y_coordinate(new Random().nextInt(1000))
                 .player(player)
-                .score(1)
                 .resources(resources)
                 .lastResourcesUpdate(Timestamp.from(Instant.now()))
                 .buildings(new ArrayList<>())
@@ -112,6 +110,8 @@ public class BaseService {
         }
 
         base.setScore(baseScore);
+        baseRepository.save(base);
+
         playerService.updatePlayerScore(base.getPlayer());
     }
 
