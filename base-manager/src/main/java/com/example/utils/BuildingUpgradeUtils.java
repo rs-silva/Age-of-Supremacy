@@ -118,8 +118,8 @@ public class BuildingUpgradeUtils {
             return buildingLevelConfig.getScore();
         }
 
-        LOG.info("There was an error while retrieving the upgrade information for {} (lv.{})", buildingType, buildingLevel);
-        throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
+        LOG.info("There was an error while retrieving the score information for {} (lv.{})", buildingType, buildingLevel);
+        throw new InternalServerErrorException(Constants.BUILDING_SCORE_NOT_FOUND_ERROR);
     }
 
 
