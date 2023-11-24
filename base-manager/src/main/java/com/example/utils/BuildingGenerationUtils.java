@@ -6,6 +6,7 @@ import com.example.enums.BuildingsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.models.Base;
 import com.example.models.Building;
+import com.example.services.buildings.BuildingUtilsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,14 +23,14 @@ public class BuildingGenerationUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuildingGenerationUtils.class);
 
-    private final ResourcesUtils resourcesUtils;
+    private final BuildingUtilsService buildingUtilsService;
 
     private final BuildingUpgradeUtils buildingUpgradeUtils;
 
     private final RestTemplate restTemplate;
 
-    public BuildingGenerationUtils(ResourcesUtils resourcesUtils, BuildingUpgradeUtils buildingUpgradeUtils, RestTemplate restTemplate) {
-        this.resourcesUtils = resourcesUtils;
+    public BuildingGenerationUtils(BuildingUtilsService buildingUtilsService, BuildingUpgradeUtils buildingUpgradeUtils, RestTemplate restTemplate) {
+        this.buildingUtilsService = buildingUtilsService;
         this.buildingUpgradeUtils = buildingUpgradeUtils;
         this.restTemplate = restTemplate;
     }
@@ -39,26 +39,26 @@ public class BuildingGenerationUtils {
         List<Building> buildingList = new ArrayList<>();
 
         /* Resource Production Buildings */
-        Building resource1Producer = generateResourceProductionBuilding(BuildingNames.RESOURCE_1_FACTORY.getLabel());
+        Building resource1Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_1_FACTORY.getLabel());
         buildingList.add(resource1Producer);
 
-        Building resource2Producer = generateResourceProductionBuilding(BuildingNames.RESOURCE_2_FACTORY.getLabel());
+        Building resource2Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_2_FACTORY.getLabel());
         buildingList.add(resource2Producer);
 
-        Building resource3Producer = generateResourceProductionBuilding(BuildingNames.RESOURCE_3_FACTORY.getLabel());
+        Building resource3Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_3_FACTORY.getLabel());
         buildingList.add(resource3Producer);
 
-        Building resource4Producer = generateResourceProductionBuilding(BuildingNames.RESOURCE_4_FACTORY.getLabel());
+        Building resource4Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_4_FACTORY.getLabel());
         buildingList.add(resource4Producer);
 
-        Building resource5Producer = generateResourceProductionBuilding(BuildingNames.RESOURCE_5_FACTORY.getLabel());
+        Building resource5Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_5_FACTORY.getLabel());
         buildingList.add(resource5Producer);
 
         /* Other Buildings */
-        Building warehouse = generateWarehouse();
+        Building warehouse = buildingUtilsService.generateBuilding(BuildingNames.WAREHOUSE.getLabel());
         buildingList.add(warehouse);
 
-        Building mainBuilding = generateMainBuilding();
+        Building mainBuilding = buildingUtilsService.generateBuilding(BuildingNames.MAIN_BUILDING.getLabel());
         buildingList.add(mainBuilding);
 
         return buildingList;
@@ -118,15 +118,8 @@ public class BuildingGenerationUtils {
             throw new InternalServerErrorException(Constants.BUILDING_ALREADY_EXISTS);
         }
 
-        Building newBuilding = null;
-
         /* TODO Call the generate method for the corresponding building */
-        if (buildingType.equals(BuildingNames.DEFENSE_CENTER.getLabel())) {
-            newBuilding = generateDefenseCenter();
-        }
-        else if (buildingType.equals(BuildingNames.BARRACKS.getLabel())) {
-            newBuilding = generateBarracks();
-        }
+        Building newBuilding = buildingUtilsService.generateBuilding(buildingType);
 
         if (newBuilding == null) {
             LOG.info("Attempted to finish generation of building {} in base {}, but the building's name is invalid.", buildingType, base.getId());
@@ -134,73 +127,6 @@ public class BuildingGenerationUtils {
         }
 
         return newBuilding;
-    }
-
-    public Building generateResourceProductionBuilding(String type) {
-        Map<String, String> properties = new HashMap<>();
-        Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(1);
-        properties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
-        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(type, 1);
-
-        return Building.builder()
-                .type(type)
-                .level(1)
-                .score(score)
-                .properties(properties)
-                .build();
-    }
-
-    public Building generateWarehouse() {
-        Map<String, String> properties = new HashMap<>();
-        Double amountOfResourcesStored = resourcesUtils.getWarehouseCapacityForLevel(1);
-        properties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesStored.toString());
-        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.WAREHOUSE.getLabel(), 1);
-
-        return Building.builder()
-                .type(BuildingNames.WAREHOUSE.getLabel())
-                .level(1)
-                .score(score)
-                .properties(properties)
-                .build();
-    }
-
-    public Building generateMainBuilding() {
-        Map<String, String> properties = new HashMap<>();
-        properties.put("123", "123");
-        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.MAIN_BUILDING.getLabel(), 1);
-
-        return Building.builder()
-                .type(BuildingNames.MAIN_BUILDING.getLabel())
-                .level(1)
-                .score(score)
-                .properties(properties)
-                .build();
-    }
-
-    public Building generateDefenseCenter() {
-        Map<String, String> properties = new HashMap<>();
-        properties.put("123", "123");
-        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.DEFENSE_CENTER.getLabel(), 1);
-
-        return Building.builder()
-                .type(BuildingNames.DEFENSE_CENTER.getLabel())
-                .level(1)
-                .score(score)
-                .properties(properties)
-                .build();
-    }
-
-    public Building generateBarracks() {
-        Map<String, String> properties = new HashMap<>();
-        properties.put("123", "123");
-        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(BuildingNames.BARRACKS.getLabel(), 1);
-
-        return Building.builder()
-                .type(BuildingNames.BARRACKS.getLabel())
-                .level(1)
-                .score(score)
-                .properties(properties)
-                .build();
     }
 
 }

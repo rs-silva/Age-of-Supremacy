@@ -5,7 +5,7 @@ import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
 import com.example.models.Building;
 import com.example.repositories.BuildingRepository;
-import com.example.utils.BuildingCompleteUpgradeUtils;
+import com.example.services.buildings.BuildingUtilsService;
 import com.example.utils.BuildingGenerationUtils;
 import com.example.utils.Constants;
 import com.example.dto.BuildingDTO;
@@ -33,7 +33,7 @@ public class BuildingService {
 
     private final BuildingUpgradeUtils buildingUpgradeUtils;
 
-    private final BuildingCompleteUpgradeUtils buildingCompleteUpgradeUtils;
+    private final BuildingUtilsService buildingUtilsService;
 
     private final BuildingGenerationUtils buildingGenerationUtils;
 
@@ -43,10 +43,10 @@ public class BuildingService {
 
     private final JwtAccessTokenUtils jwtAccessTokenUtils;
 
-    public BuildingService(BuildingRepository buildingRepository, BuildingUpgradeUtils buildingUpgradeUtils, BuildingCompleteUpgradeUtils buildingCompleteUpgradeUtils, BuildingGenerationUtils buildingGenerationUtils, ResourcesUtils resourcesUtils, @Lazy BaseService baseService, JwtAccessTokenUtils jwtAccessTokenUtils) {
+    public BuildingService(BuildingRepository buildingRepository, BuildingUpgradeUtils buildingUpgradeUtils, BuildingUtilsService buildingUtilsService, BuildingGenerationUtils buildingGenerationUtils, ResourcesUtils resourcesUtils, @Lazy BaseService baseService, JwtAccessTokenUtils jwtAccessTokenUtils) {
         this.buildingRepository = buildingRepository;
         this.buildingUpgradeUtils = buildingUpgradeUtils;
-        this.buildingCompleteUpgradeUtils = buildingCompleteUpgradeUtils;
+        this.buildingUtilsService = buildingUtilsService;
         this.buildingGenerationUtils = buildingGenerationUtils;
         this.resourcesUtils = resourcesUtils;
         this.baseService = baseService;
@@ -144,7 +144,15 @@ public class BuildingService {
 
         resourcesUtils.updateBaseResources(building.getBase());
 
-        buildingCompleteUpgradeUtils.levelUpBuilding(building);
+        String buildingType = building.getType();
+        int buildingCurrentLevel = building.getLevel();
+
+        building.setLevel(buildingCurrentLevel + 1);
+
+        int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, building.getLevel());
+        building.setScore(score);
+
+        buildingUtilsService.updateBuildingProperties(building);
 
         baseService.updateBaseAndPlayerScore(building.getBase());
     }

@@ -9,6 +9,7 @@ import com.example.models.Base;
 import com.example.models.Building;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +26,7 @@ public class BuildingUpgradeUtils {
 
     private final RestTemplate restTemplate;
 
-    public BuildingUpgradeUtils(BuildingUpgradeConfigUtils buildingUpgradeConfigUtils, RestTemplate restTemplate) {
+    public BuildingUpgradeUtils(BuildingUpgradeConfigUtils buildingUpgradeConfigUtils, @Lazy RestTemplate restTemplate) {
         this.buildingUpgradeConfigUtils = buildingUpgradeConfigUtils;
         this.restTemplate = restTemplate;
     }
