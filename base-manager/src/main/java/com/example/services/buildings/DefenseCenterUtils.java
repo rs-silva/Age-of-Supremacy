@@ -23,7 +23,10 @@ public class DefenseCenterUtils implements BuildingUtils {
     @Override
     public Building generateBuilding(String buildingType) {
         Map<String, String> properties = new HashMap<>();
-        properties.put("123", "123");
+        properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_AA.getLabel(), "30");
+        properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_OVERALL.getLabel(), "40");
+        properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_ANTITANK.getLabel(), "50");
+
         int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, 1);
 
         return Building.builder()

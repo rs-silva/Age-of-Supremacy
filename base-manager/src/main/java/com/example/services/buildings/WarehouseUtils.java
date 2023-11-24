@@ -29,6 +29,7 @@ public class WarehouseUtils implements BuildingUtils {
         Map<String, String> properties = new HashMap<>();
         Double amountOfResourcesStored = resourcesUtils.getWarehouseCapacityForLevel(1);
         properties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesStored.toString());
+
         int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, 1);
 
         return Building.builder()

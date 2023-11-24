@@ -21,7 +21,6 @@ public class BuildingUtilsService {
         }
     }
 
-
     public void updateBuildingProperties(Building building) {
         String buildingType = building.getType();
         BuildingUtils buildingUtils = buildingUtilsMap.get(buildingType);

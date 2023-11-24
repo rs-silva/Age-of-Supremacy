@@ -1,10 +1,8 @@
 package com.example.services.buildings;
 
-import com.example.enums.BuildingsPropertiesNames;
 import com.example.interfaces.BuildingUtils;
 import com.example.models.Building;
 import com.example.utils.BuildingUpgradeUtils;
-import com.example.utils.ResourcesUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +23,7 @@ public class MainBuildingUtils implements BuildingUtils {
     public Building generateBuilding(String buildingType) {
         Map<String, String> properties = new HashMap<>();
         properties.put("123", "123");
+
         int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, 1);
 
         return Building.builder()

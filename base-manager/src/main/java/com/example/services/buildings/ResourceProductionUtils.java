@@ -25,6 +25,7 @@ public class ResourceProductionUtils {
         Map<String, String> properties = new HashMap<>();
         Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(1);
         properties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
+
         int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, 1);
 
         return Building.builder()
@@ -33,6 +34,14 @@ public class ResourceProductionUtils {
                 .score(score)
                 .properties(properties)
                 .build();
+    }
+
+    public void updateBuildingProperties(Building building) {
+        Map<String, String> buildingProperties = building.getProperties();
+
+        Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(building.getLevel());
+        buildingProperties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
+
     }
 
 }
