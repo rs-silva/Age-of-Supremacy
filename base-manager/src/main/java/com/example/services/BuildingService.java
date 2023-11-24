@@ -76,7 +76,10 @@ public class BuildingService {
             requirementsToNextLevel = buildingUpgradeUtils.getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
         }
 
-        return BuildingMapper.buildDTO(building, requirementsToNextLevel);
+        Map<String, String> basicProperties = buildingUtilsService.getBasicProperties(building);
+        Map<String, String> additionalProperties = buildingUtilsService.getAdditionalProperties(building);
+
+        return BuildingMapper.buildDTO(building, basicProperties, additionalProperties, requirementsToNextLevel);
     }
 
     public void requestBuildingGeneration(Base base, String buildingType) {
@@ -151,8 +154,6 @@ public class BuildingService {
 
         int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, building.getLevel());
         building.setScore(score);
-
-        buildingUtilsService.updateBuildingProperties(building);
 
         baseService.updateBaseAndPlayerScore(building.getBase());
     }

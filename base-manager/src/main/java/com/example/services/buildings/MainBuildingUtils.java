@@ -35,8 +35,13 @@ public class MainBuildingUtils implements BuildingUtils {
     }
 
     @Override
-    public void updateBuildingProperties(Building building) {
+    public Map<String, String> getBasicProperties(Building building) {
+        return null;
+    }
 
+    @Override
+    public Map<String, String> getAdditionalProperties(Building building) {
+        return null;
     }
 
 }

@@ -5,6 +5,8 @@ import com.example.models.Building;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @Qualifier("Masonry Workshop")
 public class Resource1FactoryUtils implements BuildingUtils {
@@ -21,8 +23,13 @@ public class Resource1FactoryUtils implements BuildingUtils {
     }
 
     @Override
-    public void updateBuildingProperties(Building building) {
-        resourceProductionUtils.updateBuildingProperties(building);
+    public Map<String, String> getBasicProperties(Building building) {
+        return resourceProductionUtils.getBasicProperties(building);
+    }
+
+    @Override
+    public Map<String, String> getAdditionalProperties(Building building) {
+        return null;
     }
 
 }

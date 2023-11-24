@@ -22,26 +22,23 @@ public class ResourceProductionUtils {
     }
 
     public Building generateResourceProductionBuilding(String buildingType) {
-        Map<String, String> properties = new HashMap<>();
-        Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(1);
-        properties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
-
         int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, 1);
 
         return Building.builder()
                 .type(buildingType)
                 .level(1)
                 .score(score)
-                .properties(properties)
+                .properties(new HashMap<>())
                 .build();
     }
 
-    public void updateBuildingProperties(Building building) {
-        Map<String, String> buildingProperties = building.getProperties();
+    public Map<String, String> getBasicProperties(Building building) {
+        Map<String, String> additionalProperties = new HashMap<>();
 
         Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(building.getLevel());
-        buildingProperties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
+        additionalProperties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
 
+        return additionalProperties;
     }
 
 }

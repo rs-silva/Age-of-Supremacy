@@ -26,27 +26,29 @@ public class WarehouseUtils implements BuildingUtils {
 
     @Override
     public Building generateBuilding(String buildingType) {
-        Map<String, String> properties = new HashMap<>();
-        Double amountOfResourcesStored = resourcesUtils.getWarehouseCapacityForLevel(1);
-        properties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesStored.toString());
-
         int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, 1);
 
         return Building.builder()
                 .type(buildingType)
                 .level(1)
                 .score(score)
-                .properties(properties)
+                .properties(new HashMap<>())
                 .build();
     }
 
     @Override
-    public void updateBuildingProperties(Building building) {
-        Map<String, String> buildingProperties = building.getProperties();
+    public Map<String, String> getBasicProperties(Building building) {
+        Map<String, String> additionalProperties = new HashMap<>();
 
         Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(building.getLevel());
-        buildingProperties.put(BuildingsPropertiesNames.RESOURCE_FACTORY_AMOUNT_OF_RESOURCES_PRODUCED.getLabel(), amountOfResourcesProduced.toString());
+        additionalProperties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesProduced.toString());
 
+        return additionalProperties;
+    }
+
+    @Override
+    public Map<String, String> getAdditionalProperties(Building building) {
+       return null;
     }
 
 }

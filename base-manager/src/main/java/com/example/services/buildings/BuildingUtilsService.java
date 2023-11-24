@@ -21,12 +21,23 @@ public class BuildingUtilsService {
         }
     }
 
-    public void updateBuildingProperties(Building building) {
+    public Map<String, String> getBasicProperties(Building building) {
         String buildingType = building.getType();
         BuildingUtils buildingUtils = buildingUtilsMap.get(buildingType);
 
         if (buildingUtils != null) {
-            buildingUtils.updateBuildingProperties(building);
+            return buildingUtils.getBasicProperties(building);
+        } else {
+            throw new IllegalArgumentException("Unsupported building type: " + buildingType);
+        }
+    }
+
+    public Map<String, String> getAdditionalProperties(Building building) {
+        String buildingType = building.getType();
+        BuildingUtils buildingUtils = buildingUtilsMap.get(buildingType);
+
+        if (buildingUtils != null) {
+            return buildingUtils.getAdditionalProperties(building);
         } else {
             throw new IllegalArgumentException("Unsupported building type: " + buildingType);
         }
