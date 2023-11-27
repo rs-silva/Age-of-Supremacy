@@ -1,12 +1,17 @@
 package com.example.services;
 
+import com.example.dto.BaseDTO;
+import com.example.dto.BuildingDTO;
 import com.example.enums.BasePropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
+import com.example.mappers.BaseMapper;
+import com.example.mappers.BuildingMapper;
 import com.example.models.Base;
 import com.example.models.Building;
 import com.example.models.Player;
 import com.example.repositories.BaseRepository;
+import com.example.services.buildings.BuildingUtilsService;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import com.example.interfaces.BaseSimpleView;
@@ -39,13 +44,16 @@ public class BaseService {
 
     private final ResourcesUtils resourcesUtils;
 
+    private final BuildingUtilsService buildingUtilsService;
+
     private final PlayerService playerService;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, @Lazy PlayerService playerService) {
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
         this.resourcesUtils = resourcesUtils;
+        this.buildingUtilsService = buildingUtilsService;
         this.playerService = playerService;
     }
 
@@ -70,6 +78,23 @@ public class BaseService {
         buildingService.generateDefaultBuildingsForNewBase(base);
 
         updateBaseAndPlayerScore(base);
+    }
+
+    @Transactional
+    public BaseDTO getBaseInformation(UUID baseId) {
+        Base base = findById(baseId);
+
+        List<Building> buildingList = base.getBuildings();
+
+        List<BuildingDTO> buildingDTOList = buildingList
+                .stream()
+                .map(building -> {
+                    Map<String, String> basicProperties = buildingUtilsService.getBasicProperties(building);
+                    return BuildingMapper.buildDTO(building, basicProperties);
+                })
+                .toList();
+
+        return BaseMapper.buildDTO(base, buildingDTOList);
     }
 
     @Transactional

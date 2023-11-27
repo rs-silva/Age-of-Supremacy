@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.dto.BaseDTO;
 import com.example.models.Base;
 import com.example.services.BaseService;
 import org.slf4j.Logger;
@@ -26,13 +27,13 @@ public class BaseController {
     }
 
     @GetMapping("{baseId}")
-    public ResponseEntity<Base> getBase(@PathVariable UUID baseId) {
+    public ResponseEntity<BaseDTO> getBase(@PathVariable UUID baseId) {
 
         LOG.info("Retrieving base with id {}", baseId);
 
-        Base base = baseService.findById(baseId);
+        BaseDTO baseDTO = baseService.getBaseInformation(baseId);
 
-        return ResponseEntity.ok(base);
+        return ResponseEntity.ok(baseDTO);
     }
 
     @PostMapping("{baseId}/createBuilding/{buildingType}")
