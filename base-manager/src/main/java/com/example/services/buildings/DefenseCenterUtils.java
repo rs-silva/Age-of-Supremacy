@@ -39,12 +39,12 @@ public class DefenseCenterUtils implements BuildingUtils {
 
     @Override
     public Map<String, String> getBasicProperties(Building building) {
-        return null;
+        return new HashMap<>();
     }
 
     @Override
     public Map<String, String> getAdditionalProperties(Building building) {
-        return null;
+        return new HashMap<>();
     }
 
 }

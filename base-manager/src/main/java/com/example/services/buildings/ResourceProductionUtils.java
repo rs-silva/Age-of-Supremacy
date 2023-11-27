@@ -41,4 +41,8 @@ public class ResourceProductionUtils {
         return additionalProperties;
     }
 
+    public Map<String, String> getAdditionalProperties(Building building) {
+        return new HashMap<>();
+    }
+
 }

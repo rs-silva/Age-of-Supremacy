@@ -29,7 +29,7 @@ public class Resource1FactoryUtils implements BuildingUtils {
 
     @Override
     public Map<String, String> getAdditionalProperties(Building building) {
-        return null;
+        return resourceProductionUtils.getAdditionalProperties(building);
     }
 
 }

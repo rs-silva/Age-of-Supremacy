@@ -48,7 +48,7 @@ public class WarehouseUtils implements BuildingUtils {
 
     @Override
     public Map<String, String> getAdditionalProperties(Building building) {
-       return null;
+       return new HashMap<>();
     }
 
 }
