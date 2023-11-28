@@ -30,7 +30,7 @@ public class BuildingUpgradeConfigUtils {
         if (buildingUpgradeConfig != null) {
             return buildingUpgradeConfig.getLevels()
                     .stream()
-                    .filter(level -> level.getLevel() == buildingLevel)
+                    .filter(levelConfig -> levelConfig.getLevel() == buildingLevel)
                     .findFirst()
                     .orElse(null);
         }
@@ -46,7 +46,7 @@ public class BuildingUpgradeConfigUtils {
                         .stream()
                         .filter(resource -> resource.getResourceName().equals(resourceName.getLabel()))
                         .findFirst()
-                        .ifPresent(buildingResourceConfig -> resources.put(resourceName.getLabel(), buildingResourceConfig.getQuantity()));
+                        .ifPresent(buildingResourceConfig -> resources.put(buildingResourceConfig.getResourceName(), buildingResourceConfig.getQuantity()));
             }
 
             return resources;

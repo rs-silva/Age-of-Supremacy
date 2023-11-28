@@ -10,6 +10,10 @@ public enum BuildingsPropertiesNames {
 
     WAREHOUSE_CAPACITY("Amount of each resource stored"),
 
+    DEFENSE_CENTER_OVERALL_FACTOR("Overall defense factor"),
+    DEFENSE_CENTER_AA_FACTOR("Anti-air defense factor"),
+    DEFENSE_CENTER_ANTITANK_FACTOR("Anti-tank defense factor"),
+
     DEFENSE_CENTER_OVERALL("Overall defense"),
     DEFENSE_CENTER_AA("Anti-air defense"),
     DEFENSE_CENTER_ANTITANK("Anti-tank defense");
