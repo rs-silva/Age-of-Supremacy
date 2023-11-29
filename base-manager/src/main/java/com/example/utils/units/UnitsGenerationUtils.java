@@ -10,13 +10,13 @@ import java.util.Map;
 public class UnitsGenerationUtils {
 
     public Map<String, Integer> generateDefaultUnitsForBase() {
-        Map<String, Integer> resources = new HashMap<>();
+        Map<String, Integer> units = new HashMap<>();
 
         for (UnitNames unitName : UnitNames.values()) {
-            resources.put(unitName.getLabel(), 0);
+            units.put(unitName.getLabel(), 0);
         }
 
-        return resources;
+        return units;
     }
 
 }
