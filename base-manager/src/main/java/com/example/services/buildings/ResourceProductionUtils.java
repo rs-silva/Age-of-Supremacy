@@ -2,7 +2,7 @@ package com.example.services.buildings;
 
 import com.example.enums.BuildingsPropertiesNames;
 import com.example.models.Building;
-import com.example.utils.BuildingUpgradeUtils;
+import com.example.utils.buildings.BuildingUpgradeUtils;
 import com.example.utils.ResourcesUtils;
 import org.springframework.stereotype.Service;
 

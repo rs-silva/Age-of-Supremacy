@@ -16,6 +16,7 @@ import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import com.example.interfaces.BaseSimpleView;
 import com.example.utils.Constants;
+import com.example.utils.units.UnitsGenerationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
@@ -48,17 +49,21 @@ public class BaseService {
 
     private final PlayerService playerService;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService) {
+    private final UnitsGenerationUtils unitsGenerationUtils;
+
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitsGenerationUtils unitsGenerationUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
         this.resourcesUtils = resourcesUtils;
         this.buildingUtilsService = buildingUtilsService;
         this.playerService = playerService;
+        this.unitsGenerationUtils = unitsGenerationUtils;
     }
 
     public void generateBase(Player player) {
         Map<String, Double> resources = resourcesUtils.generateDefaultResourcesForBase();
+        Map<String, Integer> units = unitsGenerationUtils.generateDefaultUnitsForBase();
 
         Base base = Base.builder()
                 .name(BasePropertiesNames.DEFAULT_NAME.getLabel())
@@ -66,6 +71,7 @@ public class BaseService {
                 .y_coordinate(new Random().nextInt(1000))
                 .player(player)
                 .resources(resources)
+                .units(units)
                 .lastResourcesUpdate(Timestamp.from(Instant.now()))
                 .buildings(new ArrayList<>())
                 .build();

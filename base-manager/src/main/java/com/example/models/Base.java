@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -55,6 +54,12 @@ public class Base {
     @MapKeyColumn(name = "resource_name")
     @Column(name = "resource_quantity")
     private Map<String, Double> resources;
+
+    @ElementCollection
+    @CollectionTable(name = "bases_units", joinColumns = @JoinColumn(name = "base_id"))
+    @MapKeyColumn(name = "unit_name")
+    @Column(name = "unit_quantity")
+    private Map<String, Integer> units;
 
     private Timestamp lastResourcesUpdate;
 

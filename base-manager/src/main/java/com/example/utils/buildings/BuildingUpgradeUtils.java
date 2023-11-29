@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.utils.buildings;
 
 import com.example.config.BuildingLevelConfig;
 import com.example.config.BuildingUpgradeConfig;
@@ -7,6 +7,7 @@ import com.example.enums.BuildingsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.models.Base;
 import com.example.models.Building;
+import com.example.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;

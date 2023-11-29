@@ -7,7 +7,17 @@ import lombok.Getter;
 @Getter
 public enum UnitNames {
 
-    RESOURCE_1("Construction Materials");
+    GROUND_INFANTRY("Infantry"),
+    GROUND_ENGINEER("Grenadier/Engineer"),
+    GROUND_SNIPER("Sniper"),
+
+    ARMORED_APC("Armored Personnel Carrier"),
+    ARMORED_MBT("Main Battle Tank"),
+    ARMORED_ARTILLERY("Artillery"),
+
+    AIR_FIGHTER("Jet Fighter"),
+    AIR_BOMBER("Bomber"),
+    AIR_RECON("Recon");
 
     private final String label;
 

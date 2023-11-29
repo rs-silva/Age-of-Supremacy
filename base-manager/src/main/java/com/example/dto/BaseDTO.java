@@ -25,5 +25,7 @@ public class BaseDTO {
 
     private Map<String, Double> resources;
 
+    private Map<String, Integer> units;
+
     List<BuildingDTO> buildingList;
 }

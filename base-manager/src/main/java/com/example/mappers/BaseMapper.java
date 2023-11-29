@@ -17,6 +17,7 @@ public abstract class BaseMapper {
                 .y_coordinate(base.getY_coordinate())
                 .score(base.getScore())
                 .resources(base.getResources())
+                .units(base.getUnits())
                 .buildingList(buildingDTOList)
                 .build();
     }
