@@ -1,7 +1,9 @@
 package com.example.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 @Getter
 public enum BuildingsPropertiesNames {
     CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL("Amount of time in seconds to upgrade to next level"),
@@ -19,10 +21,6 @@ public enum BuildingsPropertiesNames {
     DEFENSE_CENTER_ANTITANK("Anti-tank defense");
 
     private final String label;
-
-    BuildingsPropertiesNames(String label) {
-        this.label = label;
-    }
 
 }
 

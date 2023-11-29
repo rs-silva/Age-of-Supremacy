@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum BasePropertiesNames {
-    DEFAULT_NAME("Default Name");
+public enum UnitNames {
+
+    RESOURCE_1("Construction Materials");
 
     private final String label;
 
 }
-

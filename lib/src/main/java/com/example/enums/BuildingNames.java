@@ -1,7 +1,9 @@
 package com.example.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 @Getter
 public enum BuildingNames {
     MAIN_BUILDING("Headquarters"),
@@ -20,9 +22,5 @@ public enum BuildingNames {
     DEFENSE_CENTER("Strategic Defense Center");
 
     private final String label;
-
-    BuildingNames(String label) {
-        this.label = label;
-    }
 
 }

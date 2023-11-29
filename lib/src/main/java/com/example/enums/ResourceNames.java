@@ -1,7 +1,9 @@
 package com.example.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 @Getter
 public enum ResourceNames {
     RESOURCE_1("Construction Materials"),
@@ -12,7 +14,4 @@ public enum ResourceNames {
 
     private final String label;
 
-    ResourceNames(String label) {
-        this.label = label;
-    }
 }
