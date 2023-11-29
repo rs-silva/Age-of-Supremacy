@@ -413,6 +413,114 @@
           ]
         }
       ]
+    },
+    {
+      "buildingName": "Motorized Armory Complex",
+      "maxLevel": 30,
+      "levels": [
+        {
+          "level": 1,
+          "score" : 10,
+          "constructionTime" : 5,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 100 },
+            { "resourceName": "Ammunition", "quantity": 100 }
+          ]
+        },
+        {
+          "level": 2,
+          "score" : 15,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 80 },
+            { "resourceName": "Steel", "quantity": 130 },
+            { "resourceName": "Ammunition", "quantity": 130 }
+          ]
+        },
+        {
+          "level": 3,
+          "score" : 20,
+          "constructionTime" : 15,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 120 },
+            { "resourceName": "Steel", "quantity": 160 },
+            { "resourceName": "Ammunition", "quantity": 160 }
+          ]
+        }
+      ]
+    },
+    {
+      "buildingName": "Aviation Command Center",
+      "maxLevel": 30,
+      "levels": [
+        {
+          "level": 1,
+          "score" : 10,
+          "constructionTime" : 5,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 100 },
+            { "resourceName": "Ammunition", "quantity": 100 }
+          ]
+        },
+        {
+          "level": 2,
+          "score" : 15,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 80 },
+            { "resourceName": "Steel", "quantity": 130 },
+            { "resourceName": "Ammunition", "quantity": 130 }
+          ]
+        },
+        {
+          "level": 3,
+          "score" : 20,
+          "constructionTime" : 15,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 120 },
+            { "resourceName": "Steel", "quantity": 160 },
+            { "resourceName": "Ammunition", "quantity": 160 }
+          ]
+        }
+      ]
+    },
+    {
+      "buildingName": "Research Lab",
+      "maxLevel": 30,
+      "levels": [
+        {
+          "level": 1,
+          "score" : 10,
+          "constructionTime" : 5,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 50 },
+            { "resourceName": "Steel", "quantity": 100 },
+            { "resourceName": "Ammunition", "quantity": 100 }
+          ]
+        },
+        {
+          "level": 2,
+          "score" : 15,
+          "constructionTime" : 10,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 80 },
+            { "resourceName": "Steel", "quantity": 130 },
+            { "resourceName": "Ammunition", "quantity": 130 }
+          ]
+        },
+        {
+          "level": 3,
+          "score" : 20,
+          "constructionTime" : 15,
+          "resources": [
+            { "resourceName": "Construction Materials", "quantity": 120 },
+            { "resourceName": "Steel", "quantity": 160 },
+            { "resourceName": "Ammunition", "quantity": 160 }
+          ]
+        }
+      ]
     }
   ]
 }

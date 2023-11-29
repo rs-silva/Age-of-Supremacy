@@ -92,7 +92,7 @@ public class BuildingUpgradeUtils {
             return buildingLevel >= buildingMaxLevel;
         }
 
-        LOG.info("There was an error while retrieving the upgrade information for building {} for level {}", buildingType, buildingLevel + 1);
+        LOG.info("There was an error while retrieving the maximum level information for {}.", buildingType);
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
@@ -101,13 +101,13 @@ public class BuildingUpgradeUtils {
         BuildingLevelConfig buildingLevelConfig = buildingUpgradeConfigUtils.getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel + 1);
         Map<String, Integer> buildingResourceConfig = buildingUpgradeConfigUtils.getBuildingResourceConfig(buildingLevelConfig);
 
-        if (buildingUpgradeConfig != null) {
+        if (buildingResourceConfig != null) {
             buildingResourceConfig.put(
                     BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel(), buildingLevelConfig.getConstructionTime());
             return buildingResourceConfig;
         }
 
-        LOG.info("There was an error while retrieving the upgrade information for {} (lv.{})", buildingType, buildingLevel);
+        LOG.info("There was an error while retrieving the upgrade information for {} (lv.{}).", buildingType, buildingLevel + 1);
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
@@ -115,11 +115,11 @@ public class BuildingUpgradeUtils {
         BuildingUpgradeConfig buildingUpgradeConfig = buildingUpgradeConfigUtils.getBuildingUpgradeConfig(buildingType);
         BuildingLevelConfig buildingLevelConfig = buildingUpgradeConfigUtils.getBuildingLevelConfig(buildingUpgradeConfig, buildingLevel);
 
-        if (buildingUpgradeConfig != null) {
+        if (buildingLevelConfig != null) {
             return buildingLevelConfig.getScore();
         }
 
-        LOG.info("There was an error while retrieving the score information for {} (lv.{})", buildingType, buildingLevel);
+        LOG.info("There was an error while retrieving the score information for {} (lv.{}).", buildingType, buildingLevel);
         throw new InternalServerErrorException(Constants.BUILDING_SCORE_NOT_FOUND_ERROR);
     }
 

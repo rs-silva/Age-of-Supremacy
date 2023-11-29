@@ -40,7 +40,7 @@ public class BaseController {
     public ResponseEntity<Base> createBuildingGenerationRequest(@PathVariable UUID baseId,
                                                                 @PathVariable String buildingType) {
 
-        LOG.info("Received request to create building {} in base {}", buildingType, baseId);
+        LOG.info("Received request to create {} in base {}", buildingType, baseId);
 
         baseService.createNewBuildingConstructionRequest(baseId, buildingType);
 
@@ -51,7 +51,7 @@ public class BaseController {
     public ResponseEntity<Base> completeBuildingGeneration(@PathVariable UUID baseId,
                                                            @PathVariable String buildingType) {
 
-        LOG.info("Received request to complete generation of building {} in base {}", buildingType, baseId);
+        LOG.info("Received request to complete generation of {} in base {}", buildingType, baseId);
 
         baseService.completeBuildingGeneration(baseId, buildingType);
 
