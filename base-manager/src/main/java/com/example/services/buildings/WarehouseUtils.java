@@ -40,7 +40,7 @@ public class WarehouseUtils implements BuildingUtils {
     public Map<String, String> getBasicProperties(Building building) {
         Map<String, String> additionalProperties = new HashMap<>();
 
-        Double amountOfResourcesProduced = resourcesUtils.getAmountOfResourcesProducedForLevel(building.getLevel());
+        Double amountOfResourcesProduced = resourcesUtils.getWarehouseCapacityForLevel(building.getLevel());
         additionalProperties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesProduced.toString());
 
         return additionalProperties;

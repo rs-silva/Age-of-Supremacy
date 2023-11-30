@@ -11,7 +11,7 @@ public class UnitStatusConfig {
 
     private int healthPoints;
 
-    private int movementSpeed;
+    private double movementSpeed;
 
     private int attack;
 
