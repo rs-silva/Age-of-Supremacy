@@ -1,7 +1,6 @@
 package com.example.utils.units;
 
 import com.example.config.UnitStatusConfig;
-import com.example.enums.BuildingsPropertiesNames;
 import com.example.enums.UnitNames;
 import com.example.enums.UnitsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
