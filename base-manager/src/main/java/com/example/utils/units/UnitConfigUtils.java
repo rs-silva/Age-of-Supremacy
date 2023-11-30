@@ -1,14 +1,12 @@
 package com.example.utils.units;
 
-import com.example.config.BuildingLevelConfig;
 import com.example.config.UnitConfig;
-import com.example.config.UnitStatusConfig;
+import com.example.dto.UnitDTO;
 import com.example.enums.ResourceNames;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-
 
 @Component
 public class UnitConfigUtils {
@@ -19,7 +17,7 @@ public class UnitConfigUtils {
         this.unitConfig = unitConfig;
     }
 
-    public UnitStatusConfig getUnitConfig(String unitName) {
+    public UnitDTO getUnitConfig(String unitName) {
         return unitConfig.getUnits()
                 .stream()
                 .filter(unit -> unit.getUnitName().equals(unitName))
@@ -27,12 +25,12 @@ public class UnitConfigUtils {
                 .orElse(null);
     }
 
-    public Map<String, Integer> getUnitResourceConfig(UnitStatusConfig unitStatusConfig) {
-        if (unitStatusConfig != null) {
+    public Map<String, Integer> getUnitResourceConfig(UnitDTO unitDTO) {
+        if (unitDTO != null) {
             Map<String, Integer> resources = new HashMap<>();
 
             for (ResourceNames resourceName : ResourceNames.values()) {
-                unitStatusConfig.getResources()
+                unitDTO.getResources()
                         .stream()
                         .filter(resource -> resource.getResourceName().equals(resourceName.getLabel()))
                         .findFirst()

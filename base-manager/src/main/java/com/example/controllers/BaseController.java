@@ -1,7 +1,6 @@
 package com.example.controllers;
 
 import com.example.dto.BaseDTO;
-import com.example.models.Base;
 import com.example.services.BaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class BaseController {
     }
 
     @PostMapping("{baseId}/createBuilding/{buildingType}")
-    public ResponseEntity<Base> createBuildingGenerationRequest(@PathVariable UUID baseId,
+    public ResponseEntity<String> createBuildingGenerationRequest(@PathVariable UUID baseId,
                                                                 @PathVariable String buildingType) {
 
         LOG.info("Received request to create {} in base {}", buildingType, baseId);
@@ -48,7 +47,7 @@ public class BaseController {
     }
 
     @PostMapping("{baseId}/finishBuilding/{buildingType}")
-    public ResponseEntity<Base> completeBuildingGeneration(@PathVariable UUID baseId,
+    public ResponseEntity<String> completeBuildingGeneration(@PathVariable UUID baseId,
                                                            @PathVariable String buildingType) {
 
         LOG.info("Received request to complete generation of {} in base {}", buildingType, baseId);

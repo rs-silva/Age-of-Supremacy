@@ -1,6 +1,5 @@
 package com.example.controllers;
 
-import com.example.models.Base;
 import com.example.services.BuildingService;
 import com.example.dto.BuildingDTO;
 import org.slf4j.Logger;
@@ -37,7 +36,7 @@ public class BuildingController {
     }
 
     @PostMapping("/upgrade/{buildingId}")
-    public ResponseEntity<Base> createBuildingUpgradeRequest(@PathVariable UUID buildingId) {
+    public ResponseEntity<String> createBuildingUpgradeRequest(@PathVariable UUID buildingId) {
 
         LOG.info("Received request to upgrade building with id {}", buildingId);
 
@@ -47,7 +46,7 @@ public class BuildingController {
     }
 
     @PostMapping("/completeUpgrade/{buildingId}")
-    public ResponseEntity<Base> completeBuildingUpgrade(@PathVariable UUID buildingId) {
+    public ResponseEntity<String> completeBuildingUpgrade(@PathVariable UUID buildingId) {
 
         LOG.info("Received request to complete upgrade of building with id {}", buildingId);
 

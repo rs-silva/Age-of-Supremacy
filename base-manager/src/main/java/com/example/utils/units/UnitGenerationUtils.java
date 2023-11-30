@@ -1,6 +1,6 @@
 package com.example.utils.units;
 
-import com.example.config.UnitStatusConfig;
+import com.example.dto.UnitDTO;
 import com.example.enums.UnitNames;
 import com.example.enums.UnitsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
@@ -34,12 +34,12 @@ public class UnitGenerationUtils {
     }
 
     public Map<String, Integer> getRequirementsToRecruitUnit(String unitName) {
-        UnitStatusConfig unitStatusConfig = unitConfigUtils.getUnitConfig(unitName);
-        Map<String, Integer> unitResourceConfig = unitConfigUtils.getUnitResourceConfig(unitStatusConfig);
+        UnitDTO unitDTO = unitConfigUtils.getUnitConfig(unitName);
+        Map<String, Integer> unitResourceConfig = unitConfigUtils.getUnitResourceConfig(unitDTO);
 
-        if (unitStatusConfig != null) {
+        if (unitResourceConfig != null) {
             unitResourceConfig.put(
-                    UnitsPropertiesNames.RECRUITMENT_TIME.getLabel(), unitStatusConfig.getRecruitmentTime());
+                    UnitsPropertiesNames.RECRUITMENT_TIME.getLabel(), unitDTO.getRecruitmentTime());
             return unitResourceConfig;
         }
 

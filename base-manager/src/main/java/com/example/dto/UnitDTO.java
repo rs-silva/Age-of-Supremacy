@@ -1,11 +1,12 @@
-package com.example.config;
+package com.example.dto;
 
+import com.example.config.ResourceConfig;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class UnitStatusConfig {
+public class UnitDTO {
 
     private String unitName;
 
