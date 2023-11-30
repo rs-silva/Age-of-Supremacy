@@ -29,4 +29,6 @@ public abstract class Constants {
     public static final String BUILDING_ALREADY_EXISTS = "Attempted to create a building that already exists in the base.";
 
     public static final String INVALID_BUILDING_NAME = "The building you are trying to create does not exist. Please provide a valid name.";
+
+    public static final String UNIT_CONFIG_NOT_FOUND_ERROR = "There was an error while retrieving the unit's recruitment configuration.";
 }

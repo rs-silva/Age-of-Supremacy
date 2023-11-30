@@ -16,7 +16,7 @@ import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import com.example.interfaces.BaseSimpleView;
 import com.example.utils.Constants;
-import com.example.utils.units.UnitsGenerationUtils;
+import com.example.utils.units.UnitGenerationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
@@ -49,21 +49,21 @@ public class BaseService {
 
     private final PlayerService playerService;
 
-    private final UnitsGenerationUtils unitsGenerationUtils;
+    private final UnitGenerationUtils unitGenerationUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitsGenerationUtils unitsGenerationUtils) {
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitGenerationUtils unitGenerationUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
         this.resourcesUtils = resourcesUtils;
         this.buildingUtilsService = buildingUtilsService;
         this.playerService = playerService;
-        this.unitsGenerationUtils = unitsGenerationUtils;
+        this.unitGenerationUtils = unitGenerationUtils;
     }
 
     public void generateBase(Player player) {
         Map<String, Double> resources = resourcesUtils.generateDefaultResourcesForBase();
-        Map<String, Integer> units = unitsGenerationUtils.generateDefaultUnitsForBase();
+        Map<String, Integer> units = unitGenerationUtils.generateDefaultUnitsForBase();
 
         Base base = Base.builder()
                 .name(BasePropertiesNames.DEFAULT_NAME.getLabel())

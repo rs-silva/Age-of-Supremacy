@@ -41,6 +41,7 @@ public class BuildingUpgradeConfigUtils {
     public Map<String, Integer> getBuildingResourceConfig(BuildingLevelConfig buildingLevelConfig) {
         if (buildingLevelConfig != null) {
             Map<String, Integer> resources = new HashMap<>();
+
             for (ResourceNames resourceName : ResourceNames.values()) {
                 buildingLevelConfig.getResources()
                         .stream()
