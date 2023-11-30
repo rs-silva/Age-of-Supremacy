@@ -14,6 +14,6 @@ public class BuildingLevelConfig {
 
     private int score;
 
-    private List<BuildingResourceConfig> resources;
+    private List<ResourceConfig> resources;
 
 }

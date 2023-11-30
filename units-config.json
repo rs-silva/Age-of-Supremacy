@@ -1,0 +1,28 @@
+{
+  "units": [
+    {
+      "unitName": "Infantry",
+      "healthPoints": 60,
+      "movementSpeed": 2,
+      "attack": 20,
+      "defense": 40,
+      "recruitmentTime": 10,
+      "resources": [
+        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Steel", "quantity": 1 }
+      ]
+    },
+    {
+      "unitName": "Engineer",
+      "healthPoints": 40,
+      "movementSpeed": 1.5,
+      "attack": 35,
+      "defense": 15,
+      "recruitmentTime": 20,
+      "resources": [
+        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Steel", "quantity": 1 }
+      ]
+    }
+  ]
+}

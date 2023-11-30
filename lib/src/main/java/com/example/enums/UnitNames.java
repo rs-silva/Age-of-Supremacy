@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum UnitNames {
 
     GROUND_INFANTRY("Infantry"),
-    GROUND_ENGINEER("Grenadier/Engineer"),
+    GROUND_ENGINEER("Engineer"),
     GROUND_SNIPER("Sniper"),
 
     ARMORED_APC("Armored Personnel Carrier"),

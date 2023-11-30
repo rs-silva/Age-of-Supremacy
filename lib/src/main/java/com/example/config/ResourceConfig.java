@@ -3,7 +3,7 @@ package com.example.config;
 import lombok.Data;
 
 @Data
-public class BuildingResourceConfig {
+public class ResourceConfig {
 
     private String resourceName;
 
