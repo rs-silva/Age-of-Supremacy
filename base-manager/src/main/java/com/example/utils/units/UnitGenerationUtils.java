@@ -43,7 +43,7 @@ public class UnitGenerationUtils {
             return unitResourceConfig;
         }
 
-        LOG.info("There was an error while retrieving the recruitment information for {}.", unitName);
+        LOG.error("There was an error while retrieving the recruitment information for {}.", unitName);
         throw new InternalServerErrorException(Constants.UNIT_CONFIG_NOT_FOUND_ERROR);
 
     }

@@ -23,6 +23,90 @@
         { "resourceName": "Construction Materials", "quantity": 1 },
         { "resourceName": "Steel", "quantity": 1 }
       ]
+    },
+    {
+      "unitName": "Sniper",
+      "healthPoints": 40,
+      "movementSpeed": 1.5,
+      "attack": 35,
+      "defense": 15,
+      "recruitmentTime": 20,
+      "resources": [
+        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Steel", "quantity": 1 }
+      ]
+    },
+    {
+      "unitName": "Armored Personnel Carrier",
+      "healthPoints": 40,
+      "movementSpeed": 1.5,
+      "attack": 35,
+      "defense": 15,
+      "recruitmentTime": 20,
+      "resources": [
+        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Steel", "quantity": 1 }
+      ]
+    },
+    {
+      "unitName": "Main Battle Tank",
+      "healthPoints": 40,
+      "movementSpeed": 1.5,
+      "attack": 35,
+      "defense": 15,
+      "recruitmentTime": 20,
+      "resources": [
+        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Steel", "quantity": 1 }
+      ]
+    },
+    {
+      "unitName": "Artillery",
+      "healthPoints": 40,
+      "movementSpeed": 1.5,
+      "attack": 35,
+      "defense": 15,
+      "recruitmentTime": 20,
+      "resources": [
+        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Steel", "quantity": 1 }
+      ]
+    },
+    {
+      "unitName": "Jet Fighter",
+      "healthPoints": 40,
+      "movementSpeed": 1.5,
+      "attack": 35,
+      "defense": 15,
+      "recruitmentTime": 20,
+      "resources": [
+        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Steel", "quantity": 1 }
+      ]
+    },
+    {
+      "unitName": "Bomber",
+      "healthPoints": 40,
+      "movementSpeed": 1.5,
+      "attack": 35,
+      "defense": 15,
+      "recruitmentTime": 20,
+      "resources": [
+        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Steel", "quantity": 1 }
+      ]
+    },
+    {
+      "unitName": "Recon",
+      "healthPoints": 40,
+      "movementSpeed": 1.5,
+      "attack": 35,
+      "defense": 15,
+      "recruitmentTime": 20,
+      "resources": [
+        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Steel", "quantity": 1 }
+      ]
     }
   ]
 }

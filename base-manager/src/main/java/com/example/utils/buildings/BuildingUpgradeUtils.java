@@ -75,7 +75,7 @@ public class BuildingUpgradeUtils {
                 }
             }
             else {
-                LOG.info("There was an error while upgrading a building.\n" +
+                LOG.error("There was an error while upgrading a building.\n" +
                         "The base {} does not contain information about resource {}", base.getId(), resourceName);
                 throw new InternalServerErrorException(Constants.BASE_NO_INFORMATION_ABOUT_RESOURCE_AMOUNT);
             }
@@ -93,7 +93,7 @@ public class BuildingUpgradeUtils {
             return buildingLevel >= buildingMaxLevel;
         }
 
-        LOG.info("There was an error while retrieving the maximum level information for {}.", buildingType);
+        LOG.error("There was an error while retrieving the maximum level information for {}.", buildingType);
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
@@ -108,7 +108,7 @@ public class BuildingUpgradeUtils {
             return buildingResourceConfig;
         }
 
-        LOG.info("There was an error while retrieving the upgrade information for {} (lv.{}).", buildingType, buildingLevel + 1);
+        LOG.error("There was an error while retrieving the upgrade information for {} (lv.{}).", buildingType, buildingLevel + 1);
         throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
@@ -120,7 +120,7 @@ public class BuildingUpgradeUtils {
             return buildingLevelConfig.getScore();
         }
 
-        LOG.info("There was an error while retrieving the score information for {} (lv.{}).", buildingType, buildingLevel);
+        LOG.error("There was an error while retrieving the score information for {} (lv.{}).", buildingType, buildingLevel);
         throw new InternalServerErrorException(Constants.BUILDING_SCORE_NOT_FOUND_ERROR);
     }
 

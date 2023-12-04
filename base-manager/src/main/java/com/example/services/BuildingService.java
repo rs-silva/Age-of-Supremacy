@@ -87,7 +87,7 @@ public class BuildingService {
         boolean doesBuildingAlreadyExist = buildingGenerationUtils.checkIfBuildingAlreadyExists(base, buildingType);
 
         if (doesBuildingAlreadyExist) {
-            LOG.info("Attempted to create building {} in base {}, but this building already exists in this base.", buildingType, base.getId());
+            LOG.error("Attempted to create building {} in base {}, but this building already exists in this base.", buildingType, base.getId());
             throw new InternalServerErrorException(Constants.BUILDING_ALREADY_EXISTS);
         }
 
@@ -96,7 +96,7 @@ public class BuildingService {
         boolean areUpgradeRequirementsMet = buildingUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, buildingType, 1);
 
         if (!areUpgradeRequirementsMet) {
-            LOG.info("Attempted to create building {} in base {}, but there are no enough resources in the corresponding base.", buildingType, base.getId());
+            LOG.error("Attempted to create building {} in base {}, but there are no enough resources in the corresponding base.", buildingType, base.getId());
             throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
         }
 
@@ -112,7 +112,7 @@ public class BuildingService {
         boolean isBuildingMaxLevel = buildingUpgradeUtils.checkIfBuildingIsMaxLevel(building.getType(), building.getLevel());
 
         if (isBuildingMaxLevel) {
-            LOG.info("Attempted to upgrade building {}, which is already at the maximum level", building.getId());
+            LOG.error("Attempted to upgrade building {}, which is already at the maximum level", building.getId());
             throw new InternalServerErrorException(Constants.BUILDING_IS_ALREADY_MAX_LEVEL);
         }
 
@@ -122,7 +122,7 @@ public class BuildingService {
         boolean areUpgradeRequirementsMet = buildingUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, building.getType(), building.getLevel());
 
         if (!areUpgradeRequirementsMet) {
-            LOG.info("Attempted to upgrade building {}, but there are no enough resources in the corresponding base.", building.getId());
+            LOG.error("Attempted to upgrade building {}, but there are no enough resources in the corresponding base.", building.getId());
             throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
         }
 

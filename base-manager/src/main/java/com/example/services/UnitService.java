@@ -30,7 +30,7 @@ public class UnitService {
         for (UnitNames unitName : UnitNames.values()) {
             UnitDTO unitDTO = unitConfigUtils.getUnitConfig(unitName.getLabel());
             if (unitDTO == null) {
-                LOG.info("There was an error while retrieving the recruitment information for {}.", unitName.getLabel());
+                LOG.error("There was an error while retrieving the recruitment information for {}.", unitName.getLabel());
                 throw new InternalServerErrorException(Constants.UNIT_CONFIG_NOT_FOUND_ERROR);
             }
             unitDTOList.add(unitDTO);
