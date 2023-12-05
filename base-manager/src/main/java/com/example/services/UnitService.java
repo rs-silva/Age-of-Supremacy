@@ -19,7 +19,6 @@ public class UnitService {
 
     private final UnitConfigUtils unitConfigUtils;
 
-
     public UnitService(UnitConfigUtils unitConfigUtils) {
         this.unitConfigUtils = unitConfigUtils;
     }

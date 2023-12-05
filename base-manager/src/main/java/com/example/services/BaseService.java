@@ -67,6 +67,7 @@ public class BaseService {
 
         Base base = Base.builder()
                 .name(BasePropertiesNames.DEFAULT_NAME.getLabel())
+                /* TODO Create a world manager to generate the coordinates of new bases */
                 .x_coordinate(new Random().nextInt(1000))
                 .y_coordinate(new Random().nextInt(1000))
                 .player(player)

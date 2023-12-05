@@ -56,7 +56,7 @@ public class Base {
     private Map<String, Double> resources;
 
     @ElementCollection
-    @CollectionTable(name = "bases_units", joinColumns = @JoinColumn(name = "base_id"))
+    @CollectionTable(name = "bases_own_units", joinColumns = @JoinColumn(name = "base_id"))
     @MapKeyColumn(name = "unit_name")
     @Column(name = "unit_quantity")
     private Map<String, Integer> units;
