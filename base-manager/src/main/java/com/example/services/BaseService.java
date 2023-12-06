@@ -2,6 +2,7 @@ package com.example.services;
 
 import com.example.dto.BaseDTO;
 import com.example.dto.BuildingDTO;
+import com.example.dto.UnitsRecruitmentDTO;
 import com.example.enums.BasePropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
@@ -118,6 +119,15 @@ public class BaseService {
         Base base = findById(baseId);
 
         buildingService.completeGeneration(base, buildingType);
+    }
+
+    @Transactional
+    public void createNewUnitRecruitmentRequest(UUID baseId, UnitsRecruitmentDTO unitsRecruitmentDTO) {
+        Base base = findById(baseId);
+
+        validateBaseOwnership(base.getPlayer().getId());
+
+        buildingService.requestBuildingGeneration(base, buildingType);
     }
 
     @Transactional
