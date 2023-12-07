@@ -127,7 +127,9 @@ public class BaseService {
 
         validateBaseOwnership(base.getPlayer().getId());
 
-        buildingService.requestBuildingGeneration(base, buildingType);
+        LOG.info("unitDTO = {}", unitsRecruitmentDTO);
+
+        //buildingService.requestBuildingGeneration(base, buildingType);
     }
 
     @Transactional
