@@ -96,7 +96,7 @@ public class BuildingService {
         boolean areUpgradeRequirementsMet = buildingUpgradeUtils.checkIfThereAreEnoughResourcesToUpgradeBuilding(base, buildingType, 1);
 
         if (!areUpgradeRequirementsMet) {
-            LOG.error("Attempted to create building {} in base {}, but there are no enough resources in the corresponding base.", buildingType, base.getId());
+            LOG.error("Attempted to create building {} in base {}, but there are not enough resources.", buildingType, base.getId());
             throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
         }
 

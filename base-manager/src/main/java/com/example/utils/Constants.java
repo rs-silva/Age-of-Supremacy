@@ -31,4 +31,9 @@ public abstract class Constants {
     public static final String INVALID_BUILDING_NAME = "The building you are trying to create does not exist. Please provide a valid name.";
 
     public static final String UNIT_CONFIG_NOT_FOUND_ERROR = "There was an error while retrieving the unit's recruitment configuration.";
+
+    public static final String INVALID_UNIT_NAME = "The unit %s does not exist. Please provide a valid name.";
+
+    public static final String NOT_ENOUGH_RESOURCES_TO_RECRUIT_UNITS = "There are not enough resources to recruit these units.";
+
 }

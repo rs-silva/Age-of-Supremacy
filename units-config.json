@@ -18,7 +18,7 @@
       "movementSpeed": 1.5,
       "attack": 35,
       "defense": 15,
-      "recruitmentTime": 20,
+      "recruitmentTime": 2,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
         { "resourceName": "Steel", "quantity": 1 }
@@ -30,7 +30,7 @@
       "movementSpeed": 1.5,
       "attack": 35,
       "defense": 15,
-      "recruitmentTime": 20,
+      "recruitmentTime": 5,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
         { "resourceName": "Steel", "quantity": 1 }

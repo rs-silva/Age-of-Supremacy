@@ -21,4 +21,15 @@ public enum UnitNames {
 
     private final String label;
 
+    public static boolean contains(String name) {
+
+        for (UnitNames unitName : UnitNames.values()) {
+            if (unitName.getLabel().equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

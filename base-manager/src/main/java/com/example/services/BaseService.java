@@ -2,7 +2,7 @@ package com.example.services;
 
 import com.example.dto.BaseDTO;
 import com.example.dto.BuildingDTO;
-import com.example.dto.UnitsRecruitmentDTO;
+import com.example.dto.UnitsRecruitmentRequestDTO;
 import com.example.enums.BasePropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
@@ -122,12 +122,23 @@ public class BaseService {
     }
 
     @Transactional
-    public void createNewUnitRecruitmentRequest(UUID baseId, UnitsRecruitmentDTO unitsRecruitmentDTO) {
+    public void createNewUnitRecruitmentRequest(UUID baseId, UnitsRecruitmentRequestDTO unitsRecruitmentRequestDTO) {
         Base base = findById(baseId);
 
         validateBaseOwnership(base.getPlayer().getId());
+        unitGenerationUtils.validateUnitsNames(unitsRecruitmentRequestDTO.getUnits());
 
-        LOG.info("unitDTO = {}", unitsRecruitmentDTO);
+        resourcesUtils.updateBaseResources(base);
+
+        LOG.info("unitsRecruitmentDTO = {}", unitsRecruitmentRequestDTO);
+
+        boolean areRecruitmentRequirementsMet =
+                unitGenerationUtils.checkIfThereAreEnoughResourcesToRecruitUnits(base, unitsRecruitmentRequestDTO.getUnits());
+
+        if (!areRecruitmentRequirementsMet) {
+            LOG.error("Attempted to create units in base {}, but there are not enough resources.", base.getId());
+            throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_RECRUIT_UNITS);
+        }
 
         //buildingService.requestBuildingGeneration(base, buildingType);
     }
