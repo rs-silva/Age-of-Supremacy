@@ -35,7 +35,6 @@ public class UnitRecruitmentUtils {
     public void validateUnitsNames(Map<String, Integer> units) {
         for (String unitName : units.keySet()) {
             if (!UnitNames.contains(unitName)) {
-                LOG.error(String.format(Constants.INVALID_UNIT_NAME, unitName));
                 throw new ResourceNotFoundException(String.format(Constants.INVALID_UNIT_NAME, unitName));
             }
         }
