@@ -1,8 +1,8 @@
 package com.example.utils.units;
 
+import com.example.dto.BuildingGenerationEventDTO;
 import com.example.dto.UnitDTO;
-import com.example.dto.UnitsRecruitmentRequestDTO;
-import com.example.enums.BuildingsPropertiesNames;
+import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.enums.UnitNames;
 import com.example.enums.UnitsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
@@ -13,17 +13,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class UnitGenerationUtils {
+public class UnitRecruitmentUtils {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UnitGenerationUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UnitRecruitmentUtils.class);
 
     private final UnitConfigUtils unitConfigUtils;
 
-    public UnitGenerationUtils(UnitConfigUtils unitConfigUtils) {
+    public UnitRecruitmentUtils(UnitConfigUtils unitConfigUtils) {
         this.unitConfigUtils = unitConfigUtils;
     }
 
@@ -36,10 +38,6 @@ public class UnitGenerationUtils {
         }
     }
 
-    public void createNewUnitRecruitmentRequest(Base base, UnitsRecruitmentRequestDTO unitsRecruitmentRequestDTO) {
-
-    }
-
     public Map<String, Integer> generateDefaultUnitsForBase() {
         Map<String, Integer> units = new HashMap<>();
 
@@ -50,36 +48,53 @@ public class UnitGenerationUtils {
         return units;
     }
 
-    public boolean checkIfThereAreEnoughResourcesToRecruitUnits(Base base, Map<String, Integer> units) {
+    public void createNewUnitRecruitmentRequest(Base base, Map<String, Integer> units) {
         Map<String, Double> baseResources = base.getResources();
+        int totalRecruitmentTime = 0;
 
         for (String unitName : units.keySet()) {
             int unitQuantity = units.get(unitName);
             Map<String, Integer> resourcesRequired = getRequirementsToRecruitUnit(unitName);
 
             /* Remove time requirement which is not needed for this (only resources) */
-            resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
+            int recruitmentTimePerUnit = resourcesRequired.remove(UnitsPropertiesNames.RECRUITMENT_TIME.getLabel());
+            totalRecruitmentTime += recruitmentTimePerUnit * unitQuantity;
 
-        }
+            for (String resourceName : resourcesRequired.keySet()) {
+                int resourceAmountRequiredPerUnit = resourcesRequired.get(resourceName);
+                int totalResourceAmountRequired = resourceAmountRequiredPerUnit * unitQuantity;
 
+                double baseCurrentResourceAmount = baseResources.get(resourceName);
+                double baseUpdatedResourceAmount = baseCurrentResourceAmount - totalResourceAmountRequired;
 
-
-        for (String resourceName : resourcesRequired.keySet()) {
-            if (baseResources.containsKey(resourceName)) {
-                Double currentResourceAmount = baseResources.get(resourceName);
-                Integer resourceAmountRequired = resourcesRequired.get(resourceName);
-                if (currentResourceAmount < resourceAmountRequired) {
-                    return false;
-                }
-            }
-            else {
-                LOG.error("There was an error while upgrading a building.\n" +
-                        "The base {} does not contain information about resource {}", base.getId(), resourceName);
-                throw new InternalServerErrorException(Constants.BASE_NO_INFORMATION_ABOUT_RESOURCE_AMOUNT);
+                baseResources.put(resourceName, baseUpdatedResourceAmount);
             }
         }
 
-        return true;
+        /* Check if the base had necessary resources for this (i.e. all base resources' amount are positive) */
+        for (String resourceName : baseResources.keySet()) {
+            double resourceAmount = baseResources.get(resourceName);
+
+            if (resourceAmount < 0) {
+                throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_RECRUIT_UNITS);
+            }
+        }
+
+        Timestamp endTime = Timestamp.from(Instant.now().plusMillis(constructionTime * 1000));
+
+        UnitsRecruitmentEventDTO unitsRecruitmentEventDTO = UnitsRecruitmentEventDTO.builder()
+                .baseId(base.getId())
+                .units(units)
+                .completionTime(endTime)
+                .build();
+
+        /* TODO Remove hardcoded url */
+        /* Send Building Generation Event to event-manager module */
+        String url = "http://localhost:8083/api/event/building/generate";
+        restTemplate.postForObject(url, buildingGenerationEventDTO, BuildingGenerationEventDTO.class);
+
+
+
     }
 
     public Map<String, Integer> getRequirementsToRecruitUnit(String unitName) {

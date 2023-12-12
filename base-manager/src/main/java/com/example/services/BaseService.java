@@ -17,7 +17,7 @@ import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import com.example.interfaces.BaseSimpleView;
 import com.example.utils.Constants;
-import com.example.utils.units.UnitGenerationUtils;
+import com.example.utils.units.UnitRecruitmentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
@@ -50,21 +50,21 @@ public class BaseService {
 
     private final PlayerService playerService;
 
-    private final UnitGenerationUtils unitGenerationUtils;
+    private final UnitRecruitmentUtils unitRecruitmentUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitGenerationUtils unitGenerationUtils) {
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
         this.resourcesUtils = resourcesUtils;
         this.buildingUtilsService = buildingUtilsService;
         this.playerService = playerService;
-        this.unitGenerationUtils = unitGenerationUtils;
+        this.unitRecruitmentUtils = unitRecruitmentUtils;
     }
 
     public void generateBase(Player player) {
         Map<String, Double> resources = resourcesUtils.generateDefaultResourcesForBase();
-        Map<String, Integer> units = unitGenerationUtils.generateDefaultUnitsForBase();
+        Map<String, Integer> units = unitRecruitmentUtils.generateDefaultUnitsForBase();
 
         Base base = Base.builder()
                 .name(BasePropertiesNames.DEFAULT_NAME.getLabel())
@@ -126,19 +126,13 @@ public class BaseService {
         Base base = findById(baseId);
 
         validateBaseOwnership(base.getPlayer().getId());
-        unitGenerationUtils.validateUnitsNames(unitsRecruitmentRequestDTO.getUnits());
+        unitRecruitmentUtils.validateUnitsNames(unitsRecruitmentRequestDTO.getUnits());
 
         resourcesUtils.updateBaseResources(base);
 
         LOG.info("unitsRecruitmentDTO = {}", unitsRecruitmentRequestDTO);
 
-        boolean areRecruitmentRequirementsMet =
-                unitGenerationUtils.checkIfThereAreEnoughResourcesToRecruitUnits(base, unitsRecruitmentRequestDTO.getUnits());
-
-        if (!areRecruitmentRequirementsMet) {
-            LOG.error("Attempted to create units in base {}, but there are not enough resources.", base.getId());
-            throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_RECRUIT_UNITS);
-        }
+        unitRecruitmentUtils.createNewUnitRecruitmentRequest(base, unitsRecruitmentRequestDTO.getUnits());
 
         //buildingService.requestBuildingGeneration(base, buildingType);
     }
