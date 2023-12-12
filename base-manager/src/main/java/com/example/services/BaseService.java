@@ -2,6 +2,7 @@ package com.example.services;
 
 import com.example.dto.BaseDTO;
 import com.example.dto.BuildingDTO;
+import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.dto.UnitsRecruitmentRequestDTO;
 import com.example.enums.BasePropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
@@ -115,14 +116,14 @@ public class BaseService {
     }
 
     @Transactional
-    public void completeBuildingGeneration(UUID baseId, String buildingType) {
+    public void completeBuildingConstruction(UUID baseId, String buildingType) {
         Base base = findById(baseId);
 
         buildingService.completeGeneration(base, buildingType);
     }
 
     @Transactional
-    public void createNewUnitRecruitmentRequest(UUID baseId, UnitsRecruitmentRequestDTO unitsRecruitmentRequestDTO) {
+    public void createUnitRecruitmentRequest(UUID baseId, UnitsRecruitmentRequestDTO unitsRecruitmentRequestDTO) {
         Base base = findById(baseId);
 
         validateBaseOwnership(base.getPlayer().getId());
@@ -133,8 +134,13 @@ public class BaseService {
         LOG.info("unitsRecruitmentDTO = {}", unitsRecruitmentRequestDTO);
 
         unitRecruitmentUtils.createNewUnitRecruitmentRequest(base, unitsRecruitmentRequestDTO.getUnits());
+    }
 
-        //buildingService.requestBuildingGeneration(base, buildingType);
+    @Transactional
+    public void completeUnitsRecruitment(UUID baseId, UnitsRecruitmentEventDTO unitsRecruitmentEventDTO) {
+        Base base = findById(baseId);
+
+        unitRecruitmentUtils.completeUnitsRecruitment(base, unitsRecruitmentEventDTO);
     }
 
     @Transactional

@@ -45,7 +45,7 @@ public class BuildingUpgradeEventService {
     public void checkBuildingsUpgradeEvents() {
         //LOG.info("Running scheduler");
 
-        List<BuildingUpgradeEvent> buildingUpgradeEventList = buildingUpgradeEventRepository.findAllByCompletionTimeBefore(Timestamp.from(Instant.now()));
+        List<BuildingUpgradeEvent> buildingUpgradeEventList = buildingUpgradeEventRepository.findByCompletionTimeBefore(Timestamp.from(Instant.now()));
 
         /* Trigger an event that sends a call to base-manager to level up the building */
         for (BuildingUpgradeEvent buildingUpgradeEvent : buildingUpgradeEventList) {

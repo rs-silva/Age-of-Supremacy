@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface BuildingUpgradeEventRepository extends JpaRepository<BuildingUpgradeEvent, UUID> {
 
-    List<BuildingUpgradeEvent> findAllByCompletionTimeBefore(Timestamp timestamp);
+    List<BuildingUpgradeEvent> findByCompletionTimeBefore(Timestamp timestamp);
 
     BuildingUpgradeEvent findByBuildingId(UUID buildingId);
 

@@ -1,6 +1,5 @@
 package com.example.utils.units;
 
-import com.example.dto.BuildingGenerationEventDTO;
 import com.example.dto.UnitDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.enums.UnitNames;
@@ -12,6 +11,7 @@ import com.example.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -25,8 +25,11 @@ public class UnitRecruitmentUtils {
 
     private final UnitConfigUtils unitConfigUtils;
 
-    public UnitRecruitmentUtils(UnitConfigUtils unitConfigUtils) {
+    private final RestTemplate restTemplate;
+
+    public UnitRecruitmentUtils(UnitConfigUtils unitConfigUtils, RestTemplate restTemplate) {
         this.unitConfigUtils = unitConfigUtils;
+        this.restTemplate = restTemplate;
     }
 
     public void validateUnitsNames(Map<String, Integer> units) {
@@ -80,7 +83,7 @@ public class UnitRecruitmentUtils {
             }
         }
 
-        Timestamp endTime = Timestamp.from(Instant.now().plusMillis(constructionTime * 1000));
+        Timestamp endTime = Timestamp.from(Instant.now().plusMillis(totalRecruitmentTime * 1000L));
 
         UnitsRecruitmentEventDTO unitsRecruitmentEventDTO = UnitsRecruitmentEventDTO.builder()
                 .baseId(base.getId())
@@ -90,11 +93,22 @@ public class UnitRecruitmentUtils {
 
         /* TODO Remove hardcoded url */
         /* Send Building Generation Event to event-manager module */
-        String url = "http://localhost:8083/api/event/building/generate";
-        restTemplate.postForObject(url, buildingGenerationEventDTO, BuildingGenerationEventDTO.class);
+        String url = "http://localhost:8083/api/event/units/recruit";
+        restTemplate.postForObject(url, unitsRecruitmentEventDTO, UnitsRecruitmentEventDTO.class);
+    }
 
+    public void completeUnitsRecruitment(Base base, UnitsRecruitmentEventDTO unitsRecruitmentEventDTO) {
+        Map<String, Integer> baseCurrentUnits = base.getUnits();
+        Map<String, Integer> newUnits = unitsRecruitmentEventDTO.getUnits();
 
+        for (String unitName : newUnits.keySet()) {
+            int unitCurrentAmount = baseCurrentUnits.get(unitName);
+            int unitsToAdd = newUnits.get(unitName);
 
+            int unitTotalAmount = unitCurrentAmount + unitsToAdd;
+
+            baseCurrentUnits.put(unitName, unitTotalAmount);
+        }
     }
 
     public Map<String, Integer> getRequirementsToRecruitUnit(String unitName) {

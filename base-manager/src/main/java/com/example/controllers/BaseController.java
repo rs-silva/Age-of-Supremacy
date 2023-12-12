@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.dto.BaseDTO;
+import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.dto.UnitsRecruitmentRequestDTO;
 import com.example.services.BaseService;
 import jakarta.validation.Valid;
@@ -55,7 +56,7 @@ public class BaseController {
 
         LOG.info("Received request to complete generation of {} in base {}", buildingType, baseId);
 
-        baseService.completeBuildingGeneration(baseId, buildingType);
+        baseService.completeBuildingConstruction(baseId, buildingType);
 
         return ResponseEntity.ok().build();
     }
@@ -66,19 +67,19 @@ public class BaseController {
 
         LOG.info("Received request to create {} in base {}", unitsRecruitmentRequestDTO, baseId);
 
-        baseService.createNewUnitRecruitmentRequest(baseId, unitsRecruitmentRequestDTO);
+        baseService.createUnitRecruitmentRequest(baseId, unitsRecruitmentRequestDTO);
 
         return ResponseEntity.ok().build();
     }
 
-    /*@PostMapping("{baseId}/finishBuilding/{buildingType}")
-    public ResponseEntity<String> completeBuildingGeneration(@PathVariable UUID baseId,
-                                                             @PathVariable String buildingType) {
+    @PostMapping("{baseId}/completeUnitsRecruitment")
+    public ResponseEntity<String> completeUnitsRecruitment(@PathVariable UUID baseId,
+                                                           @Valid @RequestBody UnitsRecruitmentEventDTO unitsRecruitmentEventDTO) {
 
-        LOG.info("Received request to complete generation of {} in base {}", buildingType, baseId);
+        LOG.info("Received request to complete recruitment of {} in base {}", unitsRecruitmentEventDTO.getUnits(), baseId);
 
-        baseService.completeBuildingGeneration(baseId, buildingType);
+        baseService.completeUnitsRecruitment(baseId, unitsRecruitmentEventDTO);
 
         return ResponseEntity.ok().build();
-    }*/
+    }
 }
