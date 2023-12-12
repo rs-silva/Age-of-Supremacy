@@ -13,4 +13,12 @@ public abstract class UnitRecruitmentEventMapper {
                 .build();
     }
 
+    public static UnitsRecruitmentEventDTO fromEntityToDto(UnitRecruitmentEvent unitRecruitmentEvent) {
+        return UnitsRecruitmentEventDTO.builder()
+                .baseId(unitRecruitmentEvent.getBaseId())
+                .units(unitRecruitmentEvent.getUnits())
+                .completionTime(unitRecruitmentEvent.getCompletionTime())
+                .build();
+    }
+
 }

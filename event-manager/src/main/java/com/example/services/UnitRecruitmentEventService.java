@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UnitRecruitmentEventService {
@@ -49,7 +50,8 @@ public class UnitRecruitmentEventService {
             LOG.info("Triggering event to complete recruitment of units {} for base with id {}", unitRecruitmentEvent.getUnits(), unitRecruitmentEvent.getBaseId());
             /* TODO Remove hardcoded url */
             String url = "http://localhost:8082/api/base/" + unitRecruitmentEvent.getBaseId() + "/completeUnitsRecruitment";
-            restTemplate.postForObject(url, null, String.class);
+            UnitsRecruitmentEventDTO unitsRecruitmentEventDTO = UnitRecruitmentEventMapper.fromEntityToDto(unitRecruitmentEvent);
+            restTemplate.postForObject(url, unitsRecruitmentEventDTO, UnitsRecruitmentEventDTO.class);
             unitRecruitmentEventRepository.delete(unitRecruitmentEvent);
         }
 
