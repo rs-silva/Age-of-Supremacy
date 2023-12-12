@@ -14,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UnitRecruitmentEventService {
