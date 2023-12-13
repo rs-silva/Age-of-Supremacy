@@ -58,7 +58,6 @@ public class UnitRecruitmentUtils {
             int unitQuantity = units.get(unitName);
             Map<String, Integer> resourcesRequired = getRequirementsToRecruitUnit(unitName);
 
-            /* Remove time requirement which is not needed for this (only resources) */
             int recruitmentTimePerUnit = resourcesRequired.remove(UnitsPropertiesNames.RECRUITMENT_TIME.getLabel());
             totalRecruitmentTime += recruitmentTimePerUnit * unitQuantity;
 

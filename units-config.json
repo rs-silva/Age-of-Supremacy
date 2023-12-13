@@ -8,7 +8,7 @@
       "defense": 40,
       "recruitmentTime": 10,
       "resources": [
-        { "resourceName": "Construction Materials", "quantity": 1 },
+        { "resourceName": "Construction Materials", "quantity": 100 },
         { "resourceName": "Steel", "quantity": 1 }
       ]
     },

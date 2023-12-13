@@ -81,7 +81,6 @@ public class BuildingGenerationUtils {
         Map<String, Double> baseResources = base.getResources();
         Map<String, Integer> resourcesRequired = getRequirementsToGenerateBuilding(buildingType);
 
-        /* Remove time requirement which is not needed for this (only resources) */
         Integer constructionTime = resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
 
         for (String resourceName : resourcesRequired.keySet()) {

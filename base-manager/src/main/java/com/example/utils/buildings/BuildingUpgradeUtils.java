@@ -36,7 +36,6 @@ public class BuildingUpgradeUtils {
         Map<String, Double> baseResources = base.getResources();
         Map<String, Integer> resourcesRequired = getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
 
-        /* Remove time requirement which is not needed for this (only resources) */
         Integer constructionTime = resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
 
         for (String resourceName : resourcesRequired.keySet()) {
@@ -67,17 +66,11 @@ public class BuildingUpgradeUtils {
         resourcesRequired.remove(BuildingsPropertiesNames.CONSTRUCTION_TIME_TO_UPGRADE_TO_NEXT_LEVEL.getLabel());
 
         for (String resourceName : resourcesRequired.keySet()) {
-            if (baseResources.containsKey(resourceName)) {
-                Double currentResourceAmount = baseResources.get(resourceName);
-                Integer resourceAmountRequired = resourcesRequired.get(resourceName);
-                if (currentResourceAmount < resourceAmountRequired) {
-                    return false;
-                }
-            }
-            else {
-                LOG.error("There was an error while upgrading a building.\n" +
-                        "The base {} does not contain information about resource {}", base.getId(), resourceName);
-                throw new InternalServerErrorException(Constants.BASE_NO_INFORMATION_ABOUT_RESOURCE_AMOUNT);
+            Double currentResourceAmount = baseResources.get(resourceName);
+            Integer resourceAmountRequired = resourcesRequired.get(resourceName);
+
+            if (currentResourceAmount < resourceAmountRequired) {
+                return false;
             }
         }
 
