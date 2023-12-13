@@ -83,6 +83,7 @@ public class BuildingService {
         return BuildingMapper.buildDTO(building, basicProperties, additionalProperties, requirementsToNextLevel);
     }
 
+    @Transactional
     public void requestBuildingGeneration(Base base, String buildingType) {
         boolean doesBuildingAlreadyExist = buildingGenerationUtils.checkIfBuildingAlreadyExists(base, buildingType);
 
