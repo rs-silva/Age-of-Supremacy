@@ -32,14 +32,6 @@ public class UnitRecruitmentUtils {
         this.restTemplate = restTemplate;
     }
 
-    public void validateUnitsNames(Map<String, Integer> units) {
-        for (String unitName : units.keySet()) {
-            if (!UnitNames.contains(unitName)) {
-                throw new ResourceNotFoundException(String.format(Constants.INVALID_UNIT_NAME, unitName));
-            }
-        }
-    }
-
     public Map<String, Integer> generateDefaultUnitsForBase() {
         Map<String, Integer> units = new HashMap<>();
 
@@ -48,6 +40,18 @@ public class UnitRecruitmentUtils {
         }
 
         return units;
+    }
+
+    public void validateUnitsNames(Map<String, Integer> units) {
+        for (String unitName : units.keySet()) {
+            if (!UnitNames.contains(unitName)) {
+                throw new ResourceNotFoundException(String.format(Constants.INVALID_UNIT_NAME, unitName));
+            }
+        }
+    }
+
+    public void validateBuildingLevelRequirements(Base base, Map<String, Integer> units) {
+
     }
 
     public void createNewUnitRecruitmentRequest(Base base, Map<String, Integer> units) {
@@ -72,7 +76,7 @@ public class UnitRecruitmentUtils {
             }
         }
 
-        /* Check if the base had necessary resources for this (i.e. all base resources' amount are positive) */
+        /* Check if the base has the necessary resources for this (i.e. all base resources' amount are positive) */
         for (String resourceName : baseResources.keySet()) {
             double resourceAmount = baseResources.get(resourceName);
 

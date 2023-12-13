@@ -44,7 +44,7 @@ public class UnitRecruitmentEventService {
 
         List<UnitRecruitmentEvent> unitRecruitmentEventList = unitRecruitmentEventRepository.findByCompletionTimeBefore(Timestamp.from(Instant.now()));
 
-        /* Trigger an event that sends a call to base-manager to level up the building */
+        /* Trigger an event that sends a call to base-manager to recruit the units */
         for (UnitRecruitmentEvent unitRecruitmentEvent : unitRecruitmentEventList) {
             LOG.info("Triggering event to complete recruitment of units {} for base with id {}", unitRecruitmentEvent.getUnits(), unitRecruitmentEvent.getBaseId());
             /* TODO Remove hardcoded url */
