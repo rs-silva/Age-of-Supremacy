@@ -76,6 +76,42 @@ public class UnitRecruitmentUtils {
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_INFANTRY));
             }
         }
+
+        /* Engineer */
+        if (units.containsKey(UnitNames.GROUND_ENGINEER.getLabel()) && units.get(UnitNames.GROUND_ENGINEER.getLabel()) > 0) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ENGINEER) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.GROUND_ENGINEER.getLabel(),
+                        BuildingNames.BARRACKS.getLabel(),
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ENGINEER));
+            }
+        }
+
+        /* Sniper */
+        if (units.containsKey(UnitNames.GROUND_SNIPER.getLabel()) && units.get(UnitNames.GROUND_SNIPER.getLabel()) > 0) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_SNIPER) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.GROUND_SNIPER.getLabel(),
+                        BuildingNames.BARRACKS.getLabel(),
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_SNIPER));
+            }
+        }
+
+        /* Armored Personnel Carrier */
+        if (units.containsKey(UnitNames.ARMORED_APC.getLabel()) && units.get(UnitNames.ARMORED_APC.getLabel()) > 0) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ARMORED_PERSONNEL_CARRIER) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.ARMORED_APC.getLabel(),
+                        BuildingNames.BARRACKS.getLabel(),
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ARMORED_PERSONNEL_CARRIER));
+            }
+            if (motorizedVehiclesFactory == null || motorizedVehiclesFactoryLevel < UnitsBuildingLevelRequirements.MOTORIZED_ARMORY_COMPLEX_LEVEL_FOR_ARMORED_PERSONNEL_CARRIER) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.ARMORED_APC.getLabel(),
+                        BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel(),
+                        UnitsBuildingLevelRequirements.MOTORIZED_ARMORY_COMPLEX_LEVEL_FOR_ARMORED_PERSONNEL_CARRIER));
+            }
+        }
     }
 
     public void createNewUnitRecruitmentRequest(Base base, Map<String, Integer> units) {
@@ -118,7 +154,7 @@ public class UnitRecruitmentUtils {
                 .build();
 
         /* TODO Remove hardcoded url */
-        /* Send Building Generation Event to event-manager module */
+        /* Send Unit Recruitment Event to event-manager module */
         String url = "http://localhost:8083/api/event/units/recruit";
         restTemplate.postForObject(url, unitsRecruitmentEventDTO, UnitsRecruitmentEventDTO.class);
     }

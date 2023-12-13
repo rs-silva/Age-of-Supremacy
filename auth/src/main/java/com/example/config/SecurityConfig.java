@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers(antMatcher("/h2-console/**")).permitAll()
                 .requestMatchers(antMatcher("/api/auth/register")).permitAll()
                 .requestMatchers(antMatcher("/api/auth/login")).permitAll()
+                .requestMatchers(antMatcher("/api/auth/refreshToken")).permitAll()
                 .anyRequest().authenticated()
                 );
                 /*.formLogin()
