@@ -20,8 +20,6 @@ public abstract class Constants {
 
     public static final String NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING = "There are not enough resources to upgrade this building.";
 
-    public static final String BASE_NO_INFORMATION_ABOUT_RESOURCE_AMOUNT = "The base does not contain information about this resource amount";
-
     public static final String BASE_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER = "This base does not belong to the player logged in. Cannot perform operation.";
 
     public static final String BUILDING_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER = "This building does not belong to the player logged in. Cannot perform operation.";
@@ -36,4 +34,5 @@ public abstract class Constants {
 
     public static final String NOT_ENOUGH_RESOURCES_TO_RECRUIT_UNITS = "There are not enough resources to recruit these units.";
 
+    public static final String BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS = "Recruiting %s requires %s (lv.%d)";
 }

@@ -128,6 +128,7 @@ public class BaseService {
 
         validateBaseOwnership(base.getPlayer().getId());
         unitRecruitmentUtils.validateUnitsNames(unitsRecruitmentRequestDTO.getUnits());
+        unitRecruitmentUtils.validateBuildingLevelRequirements(base, unitsRecruitmentRequestDTO.getUnits());
 
         resourcesUtils.updateBaseResources(base);
 

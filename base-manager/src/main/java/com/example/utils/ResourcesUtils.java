@@ -5,6 +5,7 @@ import com.example.enums.BuildingNames;
 import com.example.enums.ResourceNames;
 import com.example.models.Base;
 import com.example.models.Building;
+import com.example.utils.buildings.BuildingUtils;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -18,8 +19,11 @@ public class ResourcesUtils {
 
     private final WorldConfig worldConfig;
 
-    public ResourcesUtils(WorldConfig worldConfig) {
+    private final BuildingUtils buildingUtils;
+
+    public ResourcesUtils(WorldConfig worldConfig, BuildingUtils buildingUtils) {
         this.worldConfig = worldConfig;
+        this.buildingUtils = buildingUtils;
     }
 
     public Map<String, Double> generateDefaultResourcesForBase() {
@@ -51,7 +55,7 @@ public class ResourcesUtils {
         Map<String, Double> resources = base.getResources();
         Double resourceCurrentAmount = resources.get(resourceName);
 
-        Building building = getBuilding(base, resourceBuildingName);
+        Building building = buildingUtils.getBuilding(base, resourceBuildingName);
         int buildingLevel = building.getLevel();
         Double amountOfResourcesProducedPerHour = getAmountOfResourcesProducedForLevel(buildingLevel);
 
@@ -64,22 +68,10 @@ public class ResourcesUtils {
     }
 
     private Double getWarehouseCapacity(Base base) {
-        Building building = getBuilding(base, BuildingNames.WAREHOUSE.getLabel());
+        Building building = buildingUtils.getBuilding(base, BuildingNames.WAREHOUSE.getLabel());
 
         int buildingLevel = building.getLevel();
         return getWarehouseCapacityForLevel(buildingLevel);
-    }
-
-    private Building getBuilding(Base base, String buildingName) {
-        List<Building> buildingList = base.getBuildings();
-
-        for (Building building : buildingList) {
-            if (building.getType().equals(buildingName)) {
-                return building;
-            }
-        }
-
-        return null;
     }
 
     private Double calculateNumberOfHoursFromTimestampToNow(Timestamp timestamp) {

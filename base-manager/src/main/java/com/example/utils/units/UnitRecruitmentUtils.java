@@ -2,12 +2,15 @@ package com.example.utils.units;
 
 import com.example.dto.UnitDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
+import com.example.enums.BuildingNames;
 import com.example.enums.UnitNames;
 import com.example.enums.UnitsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
+import com.example.models.Building;
 import com.example.utils.Constants;
+import com.example.utils.buildings.BuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -25,10 +28,13 @@ public class UnitRecruitmentUtils {
 
     private final UnitConfigUtils unitConfigUtils;
 
+    private final BuildingUtils buildingUtils;
+
     private final RestTemplate restTemplate;
 
-    public UnitRecruitmentUtils(UnitConfigUtils unitConfigUtils, RestTemplate restTemplate) {
+    public UnitRecruitmentUtils(UnitConfigUtils unitConfigUtils, BuildingUtils buildingUtils, RestTemplate restTemplate) {
         this.unitConfigUtils = unitConfigUtils;
+        this.buildingUtils = buildingUtils;
         this.restTemplate = restTemplate;
     }
 
@@ -51,7 +57,25 @@ public class UnitRecruitmentUtils {
     }
 
     public void validateBuildingLevelRequirements(Base base, Map<String, Integer> units) {
+        Building barracks = buildingUtils.getBuilding(base, BuildingNames.BARRACKS.getLabel());
+        Building motorizedVehiclesFactory = buildingUtils.getBuilding(base, BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel());
+        Building aircraftFactory = buildingUtils.getBuilding(base, BuildingNames.AIRCRAFT_FACTORY.getLabel());
 
+        Integer barracksLevel = barracks == null ? null : barracks.getLevel();
+        Integer motorizedVehiclesFactoryLevel = motorizedVehiclesFactory == null ? null : motorizedVehiclesFactory.getLevel();
+        Integer aircraftFactoryLevel = aircraftFactory == null ? null : aircraftFactory.getLevel();
+
+        /* Check for each unit type if they are part of the unit recruitment request */
+
+        /* Infantry */
+        if (units.containsKey(UnitNames.GROUND_INFANTRY.getLabel()) && units.get(UnitNames.GROUND_INFANTRY.getLabel()) > 0) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_INFANTRY) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.GROUND_INFANTRY.getLabel(),
+                        BuildingNames.BARRACKS.getLabel(),
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_INFANTRY));
+            }
+        }
     }
 
     public void createNewUnitRecruitmentRequest(Base base, Map<String, Integer> units) {
