@@ -2,8 +2,6 @@ package com.example.utils;
 
 public abstract class EventManagerConstants {
 
-    public static final String BUILDING_UPGRADE_EVENT_ALREADY_EXISTS = "This building is already being upgraded.";
-
-    public static final String BUILDING_GENERATION_EVENT_ALREADY_EXISTS = "This base already has a building being constructed.";
+    public static final String BUILDING_UPGRADE_EVENT_ALREADY_EXISTS = "This base already has a building being upgraded/constructed.";
 
 }

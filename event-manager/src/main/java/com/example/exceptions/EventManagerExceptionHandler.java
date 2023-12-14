@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class EventManagerExceptionHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EventManagerExceptionHandler.class);
 
     private final HttpServletRequest request;
 
-    public GlobalExceptionHandler(HttpServletRequest request) {
+    public EventManagerExceptionHandler(HttpServletRequest request) {
         this.request = request;
     }
 

@@ -13,7 +13,7 @@ public interface BuildingUpgradeEventRepository extends JpaRepository<BuildingUp
 
     List<BuildingUpgradeEvent> findByCompletionTimeBefore(Timestamp timestamp);
 
-    BuildingUpgradeEvent findByBuildingId(UUID buildingId);
+    BuildingUpgradeEvent findByBaseId(UUID buildingId);
 
 }
 

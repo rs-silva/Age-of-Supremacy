@@ -34,7 +34,7 @@ public class BuildingUpgradeEventService {
 
     public void registerEvent(BuildingUpgradeEventDTO buildingUpgradeEventDTO) {
         /* TODO Check possible buildings being upgraded/constructed in the same base and increment the completion time */
-        checkIfBuildingIsNotBeingUpgradedAlready(buildingUpgradeEventDTO.getBuildingId());
+        checkIfBaseAlreadyHasABuildingUpgradeOrConstructionEvent(buildingUpgradeEventDTO.getBaseId());
 
         BuildingUpgradeEvent buildingUpgradeEvent = BuildingUpgradeEventMapper.fromDtoToEntity(buildingUpgradeEventDTO);
         buildingUpgradeEventRepository.save(buildingUpgradeEvent);
@@ -70,8 +70,8 @@ public class BuildingUpgradeEventService {
 
     }
 
-    private void checkIfBuildingIsNotBeingUpgradedAlready(UUID id) {
-        BuildingUpgradeEvent buildingUpgradeEvent = buildingUpgradeEventRepository.findByBuildingId(id);
+    private void checkIfBaseAlreadyHasABuildingUpgradeOrConstructionEvent(UUID id) {
+        BuildingUpgradeEvent buildingUpgradeEvent = buildingUpgradeEventRepository.findByBaseId(id);
 
         if (buildingUpgradeEvent != null) {
             throw new InternalServerErrorException(EventManagerConstants.BUILDING_UPGRADE_EVENT_ALREADY_EXISTS);
