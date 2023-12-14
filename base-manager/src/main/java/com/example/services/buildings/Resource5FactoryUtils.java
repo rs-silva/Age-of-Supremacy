@@ -13,7 +13,6 @@ public class Resource5FactoryUtils implements BuildingUtils {
 
     private final ResourceProductionUtils resourceProductionUtils;
 
-
     public Resource5FactoryUtils(ResourceProductionUtils resourceProductionUtils) {
         this.resourceProductionUtils = resourceProductionUtils;
     }
