@@ -66,7 +66,12 @@ public class UnitRecruitmentUtils {
         Integer aircraftFactoryLevel = aircraftFactory == null ? null : aircraftFactory.getLevel();
 
         /* Check for each unit type if they are part of the unit recruitment request */
+        validateGroundUnits(units, barracksLevel);
+        validateArmoredUnits(units, barracksLevel, motorizedVehiclesFactoryLevel);
+        validateAirUnits(units, barracksLevel, aircraftFactoryLevel);
+    }
 
+    private void validateGroundUnits(Map<String, Integer> units, Integer barracksLevel) {
         /* Infantry */
         if (units.containsKey(UnitNames.GROUND_INFANTRY.getLabel()) && units.get(UnitNames.GROUND_INFANTRY.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_INFANTRY) {
@@ -96,20 +101,104 @@ public class UnitRecruitmentUtils {
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_SNIPER));
             }
         }
+    }
 
+    private void validateArmoredUnits(Map<String, Integer> units, Integer barracksLevel, Integer motorizedVehiclesFactoryLevel) {
         /* Armored Personnel Carrier */
         if (units.containsKey(UnitNames.ARMORED_APC.getLabel()) && units.get(UnitNames.ARMORED_APC.getLabel()) > 0) {
-            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ARMORED_PERSONNEL_CARRIER) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_APC) {
                 throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.ARMORED_APC.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
-                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ARMORED_PERSONNEL_CARRIER));
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_APC));
             }
-            if (motorizedVehiclesFactory == null || motorizedVehiclesFactoryLevel < UnitsBuildingLevelRequirements.MOTORIZED_ARMORY_COMPLEX_LEVEL_FOR_ARMORED_PERSONNEL_CARRIER) {
+            if (motorizedVehiclesFactoryLevel == null || motorizedVehiclesFactoryLevel < UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_APC) {
                 throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.ARMORED_APC.getLabel(),
                         BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel(),
-                        UnitsBuildingLevelRequirements.MOTORIZED_ARMORY_COMPLEX_LEVEL_FOR_ARMORED_PERSONNEL_CARRIER));
+                        UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_APC));
+            }
+        }
+
+        /* Main Battle Tank */
+        if (units.containsKey(UnitNames.ARMORED_MBT.getLabel()) && units.get(UnitNames.ARMORED_MBT.getLabel()) > 0) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_MBT) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.ARMORED_MBT.getLabel(),
+                        BuildingNames.BARRACKS.getLabel(),
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_MBT));
+            }
+            if (motorizedVehiclesFactoryLevel == null || motorizedVehiclesFactoryLevel < UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_MBT) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.ARMORED_MBT.getLabel(),
+                        BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel(),
+                        UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_MBT));
+            }
+        }
+
+        /* Artillery */
+        if (units.containsKey(UnitNames.ARMORED_ARTILLERY.getLabel()) && units.get(UnitNames.ARMORED_ARTILLERY.getLabel()) > 0) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ARTILLERY) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.ARMORED_ARTILLERY.getLabel(),
+                        BuildingNames.BARRACKS.getLabel(),
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ARTILLERY));
+            }
+            if (motorizedVehiclesFactoryLevel == null || motorizedVehiclesFactoryLevel < UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_ARTILLERY) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.ARMORED_ARTILLERY.getLabel(),
+                        BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel(),
+                        UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_ARTILLERY));
+            }
+        }
+    }
+
+    private void validateAirUnits(Map<String, Integer> units, Integer barracksLevel, Integer aircraftFactoryLevel) {
+        /* Recon Plane */
+        if (units.containsKey(UnitNames.AIR_RECON.getLabel()) && units.get(UnitNames.AIR_RECON.getLabel()) > 0) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_RECON_PLANE) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.AIR_RECON.getLabel(),
+                        BuildingNames.BARRACKS.getLabel(),
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_RECON_PLANE));
+            }
+            if (aircraftFactoryLevel == null || aircraftFactoryLevel < UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_RECON_PLANE) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.AIR_RECON.getLabel(),
+                        BuildingNames.AIRCRAFT_FACTORY.getLabel(),
+                        UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_RECON_PLANE));
+            }
+        }
+
+        /* Jet Fighter */
+        if (units.containsKey(UnitNames.AIR_FIGHTER.getLabel()) && units.get(UnitNames.AIR_FIGHTER.getLabel()) > 0) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_JET_FIGHTER) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.AIR_FIGHTER.getLabel(),
+                        BuildingNames.BARRACKS.getLabel(),
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_JET_FIGHTER));
+            }
+            if (aircraftFactoryLevel == null || aircraftFactoryLevel < UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_JET_FIGHTER) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.AIR_FIGHTER.getLabel(),
+                        BuildingNames.AIRCRAFT_FACTORY.getLabel(),
+                        UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_JET_FIGHTER));
+            }
+        }
+
+        /* Bomber */
+        if (units.containsKey(UnitNames.AIR_BOMBER.getLabel()) && units.get(UnitNames.AIR_BOMBER.getLabel()) > 0) {
+            if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_BOMBER) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.AIR_BOMBER.getLabel(),
+                        BuildingNames.BARRACKS.getLabel(),
+                        UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_BOMBER));
+            }
+            if (aircraftFactoryLevel == null || aircraftFactoryLevel < UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_BOMBER) {
+                throw new InternalServerErrorException(String.format(Constants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                        UnitNames.AIR_BOMBER.getLabel(),
+                        BuildingNames.AIRCRAFT_FACTORY.getLabel(),
+                        UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_BOMBER));
             }
         }
     }
