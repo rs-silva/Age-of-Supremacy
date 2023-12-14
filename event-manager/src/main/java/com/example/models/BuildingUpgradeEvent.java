@@ -25,7 +25,11 @@ public class BuildingUpgradeEvent {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private UUID baseId;
+
     private UUID buildingId;
+
+    private String buildingType;
 
     private Timestamp completionTime;
 

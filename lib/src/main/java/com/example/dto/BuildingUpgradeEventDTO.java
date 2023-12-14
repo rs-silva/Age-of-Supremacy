@@ -14,7 +14,11 @@ import java.util.UUID;
 @Builder
 public class BuildingUpgradeEventDTO {
 
+    private UUID baseId;
+
     private UUID buildingId;
+
+    private String buildingType;
 
     private Timestamp completionTime;
 

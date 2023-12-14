@@ -1,6 +1,6 @@
 package com.example.utils.buildings;
 
-import com.example.dto.BuildingGenerationEventDTO;
+import com.example.dto.BuildingUpgradeEventDTO;
 import com.example.enums.BuildingNames;
 import com.example.enums.BuildingsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
@@ -92,16 +92,16 @@ public class BuildingGenerationUtils {
 
         Timestamp endTime = Timestamp.from(Instant.now().plusMillis(constructionTime * 1000));
 
-        BuildingGenerationEventDTO buildingGenerationEventDTO = BuildingGenerationEventDTO.builder()
+        BuildingUpgradeEventDTO buildingUpgradeEventDTO = BuildingUpgradeEventDTO.builder()
                 .baseId(base.getId())
                 .buildingType(buildingType)
                 .completionTime(endTime)
                 .build();
 
         /* TODO Remove hardcoded url */
-        /* Send Building Generation Event to event-manager module */
-        String url = "http://localhost:8083/api/event/building/generate";
-        restTemplate.postForObject(url, buildingGenerationEventDTO, BuildingGenerationEventDTO.class);
+        /* Send Building Upgrade Event to event-manager module */
+        String url = "http://localhost:8083/api/event/building/upgrade";
+        restTemplate.postForObject(url, buildingUpgradeEventDTO, BuildingUpgradeEventDTO.class);
     }
 
     private Map<String, Integer> getRequirementsToGenerateBuilding(String buildingType) {

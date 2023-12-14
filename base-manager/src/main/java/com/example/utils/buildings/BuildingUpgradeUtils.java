@@ -48,6 +48,7 @@ public class BuildingUpgradeUtils {
         Timestamp endTime = Timestamp.from(Instant.now().plusMillis(constructionTime * 1000));
 
         BuildingUpgradeEventDTO buildingUpgradeEventDTO = BuildingUpgradeEventDTO.builder()
+                .baseId(base.getId())
                 .buildingId(building.getId())
                 .completionTime(endTime)
                 .build();
