@@ -20,6 +20,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -60,6 +61,9 @@ public class Base {
     @MapKeyColumn(name = "unit_name")
     @Column(name = "unit_quantity")
     private Map<String, Integer> units;
+
+    @OneToMany(mappedBy = "baseBeingSupported", cascade = CascadeType.ALL)
+    private List<SupportArmy> supportUnits;
 
     private Timestamp lastResourcesUpdate;
 
