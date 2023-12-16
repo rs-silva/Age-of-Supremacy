@@ -1,7 +1,9 @@
 package com.example.services;
 
 import com.example.dto.ArmyDTO;
+import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
+import com.example.utils.Constants;
 import com.example.utils.SupportArmyUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +25,7 @@ public class SupportArmyService {
     @Transactional
     public void createSupportArmyRequest(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
         if (originBaseId.equals(destinationBaseId)) {
-            throw new
+            throw new BadRequestException(Constants.SUPPORT_ARMY_ORIGIN_BASE_AND_DESTINATION_BASE_ARE_EQUAL);
         }
 
         Base originBase = baseService.findById(originBaseId);

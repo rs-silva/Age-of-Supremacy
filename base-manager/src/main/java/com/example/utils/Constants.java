@@ -38,4 +38,5 @@ public abstract class Constants {
 
     public static final String NOT_ENOUGH_UNITS_TO_SEND = "This base does not have the amount of troops that you want to send.";
 
+    public static final String SUPPORT_ARMY_ORIGIN_BASE_AND_DESTINATION_BASE_ARE_EQUAL = "Cannot send support army to the base where the units belong.";
 }
