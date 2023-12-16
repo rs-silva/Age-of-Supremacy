@@ -20,6 +20,6 @@ public class UnitDTO {
 
     private int recruitmentTime;
 
-    private List<ResourceConfig> resources;
+    private List<ResourceConfig> resourceRequirements;
 
 }

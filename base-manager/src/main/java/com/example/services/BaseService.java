@@ -3,7 +3,7 @@ package com.example.services;
 import com.example.dto.BaseDTO;
 import com.example.dto.BuildingDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
-import com.example.dto.UnitsRecruitmentRequestDTO;
+import com.example.dto.ArmyDTO;
 import com.example.enums.BasePropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
@@ -107,7 +107,7 @@ public class BaseService {
     }
 
     @Transactional
-    public void createNewBuildingConstructionRequest(UUID baseId, String buildingType) {
+    public void createBuildingConstructionRequest(UUID baseId, String buildingType) {
         Base base = findById(baseId);
 
         validateBaseOwnership(base.getPlayer().getId());
@@ -123,18 +123,18 @@ public class BaseService {
     }
 
     @Transactional
-    public void createUnitRecruitmentRequest(UUID baseId, UnitsRecruitmentRequestDTO unitsRecruitmentRequestDTO) {
+    public void createUnitRecruitmentRequest(UUID baseId, ArmyDTO armyDTO) {
         Base base = findById(baseId);
 
         validateBaseOwnership(base.getPlayer().getId());
-        unitRecruitmentUtils.validateUnitsNames(unitsRecruitmentRequestDTO.getUnits());
-        unitRecruitmentUtils.validateBuildingLevelRequirements(base, unitsRecruitmentRequestDTO.getUnits());
+        unitRecruitmentUtils.validateUnitsNames(armyDTO.getUnits());
+        unitRecruitmentUtils.validateBuildingLevelRequirements(base, armyDTO.getUnits());
 
         resourcesUtils.updateBaseResources(base);
 
-        LOG.info("unitsRecruitmentDTO = {}", unitsRecruitmentRequestDTO);
+        LOG.info("unitsRecruitmentDTO = {}", armyDTO);
 
-        unitRecruitmentUtils.createNewUnitRecruitmentRequest(base, unitsRecruitmentRequestDTO.getUnits());
+        unitRecruitmentUtils.createNewUnitRecruitmentRequest(base, armyDTO.getUnits());
     }
 
     @Transactional
@@ -171,7 +171,7 @@ public class BaseService {
         playerService.updatePlayerScore(base.getPlayer());
     }
 
-    private void validateBaseOwnership(UUID basePlayerId) {
+    public void validateBaseOwnership(UUID basePlayerId) {
         UUID playerIdFromToken = jwtAccessTokenUtils.retrievePlayerIdFromToken();
 
         if (!basePlayerId.equals(playerIdFromToken)) {

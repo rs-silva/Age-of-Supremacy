@@ -2,7 +2,7 @@ package com.example.controllers;
 
 import com.example.dto.BaseDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
-import com.example.dto.UnitsRecruitmentRequestDTO;
+import com.example.dto.ArmyDTO;
 import com.example.services.BaseService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class BaseController {
 
         LOG.info("Received request to create {} in base {}", buildingType, baseId);
 
-        baseService.createNewBuildingConstructionRequest(baseId, buildingType);
+        baseService.createBuildingConstructionRequest(baseId, buildingType);
 
         return ResponseEntity.ok().build();
     }
@@ -63,11 +63,11 @@ public class BaseController {
 
     @PostMapping("{baseId}/recruitUnits")
     public ResponseEntity<String> createUnitRecruitmentRequest(@PathVariable UUID baseId,
-                                                               @Valid @RequestBody UnitsRecruitmentRequestDTO unitsRecruitmentRequestDTO) {
+                                                               @Valid @RequestBody ArmyDTO armyDTO) {
 
-        LOG.info("Received request to create {} in base {}", unitsRecruitmentRequestDTO, baseId);
+        LOG.info("Received request to create {} in base {}", armyDTO, baseId);
 
-        baseService.createUnitRecruitmentRequest(baseId, unitsRecruitmentRequestDTO);
+        baseService.createUnitRecruitmentRequest(baseId, armyDTO);
 
         return ResponseEntity.ok().build();
     }
