@@ -18,6 +18,7 @@ public abstract class BaseMapper {
                 .score(base.getScore())
                 .resources(base.getResources())
                 .units(base.getUnits())
+                .supportUnits(base.getSupportUnits())
                 .buildingList(buildingDTOList)
                 .build();
     }

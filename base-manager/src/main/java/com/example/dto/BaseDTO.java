@@ -1,5 +1,6 @@
 package com.example.dto;
 
+import com.example.models.SupportArmy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +27,8 @@ public class BaseDTO {
     private Map<String, Double> resources;
 
     private Map<String, Integer> units;
+
+    private List<SupportArmy> supportUnits;
 
     List<BuildingDTO> buildingList;
 }
