@@ -37,7 +37,7 @@ public class SupportArmy {
     private Base baseBeingSupported;
 
     @ElementCollection
-    @CollectionTable(name = "support_units", joinColumns = @JoinColumn(name = "supporting_base_id"))
+    @CollectionTable(name = "support_armies_units", joinColumns = @JoinColumn(name = "support_army_id"))
     @MapKeyColumn(name = "unit_name")
     @Column(name = "unit_quantity")
     private Map<String, Integer> supportUnits = new HashMap<>();
