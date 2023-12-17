@@ -28,13 +28,13 @@ public class SupportArmyController {
     }
 
     @PostMapping("send/{originBaseId}/to/{destinationBaseId}")
-    public ResponseEntity<SupportArmy> createSupportArmyRequest(@PathVariable UUID originBaseId,
-                                                                @PathVariable UUID destinationBaseId,
-                                                                @Valid @RequestBody ArmyDTO armyDTO) {
+    public ResponseEntity<SupportArmy> createSupportArmySendRequest(@PathVariable UUID originBaseId,
+                                                                    @PathVariable UUID destinationBaseId,
+                                                                    @Valid @RequestBody ArmyDTO armyDTO) {
 
         LOG.info("Sending {} from base {} to base {}", armyDTO, originBaseId, destinationBaseId);
 
-        supportArmyService.createSupportArmyRequest(originBaseId, destinationBaseId, armyDTO);
+        supportArmyService.createSupportArmySendRequest(originBaseId, destinationBaseId, armyDTO);
 
         return ResponseEntity.ok().build();
     }

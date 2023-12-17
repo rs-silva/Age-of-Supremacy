@@ -23,7 +23,7 @@ public class SupportArmyService {
     }
 
     @Transactional
-    public void createSupportArmyRequest(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
+    public void createSupportArmySendRequest(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
         if (originBaseId.equals(destinationBaseId)) {
             throw new BadRequestException(Constants.SUPPORT_ARMY_ORIGIN_BASE_AND_DESTINATION_BASE_ARE_EQUAL);
         }
@@ -33,6 +33,6 @@ public class SupportArmyService {
 
         Base destinationBase = baseService.findById(destinationBaseId);
 
-        supportArmyUtils.createSupportArmyRequest(originBase, destinationBase, armyDTO);
+        supportArmyUtils.createSupportArmySendRequest(originBase, destinationBase, armyDTO);
     }
 }
