@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
 @ControllerAdvice
 public class BaseManagerExceptionHandler {
@@ -43,6 +44,12 @@ public class BaseManagerExceptionHandler {
     public ResponseEntity<ErrorMessage> handleBadRequestException(BadRequestException ex) {
         LOG.error(ex.getMessage());
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceAccessException.class)
+    public ResponseEntity<ErrorMessage> handleResourceAccessException(ResourceAccessException ex) {
+        LOG.error(ex.getMessage());
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
