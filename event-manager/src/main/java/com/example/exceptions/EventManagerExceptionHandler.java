@@ -37,6 +37,12 @@ public class EventManagerExceptionHandler {
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(ExpiredJwtTokenException.class)
+    public ResponseEntity<ErrorMessage> handleExpiredJwtTokenException(ExpiredJwtTokenException ex) {
+        LOG.error(ex.getMessage());
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ErrorMessage> handleInternalServerErrorException(InternalServerErrorException ex) {
         LOG.error(ex.getMessage());

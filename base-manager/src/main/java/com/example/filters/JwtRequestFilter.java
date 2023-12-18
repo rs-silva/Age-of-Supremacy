@@ -1,5 +1,7 @@
 package com.example.filters;
 
+import com.example.exceptions.ExpiredJwtTokenException;
+import com.example.utils.BaseManagerConstants;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -44,7 +46,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+                throw new ExpiredJwtTokenException(BaseManagerConstants.EXPIRED_JWT_TOKEN);
             }
         } else {
             //logger.warn("JWT Token does not begin with Bearer String");

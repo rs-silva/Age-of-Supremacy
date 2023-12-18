@@ -1,6 +1,8 @@
 package com.example.utils;
 
-public abstract class Constants {
+public abstract class BaseManagerConstants {
+
+    public static final String EXPIRED_JWT_TOKEN = "JWT Token has expired.";
 
     public static final String PLAYER_ALREADY_EXISTS = "Player with id %s and/or username %s already exists!";
 

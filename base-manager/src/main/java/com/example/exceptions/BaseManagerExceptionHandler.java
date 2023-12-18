@@ -40,6 +40,12 @@ public class BaseManagerExceptionHandler {
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(ExpiredJwtTokenException.class)
+    public ResponseEntity<ErrorMessage> handleExpiredJwtTokenException(ExpiredJwtTokenException ex) {
+        LOG.error(ex.getMessage());
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorMessage> handleBadRequestException(BadRequestException ex) {
         LOG.error(ex.getMessage());

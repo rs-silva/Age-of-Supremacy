@@ -17,7 +17,7 @@ import com.example.services.buildings.BuildingUtilsService;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import com.example.interfaces.BaseSimpleView;
-import com.example.utils.Constants;
+import com.example.utils.BaseManagerConstants;
 import com.example.utils.units.UnitRecruitmentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,7 +150,7 @@ public class BaseService {
 
         if (base.isEmpty()) {
             throw new ResourceNotFoundException(String.format(
-                    Constants.BASE_NOT_FOUND, id));
+                    BaseManagerConstants.BASE_NOT_FOUND, id));
         }
 
         resourcesUtils.updateBaseResources(base.get());
@@ -176,7 +176,7 @@ public class BaseService {
 
         if (!basePlayerId.equals(playerIdFromToken)) {
             LOG.error("User with id {} attempted to perform an operation in a base that belong to {}", playerIdFromToken, basePlayerId);
-            throw new InternalServerErrorException(Constants.BASE_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
+            throw new InternalServerErrorException(BaseManagerConstants.BASE_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
         }
     }
 

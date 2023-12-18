@@ -7,7 +7,7 @@ import com.example.enums.BuildingsPropertiesNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.models.Base;
 import com.example.models.Building;
-import com.example.utils.Constants;
+import com.example.utils.BaseManagerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
@@ -88,7 +88,7 @@ public class BuildingUpgradeUtils {
         }
 
         LOG.error("There was an error while retrieving the maximum level information for {}.", buildingType);
-        throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
+        throw new InternalServerErrorException(BaseManagerConstants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
     public Map<String, Integer> getRequirementsToUpgradeBuilding(String buildingType, int buildingLevel) {
@@ -103,7 +103,7 @@ public class BuildingUpgradeUtils {
         }
 
         LOG.error("There was an error while retrieving the upgrade information for {} (lv.{}).", buildingType, buildingLevel + 1);
-        throw new InternalServerErrorException(Constants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
+        throw new InternalServerErrorException(BaseManagerConstants.BUILDING_UPGRADE_NOT_FOUND_ERROR);
     }
 
     public int getBuildingScoreForSpecificLevel(String buildingType, int buildingLevel) {
@@ -115,7 +115,7 @@ public class BuildingUpgradeUtils {
         }
 
         LOG.error("There was an error while retrieving the score information for {} (lv.{}).", buildingType, buildingLevel);
-        throw new InternalServerErrorException(Constants.BUILDING_SCORE_NOT_FOUND_ERROR);
+        throw new InternalServerErrorException(BaseManagerConstants.BUILDING_SCORE_NOT_FOUND_ERROR);
     }
 
 

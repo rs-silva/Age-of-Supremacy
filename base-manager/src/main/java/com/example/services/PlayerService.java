@@ -9,7 +9,7 @@ import com.example.models.Player;
 import com.example.repositories.PlayerRepository;
 import com.example.dto.NewPlayerDTO;
 import com.example.interfaces.BaseSimpleView;
-import com.example.utils.Constants;
+import com.example.utils.BaseManagerConstants;
 import com.example.utils.JwtAccessTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +73,7 @@ public class PlayerService {
 
         if (playerById.isPresent() || playerByUsername != null) {
             throw new ResourceAlreadyExistsException(String.format(
-                    Constants.PLAYER_ALREADY_EXISTS, playerId, username));
+                    BaseManagerConstants.PLAYER_ALREADY_EXISTS, playerId, username));
         }
     }
 
@@ -95,7 +95,7 @@ public class PlayerService {
 
         if (player == null) {
             throw new ResourceNotFoundException(String.format(
-                    Constants.PLAYER_NOT_FOUND, playerId));
+                    BaseManagerConstants.PLAYER_NOT_FOUND, playerId));
         }
 
         return player;
@@ -105,10 +105,10 @@ public class PlayerService {
         UUID tokenPlayerId = jwtAccessTokenUtils.retrievePlayerIdFromToken();
 
         if (!playerId.equals(tokenPlayerId)) {
-            LOG.error(Constants.PLAYER_ID_FROM_REQUEST_DOES_NOT_MATCH_TOKEN_PLAYER_ID +
+            LOG.error(BaseManagerConstants.PLAYER_ID_FROM_REQUEST_DOES_NOT_MATCH_TOKEN_PLAYER_ID +
                     " Player ID from request = {} | Player ID from Token = {}", playerId, tokenPlayerId);
             throw new ForbiddenException(
-                    Constants.PLAYER_ID_FROM_REQUEST_DOES_NOT_MATCH_TOKEN_PLAYER_ID);
+                    BaseManagerConstants.PLAYER_ID_FROM_REQUEST_DOES_NOT_MATCH_TOKEN_PLAYER_ID);
         }
     }
 

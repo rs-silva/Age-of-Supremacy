@@ -3,7 +3,7 @@ package com.example.services;
 import com.example.dto.UnitDTO;
 import com.example.enums.UnitNames;
 import com.example.exceptions.InternalServerErrorException;
-import com.example.utils.Constants;
+import com.example.utils.BaseManagerConstants;
 import com.example.utils.units.UnitConfigUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class UnitService {
             UnitDTO unitDTO = unitConfigUtils.getUnitConfig(unitName.getLabel());
             if (unitDTO == null) {
                 LOG.error("There was an error while retrieving the recruitment information for {}.", unitName.getLabel());
-                throw new InternalServerErrorException(Constants.UNIT_CONFIG_NOT_FOUND_ERROR);
+                throw new InternalServerErrorException(BaseManagerConstants.UNIT_CONFIG_NOT_FOUND_ERROR);
             }
             unitDTOList.add(unitDTO);
         }

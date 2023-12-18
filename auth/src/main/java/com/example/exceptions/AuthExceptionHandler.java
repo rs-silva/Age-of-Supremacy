@@ -62,6 +62,12 @@ public class AuthExceptionHandler {
         return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(ExpiredJwtTokenException.class)
+    public ResponseEntity<ErrorMessage> handleExpiredJwtTokenException(ExpiredJwtTokenException ex) {
+        LOG.error(ex.getMessage());
+        return new ResponseEntity<>(buildErrorMessage(ex), HttpStatus.FORBIDDEN);
+    }
+
     private ErrorMessage buildErrorMessage(RuntimeException ex) {
         String errorType = ex.getClass().getSimpleName().substring(0, ex.getClass().getSimpleName().length() - 9);
         return new ErrorMessage(errorType,

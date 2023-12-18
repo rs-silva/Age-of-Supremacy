@@ -2,7 +2,6 @@ package com.example.utils;
 
 import com.example.dto.ArmyDTO;
 import com.example.dto.SupportArmyEventDTO;
-import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
 import org.springframework.stereotype.Component;
@@ -38,7 +37,7 @@ public class SupportArmyUtils {
             int unitCurrentAmount = baseUnits.get(unitName);
 
             if (unitCurrentAmount < 0) {
-                throw new BadRequestException(Constants.NOT_ENOUGH_UNITS_TO_SEND);
+                throw new BadRequestException(BaseManagerConstants.NOT_ENOUGH_UNITS_TO_SEND);
             }
         }
 

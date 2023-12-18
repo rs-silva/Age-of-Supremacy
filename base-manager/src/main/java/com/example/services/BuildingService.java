@@ -7,7 +7,7 @@ import com.example.models.Building;
 import com.example.repositories.BuildingRepository;
 import com.example.services.buildings.BuildingUtilsService;
 import com.example.utils.buildings.BuildingGenerationUtils;
-import com.example.utils.Constants;
+import com.example.utils.BaseManagerConstants;
 import com.example.dto.BuildingDTO;
 import com.example.mappers.BuildingMapper;
 import com.example.utils.buildings.BuildingUpgradeUtils;
@@ -89,7 +89,7 @@ public class BuildingService {
 
         if (doesBuildingAlreadyExist) {
             LOG.error("Attempted to create building {} in base {}, but this building already exists in this base.", buildingType, base.getId());
-            throw new InternalServerErrorException(Constants.BUILDING_ALREADY_EXISTS);
+            throw new InternalServerErrorException(BaseManagerConstants.BUILDING_ALREADY_EXISTS);
         }
 
         resourcesUtils.updateBaseResources(base);
@@ -98,7 +98,7 @@ public class BuildingService {
 
         if (!areUpgradeRequirementsMet) {
             LOG.error("Attempted to create building {} in base {}, but there are not enough resources.", buildingType, base.getId());
-            throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
+            throw new InternalServerErrorException(BaseManagerConstants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
         }
 
         buildingGenerationUtils.requestBuildingGeneration(base, buildingType);
@@ -114,7 +114,7 @@ public class BuildingService {
 
         if (isBuildingMaxLevel) {
             LOG.error("Attempted to upgrade building {}, which is already at the maximum level", building.getId());
-            throw new InternalServerErrorException(Constants.BUILDING_IS_ALREADY_MAX_LEVEL);
+            throw new InternalServerErrorException(BaseManagerConstants.BUILDING_IS_ALREADY_MAX_LEVEL);
         }
 
         Base base = building.getBase();
@@ -124,7 +124,7 @@ public class BuildingService {
 
         if (!areUpgradeRequirementsMet) {
             LOG.error("Attempted to upgrade building {}, but there are no enough resources in the corresponding base.", building.getId());
-            throw new InternalServerErrorException(Constants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
+            throw new InternalServerErrorException(BaseManagerConstants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
         }
 
         buildingUpgradeUtils.requestBuildingUpgrade(base, building);
@@ -165,7 +165,7 @@ public class BuildingService {
 
         if (!buildingPlayerId.equals(playerIdFromToken)) {
             LOG.error("User with id {} attempted to perform an operation in a building that belong to player with id {}", playerIdFromToken, buildingPlayerId);
-            throw new InternalServerErrorException(Constants.BUILDING_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
+            throw new InternalServerErrorException(BaseManagerConstants.BUILDING_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
         }
     }
 
@@ -174,7 +174,7 @@ public class BuildingService {
 
         if (building.isEmpty()) {
             throw new ResourceNotFoundException(String.format(
-                    Constants.BUILDING_NOT_FOUND, id));
+                    BaseManagerConstants.BUILDING_NOT_FOUND, id));
         }
 
         return building.get();
