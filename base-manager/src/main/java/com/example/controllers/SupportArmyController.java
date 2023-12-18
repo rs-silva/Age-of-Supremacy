@@ -38,4 +38,16 @@ public class SupportArmyController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("completeSend/{originBaseId}/to/{destinationBaseId}")
+    public ResponseEntity<SupportArmy> completeSupportArmySendRequest(@PathVariable UUID originBaseId,
+                                                                      @PathVariable UUID destinationBaseId,
+                                                                      @Valid @RequestBody ArmyDTO armyDTO) {
+
+        LOG.info("{} are arriving to base {}", armyDTO, destinationBaseId);
+
+        supportArmyService.completeSupportArmySendRequest(originBaseId, destinationBaseId, armyDTO);
+
+        return ResponseEntity.ok().build();
+    }
 }

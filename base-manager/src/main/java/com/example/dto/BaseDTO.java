@@ -30,5 +30,5 @@ public class BaseDTO {
 
     private List<SupportArmy> supportUnits;
 
-    List<BuildingDTO> buildingList;
+    private List<BuildingDTO> buildingList;
 }

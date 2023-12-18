@@ -55,7 +55,6 @@ public class SupportArmyUtils {
         /* Send Support Army Event to event-manager module */
         String url = "http://localhost:8083/api/event/supportArmy";
         restTemplate.postForObject(url, supportArmyEventDTO, SupportArmyEventDTO.class);
-
     }
 
     private Timestamp calculateArrivalTime(Base originBase, Base destinationBase, ArmyDTO armyDTO) {

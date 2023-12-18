@@ -1,5 +1,6 @@
 package com.example.services;
 
+import com.example.dto.ArmyDTO;
 import com.example.dto.SupportArmyEventDTO;
 import com.example.mappers.SupportArmyEventMapper;
 import com.example.models.SupportArmyEvent;
@@ -44,25 +45,29 @@ public class SupportArmyEventService {
         List<SupportArmyEvent> supportArmyEventList = supportArmyEventRepository.findByCompletionTimeBefore(Timestamp.from(Instant.now()));
 
         /* Trigger an event that sends a call to base-manager to recruit the units */
-        /*for (SupportArmyEvent supportArmyEvent : supportArmyEventList) {
+        for (SupportArmyEvent supportArmyEvent : supportArmyEventList) {
             UUID ownerBaseId = supportArmyEvent.getOwnerBaseId();
             UUID originBaseId = supportArmyEvent.getOriginBaseId();
+            UUID destinationBaseId = supportArmyEvent.getDestinationBaseId();
 
             /* In case it is a send event */
-            /*if (ownerBaseId.equals(originBaseId)) {
+            if (ownerBaseId.equals(originBaseId)) {
                 LOG.info("Triggering event to complete support army deployment from base {} to base {}. {}", supportArmyEvent.getOriginBaseId(), supportArmyEvent.getDestinationBaseId(), supportArmyEvent.getUnits());
                 /* TODO Remove hardcoded url */
-                /*String url = "http://localhost:8082/api/base/" + unitRecruitmentEvent.getBaseId() + "/completeUnitsRecruitment";
-                UnitsRecruitmentEventDTO unitsRecruitmentEventDTO = UnitRecruitmentEventMapper.fromEntityToDto(unitRecruitmentEvent);
-                restTemplate.postForObject(url, unitsRecruitmentEventDTO, UnitsRecruitmentEventDTO.class);
-                unitRecruitmentEventRepository.delete(unitRecruitmentEvent);
+                String url = "http://localhost:8082/api/supportArmy/completeSend/" + originBaseId + "/to/" + destinationBaseId;
+                ArmyDTO armyDTO = ArmyDTO.builder()
+                        .units(supportArmyEvent.getUnits())
+                        .build();
+
+                restTemplate.postForObject(url, armyDTO, ArmyDTO.class);
+                supportArmyEventRepository.delete(supportArmyEvent);
             }
             /* In case it is a return event */
+            else {
 
+            }
 
-
-
-        //}
+        }
 
     }
 
