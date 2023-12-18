@@ -1,7 +1,6 @@
 package com.example.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -62,9 +61,8 @@ public class Base {
     @Column(name = "unit_quantity")
     private Map<String, Integer> units;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "baseBeingSupported", cascade = CascadeType.ALL)
-    private List<SupportArmy> supportUnits;
+    private List<SupportArmy> supportArmies;
 
     private Timestamp lastResourcesUpdate;
 
@@ -85,7 +83,7 @@ public class Base {
                 ", score=" + score +
                 ", resources=" + resources +
                 ", units=" + units +
-                ", supportUnits=" + supportUnits +
+                ", supportUnits=" + supportArmies +
                 ", lastResourcesUpdate=" + lastResourcesUpdate +
                 ", buildings=" + buildings +
                 '}';

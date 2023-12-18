@@ -36,6 +36,8 @@ public class BaseController {
 
         BaseDTO baseDTO = baseService.getBaseInformation(baseId);
 
+        LOG.info("BASE_DTO = {}", baseDTO);
+
         return ResponseEntity.ok(baseDTO);
     }
 

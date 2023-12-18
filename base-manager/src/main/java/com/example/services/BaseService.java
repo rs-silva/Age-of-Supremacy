@@ -2,6 +2,7 @@ package com.example.services;
 
 import com.example.dto.BaseDTO;
 import com.example.dto.BuildingDTO;
+import com.example.dto.SupportArmyDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.dto.ArmyDTO;
 import com.example.enums.BasePropertiesNames;
@@ -9,9 +10,11 @@ import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.mappers.BaseMapper;
 import com.example.mappers.BuildingMapper;
+import com.example.mappers.SupportArmyMapper;
 import com.example.models.Base;
 import com.example.models.Building;
 import com.example.models.Player;
+import com.example.models.SupportArmy;
 import com.example.repositories.BaseRepository;
 import com.example.services.buildings.BuildingUtilsService;
 import com.example.utils.JwtAccessTokenUtils;
@@ -94,6 +97,7 @@ public class BaseService {
         Base base = findById(baseId);
 
         List<Building> buildingList = base.getBuildings();
+        List<SupportArmy> supportArmyList = base.getSupportArmies();
 
         LOG.info("GET_BASE_INFORMATION = {}", base);
 
@@ -105,7 +109,12 @@ public class BaseService {
                 })
                 .toList();
 
-        return BaseMapper.buildDTO(base, buildingDTOList);
+        List<SupportArmyDTO> supportArmyDTOList = supportArmyList
+                .stream()
+                .map(SupportArmyMapper::fromEntityToDto)
+                .toList();
+
+        return BaseMapper.buildDTO(base, buildingDTOList, supportArmyDTOList);
     }
 
     @Transactional
