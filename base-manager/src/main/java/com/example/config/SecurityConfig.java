@@ -3,6 +3,7 @@ package com.example.config;
 import com.example.filters.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,9 +23,6 @@ public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
 
-    private static final String[] PUBLIC_MATCHERS = {
-    };
-
     public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
     }
@@ -37,15 +35,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers(antMatcher("/error")).permitAll()
                 .requestMatchers(antMatcher("/h2-console/**")).permitAll()
-                .requestMatchers(antMatcher("/api/building/completeUpgrade/**"))
+
+                .requestMatchers(antMatcher(HttpMethod.POST, "/api/building/completeUpgrade/**"))
                 .access((authentication, context) ->
                         new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
 
-                .requestMatchers(antMatcher("/api/base/*/finishBuilding/**"))
+                .requestMatchers(antMatcher(HttpMethod.POST, "/api/base/*/finishBuilding/**"))
                 .access((authentication, context) ->
                         new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
 
-                .requestMatchers(antMatcher("/api/base/*/completeUnitsRecruitment"))
+                .requestMatchers(antMatcher(HttpMethod.POST, "/api/base/*/completeUnitsRecruitment"))
                 .access((authentication, context) ->
                         new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
 
