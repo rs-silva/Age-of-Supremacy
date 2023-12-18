@@ -30,7 +30,7 @@ public class UnitConfigUtils {
             Map<String, Integer> resources = new HashMap<>();
 
             for (ResourceNames resourceName : ResourceNames.values()) {
-                unitDTO.getResourceRequirements()
+                unitDTO.getResources()
                         .stream()
                         .filter(resource -> resource.getResourceName().equals(resourceName.getLabel()))
                         .findFirst()

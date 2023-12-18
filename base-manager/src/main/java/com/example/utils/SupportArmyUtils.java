@@ -48,13 +48,14 @@ public class SupportArmyUtils {
                 .ownerBaseId(originBase.getId())
                 .originBaseId(originBase.getId())
                 .destinationBaseId(destinationBase.getId())
+                .units(armyDTO.getUnits())
                 .arrivalTime(arrivalTime)
                 .build();
 
         /* TODO Remove hardcoded url */
-        /* Send Unit Recruitment Event to event-manager module */
-        String url = "http://localhost:8083/api/event/units/recruit";
-        restTemplate.postForObject(url, unitsRecruitmentEventDTO, UnitsRecruitmentEventDTO.class);
+        /* Send Support Army Event to event-manager module */
+        String url = "http://localhost:8083/api/event/supportArmy";
+        restTemplate.postForObject(url, supportArmyEventDTO, SupportArmyEventDTO.class);
 
     }
 

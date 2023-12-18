@@ -34,7 +34,7 @@ public abstract class Constants {
 
     public static final String NOT_ENOUGH_RESOURCES_TO_RECRUIT_UNITS = "There are not enough resources to recruit these units.";
 
-    public static final String BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS = "Recruiting %s requires %s (lv.%s)";
+    public static final String BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS = "Recruiting %s requires %s (lv.%s).";
 
     public static final String NOT_ENOUGH_UNITS_TO_SEND = "This base does not have the amount of troops that you want to send.";
 

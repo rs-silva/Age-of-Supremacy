@@ -2,6 +2,7 @@ package com.example.controllers;
 
 import com.example.dto.BuildingUpgradeEventDTO;
 import com.example.dto.SupportArmyEventDTO;
+import com.example.services.SupportArmyEventService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +18,17 @@ public class SupportArmyEventController {
 
     private static final Logger LOG = LoggerFactory.getLogger(SupportArmyEventController.class);
 
-    @PostMapping("send")
+    private final SupportArmyEventService supportArmyEventService;
+
+    public SupportArmyEventController(SupportArmyEventService supportArmyEventService) {
+        this.supportArmyEventService = supportArmyEventService;
+    }
+
+    @PostMapping()
     public ResponseEntity<BuildingUpgradeEventDTO> registerSupportArmyEvent(@Valid @RequestBody SupportArmyEventDTO supportArmyEventDTO) {
         LOG.info("Registering event = {}", supportArmyEventDTO);
 
-        buildingUpgradeEventService.registerEvent(buildingUpgradeEventDTO);
+        supportArmyEventService.registerEvent(supportArmyEventDTO);
 
         return ResponseEntity.ok().build();
     }
