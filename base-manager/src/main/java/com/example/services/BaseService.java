@@ -95,6 +95,8 @@ public class BaseService {
 
         List<Building> buildingList = base.getBuildings();
 
+        LOG.info("GET_BASE_INFORMATION = {}", base);
+
         List<BuildingDTO> buildingDTOList = buildingList
                 .stream()
                 .map(building -> {

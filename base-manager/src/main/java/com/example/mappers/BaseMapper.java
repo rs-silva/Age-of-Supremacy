@@ -9,6 +9,8 @@ import java.util.List;
 public abstract class BaseMapper {
 
     public static BaseDTO buildDTO(Base base, List<BuildingDTO> buildingDTOList) {
+        System.out.println("SUPPORT_UNITS = " + base.getSupportUnits());
+
         return BaseDTO
                 .builder()
                 .id(base.getId())
