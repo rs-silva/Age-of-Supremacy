@@ -111,7 +111,10 @@ public class BaseService {
 
         List<SupportArmyDTO> supportArmyDTOList = supportArmyList
                 .stream()
-                .map(SupportArmyMapper::fromEntityToDto)
+                .map(supportArmy -> {
+                    String ownerBaseName = getBaseName(supportArmy.getOwnerBaseId());
+                    return SupportArmyMapper.fromEntityToDto(supportArmy, ownerBaseName);
+                    })
                 .toList();
 
         return BaseMapper.buildDTO(base, buildingDTOList, supportArmyDTOList);
@@ -155,7 +158,6 @@ public class BaseService {
         unitRecruitmentUtils.completeUnitsRecruitment(base, unitsRecruitmentEventDTO);
     }
 
-    @Transactional
     public Base findById(UUID id) {
         Optional<Base> base = baseRepository.findById(id);
 
@@ -166,6 +168,11 @@ public class BaseService {
 
         resourcesUtils.updateBaseResources(base.get());
         return base.get();
+    }
+
+    public String getBaseName(UUID id) {
+        Base base = findById(id);
+        return base.getName();
     }
 
     public void updateBaseAndPlayerScore(Base base) {

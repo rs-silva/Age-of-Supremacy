@@ -23,7 +23,7 @@ public class AuthConfig {
         this.passwordUtils = passwordUtils;
     }
 
-    @Profile("test")
+    /*@Profile("test")
     @Bean
     public void populateDB() {
         List<User> userList = new ArrayList<>();
@@ -37,6 +37,6 @@ public class AuthConfig {
         userList.add(user2);
 
         userRepository.saveAll(userList);
-    }
+    }*/
 
 }

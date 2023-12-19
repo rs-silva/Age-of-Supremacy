@@ -16,6 +16,8 @@ public class SupportArmyDTO {
 
     private UUID ownerBaseId;
 
+    private String ownerBaseName;
+
     private Map<String, Integer> units;
 
 }
