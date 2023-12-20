@@ -99,8 +99,6 @@ public class BaseService {
         List<Building> buildingList = base.getBuildings();
         List<SupportArmy> supportArmyList = base.getSupportArmies();
 
-        LOG.info("GET_BASE_INFORMATION = {}", base);
-
         List<BuildingDTO> buildingDTOList = buildingList
                 .stream()
                 .map(building -> {
