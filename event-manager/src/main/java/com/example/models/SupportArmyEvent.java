@@ -38,6 +38,8 @@ public class SupportArmyEvent {
 
     private UUID destinationBaseId;
 
+    private UUID supportArmyId;
+
     @ElementCollection
     @CollectionTable(name = "support_armies_units", joinColumns = @JoinColumn(name = "support_army_id"))
     @MapKeyColumn(name = "unit_name")

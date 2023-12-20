@@ -52,6 +52,10 @@ public class SecurityConfig {
                 .access((authentication, context) ->
                         new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
 
+                .requestMatchers(antMatcher(HttpMethod.POST, "/api/supportArmy/completeReturn/**"))
+                .access((authentication, context) ->
+                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
+
                 .anyRequest().authenticated()
                 );
                 /*.formLogin()

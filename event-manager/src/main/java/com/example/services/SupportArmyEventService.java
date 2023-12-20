@@ -49,24 +49,30 @@ public class SupportArmyEventService {
             UUID ownerBaseId = supportArmyEvent.getOwnerBaseId();
             UUID originBaseId = supportArmyEvent.getOriginBaseId();
             UUID destinationBaseId = supportArmyEvent.getDestinationBaseId();
+            UUID supportArmyId = supportArmyEvent.getSupportArmyId();
+
+            String url;
 
             /* In case it is a send event */
             if (ownerBaseId.equals(originBaseId)) {
                 LOG.info("Triggering event to complete support army deployment from base {} to base {}. {}", supportArmyEvent.getOriginBaseId(), supportArmyEvent.getDestinationBaseId(), supportArmyEvent.getUnits());
                 /* TODO Remove hardcoded url */
-                String url = "http://localhost:8082/api/supportArmy/completeSend/" + originBaseId + "/to/" + destinationBaseId;
-                ArmyDTO armyDTO = ArmyDTO.builder()
-                        .units(supportArmyEvent.getUnits())
-                        .build();
-
-                restTemplate.postForObject(url, armyDTO, ArmyDTO.class);
-                supportArmyEventRepository.delete(supportArmyEvent);
+                url = "http://localhost:8082/api/supportArmy/completeSend/" + originBaseId + "/to/" + destinationBaseId;
             }
             /* In case it is a return event */
             else {
-
+                LOG.info("Triggering event to complete support army return to owner base {}. {}", supportArmyEvent.getOwnerBaseId(), supportArmyEvent.getUnits());
+                /* TODO Remove hardcoded url */
+                url = "http://localhost:8082/api/supportArmy/completeReturn/" + supportArmyId;
             }
 
+            ArmyDTO armyDTO = ArmyDTO.builder()
+                    .units(supportArmyEvent.getUnits())
+                    .build();
+
+            restTemplate.postForObject(url, armyDTO, ArmyDTO.class);
+
+            supportArmyEventRepository.delete(supportArmyEvent);
         }
 
     }

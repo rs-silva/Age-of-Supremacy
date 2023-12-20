@@ -8,11 +8,13 @@ public abstract class BaseManagerConstants {
 
     public static final String PLAYER_ID_FROM_REQUEST_DOES_NOT_MATCH_TOKEN_PLAYER_ID = "Player ID from request is different from the Player ID in the token";
 
-    public static final String PLAYER_NOT_FOUND = "Player with id %s was not found";
+    public static final String PLAYER_NOT_FOUND = "Player with id %s was not found!";
 
-    public static final String BASE_NOT_FOUND = "Base with id %s was not found";
+    public static final String BASE_NOT_FOUND = "Base with id %s was not found!";
 
-    public static final String BUILDING_NOT_FOUND = "Building with id %s was not found";
+    public static final String BUILDING_NOT_FOUND = "Building with id %s was not found!";
+
+    public static final String SUPPORT_ARMY_NOT_FOUND = "Support army with id %s was not found!";
 
     public static final String BUILDING_UPGRADE_NOT_FOUND_ERROR = "There was an error while retrieving the building's upgrade configuration.";
 
@@ -39,6 +41,8 @@ public abstract class BaseManagerConstants {
     public static final String BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS = "Recruiting %s requires %s (lv.%s).";
 
     public static final String NOT_ENOUGH_UNITS_TO_SEND = "This base does not have the amount of troops that you want to send.";
+
+    public static final String NOT_ENOUGH_UNITS_TO_RETURN = "This support army does not have the amount of troops that you want to return.";
 
     public static final String SUPPORT_ARMY_ORIGIN_BASE_AND_DESTINATION_BASE_ARE_EQUAL = "Cannot send support army to the base where the units belong.";
 }

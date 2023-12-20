@@ -2,6 +2,7 @@ package com.example.services;
 
 import com.example.dto.ArmyDTO;
 import com.example.exceptions.BadRequestException;
+import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
 import com.example.models.SupportArmy;
 import com.example.repositories.SupportArmyRepository;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -81,6 +83,53 @@ public class SupportArmyService {
         }
     }
 
+    @Transactional
+    public void createSupportArmyReturnRequest(UUID supportArmyId, ArmyDTO armyDTO) {
+        SupportArmy supportArmy = findById(supportArmyId);
+        Base ownerBase = baseService.findById(supportArmy.getOwnerBaseId());
+
+        baseService.validateBaseOwnership(ownerBase.getPlayer().getId());
+
+        supportArmyUtils.createSupportArmyReturnRequest(ownerBase, supportArmy, armyDTO);
+
+        boolean isSupportArmyEmpty = isSupportArmyEmpty(supportArmy);
+
+        if (isSupportArmyEmpty) {
+            supportArmyRepository.delete(supportArmy);
+        }
+    }
+
+    @Transactional
+    public void completeSupportArmyReturnRequest(UUID supportArmyId, ArmyDTO armyDTO) {
+        SupportArmy supportArmy = findById(supportArmyId);
+        Base ownerBase = baseService.findById(supportArmy.getOwnerBaseId());
+
+        Map<String, Integer> unitsToReturn = armyDTO.getUnits();
+        Map<String, Integer> ownerBaseUnits = ownerBase.getUnits();
+
+        for (String unitName : unitsToReturn.keySet()) {
+            int unitAmountToAdd = unitsToReturn.get(unitName);
+
+            int unitCurrentAmount = ownerBaseUnits.get(unitName);
+
+            int unitUpdatedAmount = unitCurrentAmount + unitAmountToAdd;
+
+            ownerBaseUnits.put(unitName, unitUpdatedAmount);
+        }
+
+    }
+
+    public SupportArmy findById(UUID id) {
+        Optional<SupportArmy> supportArmy = supportArmyRepository.findById(id);
+
+        if (supportArmy.isEmpty()) {
+            throw new ResourceNotFoundException(String.format(
+                    BaseManagerConstants.SUPPORT_ARMY_NOT_FOUND, id));
+        }
+
+        return supportArmy.get();
+    }
+
     private SupportArmy findByOwnerBaseId(List<SupportArmy> supportArmyList, UUID ownerBaseId) {
         for (SupportArmy supportArmy : supportArmyList) {
             if (supportArmy.getOwnerBaseId().equals(ownerBaseId)) {
@@ -90,4 +139,17 @@ public class SupportArmyService {
 
         return null;
     }
+
+    private boolean isSupportArmyEmpty(SupportArmy supportArmy) {
+        Map<String, Integer> supportArmyUnits = supportArmy.getUnits();
+
+        for (String unitName : supportArmyUnits.keySet()) {
+            if (supportArmyUnits.get(unitName) > 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

@@ -50,4 +50,26 @@ public class SupportArmyController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("return/{supportArmyId}")
+    public ResponseEntity<SupportArmy> createSupportArmyReturnRequest(@PathVariable UUID supportArmyId,
+                                                                      @Valid @RequestBody ArmyDTO armyDTO) {
+
+        LOG.info("Returning {} from support army with id {}", armyDTO, supportArmyId);
+
+        supportArmyService.createSupportArmyReturnRequest(supportArmyId, armyDTO);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("completeReturn/{supportArmyId}")
+    public ResponseEntity<SupportArmy> completeSupportArmyReturnRequest(@PathVariable UUID supportArmyId,
+                                                                        @Valid @RequestBody ArmyDTO armyDTO) {
+
+        LOG.info("{} from support army with id {} are arriving to owner base.", armyDTO, supportArmyId);
+
+        supportArmyService.completeSupportArmyReturnRequest(supportArmyId, armyDTO);
+
+        return ResponseEntity.ok().build();
+    }
 }
