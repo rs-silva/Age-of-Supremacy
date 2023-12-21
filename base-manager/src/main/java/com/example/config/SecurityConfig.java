@@ -27,7 +27,7 @@ public class SecurityConfig {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
-    /* List of APIs to be accessible only via localhost (i.e. other microservices) */
+    /* List of APIs to be accessible only via localhost (i.e. other microservices) for POST method */
     private final String[] PRIVATE_API_LIST = {
             "/api/building/completeUpgrade/**",
             "/api/base/*/finishBuilding/**",
