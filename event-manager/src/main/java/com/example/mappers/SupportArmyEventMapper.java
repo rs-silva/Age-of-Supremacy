@@ -10,7 +10,6 @@ public abstract class SupportArmyEventMapper {
                 .ownerBaseId(supportArmyEventDTO.getOwnerBaseId())
                 .originBaseId(supportArmyEventDTO.getOriginBaseId())
                 .destinationBaseId(supportArmyEventDTO.getDestinationBaseId())
-                .supportArmyId(supportArmyEventDTO.getSupportArmyId())
                 .units(supportArmyEventDTO.getUnits())
                 .completionTime(supportArmyEventDTO.getArrivalTime())
                 .build();

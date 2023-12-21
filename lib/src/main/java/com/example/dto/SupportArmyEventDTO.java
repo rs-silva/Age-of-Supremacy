@@ -21,8 +21,6 @@ public class SupportArmyEventDTO {
 
     private UUID destinationBaseId;
 
-    private UUID supportArmyId;
-
     private Map<String, Integer> units;
 
     private Timestamp arrivalTime;

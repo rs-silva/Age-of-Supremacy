@@ -49,7 +49,6 @@ public class SupportArmyEventService {
             UUID ownerBaseId = supportArmyEvent.getOwnerBaseId();
             UUID originBaseId = supportArmyEvent.getOriginBaseId();
             UUID destinationBaseId = supportArmyEvent.getDestinationBaseId();
-            UUID supportArmyId = supportArmyEvent.getSupportArmyId();
 
             String url;
 
@@ -63,7 +62,7 @@ public class SupportArmyEventService {
             else {
                 LOG.info("Triggering event to complete support army return to owner base {}. {}", supportArmyEvent.getOwnerBaseId(), supportArmyEvent.getUnits());
                 /* TODO Remove hardcoded url */
-                url = "http://localhost:8082/api/supportArmy/completeReturn/" + supportArmyId;
+                url = "http://localhost:8082/api/supportArmy/completeReturn/" + ownerBaseId;
             }
 
             ArmyDTO armyDTO = ArmyDTO.builder()

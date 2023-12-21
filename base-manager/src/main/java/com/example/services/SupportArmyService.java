@@ -100,9 +100,8 @@ public class SupportArmyService {
     }
 
     @Transactional
-    public void completeSupportArmyReturnRequest(UUID supportArmyId, ArmyDTO armyDTO) {
-        SupportArmy supportArmy = findById(supportArmyId);
-        Base ownerBase = baseService.findById(supportArmy.getOwnerBaseId());
+    public void completeSupportArmyReturnRequest(UUID ownerBaseId, ArmyDTO armyDTO) {
+        Base ownerBase = baseService.findById(ownerBaseId);
 
         Map<String, Integer> unitsToReturn = armyDTO.getUnits();
         Map<String, Integer> ownerBaseUnits = ownerBase.getUnits();

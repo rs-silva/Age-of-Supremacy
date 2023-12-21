@@ -62,13 +62,13 @@ public class SupportArmyController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("completeReturn/{supportArmyId}")
-    public ResponseEntity<SupportArmy> completeSupportArmyReturnRequest(@PathVariable UUID supportArmyId,
+    @PostMapping("completeReturn/{ownerBaseId}")
+    public ResponseEntity<SupportArmy> completeSupportArmyReturnRequest(@PathVariable UUID ownerBaseId,
                                                                         @Valid @RequestBody ArmyDTO armyDTO) {
 
-        LOG.info("{} from support army with id {} are arriving to owner base.", armyDTO, supportArmyId);
+        LOG.info("{} are returning to owner base {}.", armyDTO, ownerBaseId);
 
-        supportArmyService.completeSupportArmyReturnRequest(supportArmyId, armyDTO);
+        supportArmyService.completeSupportArmyReturnRequest(ownerBaseId, armyDTO);
 
         return ResponseEntity.ok().build();
     }

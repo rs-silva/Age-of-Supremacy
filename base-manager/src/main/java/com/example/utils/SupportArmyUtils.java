@@ -85,7 +85,6 @@ public class SupportArmyUtils {
                 .ownerBaseId(ownerBase.getId())
                 .originBaseId(supportArmy.getBaseBeingSupported().getId())
                 .destinationBaseId(ownerBase.getId())
-                .supportArmyId(supportArmy.getId())
                 .units(armyToReturn)
                 .arrivalTime(arrivalTime)
                 .build();
@@ -97,7 +96,7 @@ public class SupportArmyUtils {
     }
 
     private Timestamp calculateArrivalTime(Base originBase, Base destinationBase, ArmyDTO armyDTO) {
-        /* TODO calculate travelling time based on the bases' coordinates */
+        /* TODO calculate travelling time based on the bases' coordinates and the units' movement speed */
         int travellingTimeInSeconds = 5;
 
         return Timestamp.from(Instant.now().plusMillis(travellingTimeInSeconds * 1000));
