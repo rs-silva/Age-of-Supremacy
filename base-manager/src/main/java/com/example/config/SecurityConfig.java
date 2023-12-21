@@ -27,6 +27,15 @@ public class SecurityConfig {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
+    /* List of APIs to be accessible only via localhost (i.e. other microservices) */
+    private final String[] PRIVATE_API_LIST = {
+            "/api/building/completeUpgrade/**",
+            "/api/base/*/finishBuilding/**",
+            "/api/base/*/completeUnitsRecruitment",
+            "/api/supportArmy/completeSend/*/to/**",
+            "/api/supportArmy/completeReturn/**"
+    };
+
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -34,30 +43,19 @@ public class SecurityConfig {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers(antMatcher("/error")).permitAll()
-                .requestMatchers(antMatcher("/h2-console/**")).permitAll()
+                .requestMatchers(antMatcher("/h2-console/**")).permitAll());
 
-                .requestMatchers(antMatcher(HttpMethod.POST, "/api/building/completeUpgrade/**"))
-                .access((authentication, context) ->
-                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
+        for (String endpoint : PRIVATE_API_LIST) {
+               http
+                   .authorizeHttpRequests(auth -> auth
+                   .requestMatchers(antMatcher(HttpMethod.POST, endpoint))
+                   .access((authentication, context) ->
+                           new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest()))));
+        }
 
-                .requestMatchers(antMatcher(HttpMethod.POST, "/api/base/*/finishBuilding/**"))
-                .access((authentication, context) ->
-                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
+        http.authorizeHttpRequests(auth -> auth
+        .anyRequest().authenticated());
 
-                .requestMatchers(antMatcher(HttpMethod.POST, "/api/base/*/completeUnitsRecruitment"))
-                .access((authentication, context) ->
-                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
-
-                .requestMatchers(antMatcher(HttpMethod.POST, "/api/supportArmy/completeSend/*/to/**"))
-                .access((authentication, context) ->
-                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
-
-                .requestMatchers(antMatcher(HttpMethod.POST, "/api/supportArmy/completeReturn/**"))
-                .access((authentication, context) ->
-                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
-
-                .anyRequest().authenticated()
-                );
                 /*.formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/", true)

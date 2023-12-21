@@ -27,6 +27,11 @@ public class SecurityConfig {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
+    /* List of APIs to be accessible only via localhost (i.e. other microservices) */
+    private final String[] PRIVATE_API_LIST = {
+            "/api/event/**"
+    };
+
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -34,13 +39,18 @@ public class SecurityConfig {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers(antMatcher("/error")).permitAll()
-                .requestMatchers(antMatcher("/h2-console/**")).permitAll()
+                .requestMatchers(antMatcher("/h2-console/**")).permitAll());
 
-                .requestMatchers(antMatcher(HttpMethod.POST, "/api/event/**"))
+        for (String endpoint : PRIVATE_API_LIST) {
+            http
+                .authorizeHttpRequests(auth -> auth
+                .requestMatchers(antMatcher(HttpMethod.POST, endpoint))
                 .access((authentication, context) ->
-                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest())))
-                .anyRequest().authenticated()
-                );
+                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest()))));
+        }
+
+        http.authorizeHttpRequests(auth -> auth
+        .anyRequest().authenticated());
 
                 /*.formLogin()
                 .loginPage("/login")
