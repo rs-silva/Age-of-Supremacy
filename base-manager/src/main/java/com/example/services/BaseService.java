@@ -6,7 +6,7 @@ import com.example.dto.SupportArmyDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.dto.ArmyDTO;
 import com.example.enums.BasePropertiesNames;
-import com.example.exceptions.InternalServerErrorException;
+import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.mappers.BaseMapper;
 import com.example.mappers.BuildingMapper;
@@ -192,7 +192,7 @@ public class BaseService {
 
         if (!basePlayerId.equals(playerIdFromToken)) {
             LOG.error("User with id {} attempted to perform an operation in a base that belong to {}", playerIdFromToken, basePlayerId);
-            throw new InternalServerErrorException(BaseManagerConstants.BASE_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
+            throw new ForbiddenException(BaseManagerConstants.BASE_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
         }
     }
 

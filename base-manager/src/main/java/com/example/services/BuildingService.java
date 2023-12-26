@@ -1,5 +1,7 @@
 package com.example.services;
 
+import com.example.exceptions.BadRequestException;
+import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
@@ -89,7 +91,7 @@ public class BuildingService {
 
         if (doesBuildingAlreadyExist) {
             LOG.error("Attempted to create building {} in base {}, but this building already exists in this base.", buildingType, base.getId());
-            throw new InternalServerErrorException(BaseManagerConstants.BUILDING_ALREADY_EXISTS);
+            throw new BadRequestException(BaseManagerConstants.BUILDING_ALREADY_EXISTS);
         }
 
         resourcesUtils.updateBaseResources(base);
@@ -98,7 +100,7 @@ public class BuildingService {
 
         if (!areUpgradeRequirementsMet) {
             LOG.error("Attempted to create building {} in base {}, but there are not enough resources.", buildingType, base.getId());
-            throw new InternalServerErrorException(BaseManagerConstants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
+            throw new BadRequestException(BaseManagerConstants.NOT_ENOUGH_RESOURCES_TO_UPGRADE_BUILDING);
         }
 
         buildingGenerationUtils.requestBuildingGeneration(base, buildingType);
@@ -165,7 +167,7 @@ public class BuildingService {
 
         if (!buildingPlayerId.equals(playerIdFromToken)) {
             LOG.error("User with id {} attempted to perform an operation in a building that belong to player with id {}", playerIdFromToken, buildingPlayerId);
-            throw new InternalServerErrorException(BaseManagerConstants.BUILDING_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
+            throw new ForbiddenException(BaseManagerConstants.BUILDING_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
         }
     }
 

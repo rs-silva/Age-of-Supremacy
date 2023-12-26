@@ -5,6 +5,7 @@ import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.enums.BuildingNames;
 import com.example.enums.UnitNames;
 import com.example.enums.UnitsPropertiesNames;
+import com.example.exceptions.BadRequestException;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
@@ -75,7 +76,7 @@ public class UnitRecruitmentUtils {
         /* Infantry */
         if (units.containsKey(UnitNames.GROUND_INFANTRY.getLabel()) && units.get(UnitNames.GROUND_INFANTRY.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_INFANTRY) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.GROUND_INFANTRY.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_INFANTRY));
@@ -85,7 +86,7 @@ public class UnitRecruitmentUtils {
         /* Engineer */
         if (units.containsKey(UnitNames.GROUND_ENGINEER.getLabel()) && units.get(UnitNames.GROUND_ENGINEER.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ENGINEER) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.GROUND_ENGINEER.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ENGINEER));
@@ -95,7 +96,7 @@ public class UnitRecruitmentUtils {
         /* Sniper */
         if (units.containsKey(UnitNames.GROUND_SNIPER.getLabel()) && units.get(UnitNames.GROUND_SNIPER.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_SNIPER) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.GROUND_SNIPER.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_SNIPER));
@@ -107,13 +108,13 @@ public class UnitRecruitmentUtils {
         /* Armored Personnel Carrier */
         if (units.containsKey(UnitNames.ARMORED_APC.getLabel()) && units.get(UnitNames.ARMORED_APC.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_APC) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.ARMORED_APC.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_APC));
             }
             if (motorizedVehiclesFactoryLevel == null || motorizedVehiclesFactoryLevel < UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_APC) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.ARMORED_APC.getLabel(),
                         BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel(),
                         UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_APC));
@@ -123,13 +124,13 @@ public class UnitRecruitmentUtils {
         /* Main Battle Tank */
         if (units.containsKey(UnitNames.ARMORED_MBT.getLabel()) && units.get(UnitNames.ARMORED_MBT.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_MBT) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.ARMORED_MBT.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_MBT));
             }
             if (motorizedVehiclesFactoryLevel == null || motorizedVehiclesFactoryLevel < UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_MBT) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.ARMORED_MBT.getLabel(),
                         BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel(),
                         UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_MBT));
@@ -139,13 +140,13 @@ public class UnitRecruitmentUtils {
         /* Artillery */
         if (units.containsKey(UnitNames.ARMORED_ARTILLERY.getLabel()) && units.get(UnitNames.ARMORED_ARTILLERY.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ARTILLERY) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.ARMORED_ARTILLERY.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_ARTILLERY));
             }
             if (motorizedVehiclesFactoryLevel == null || motorizedVehiclesFactoryLevel < UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_ARTILLERY) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.ARMORED_ARTILLERY.getLabel(),
                         BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel(),
                         UnitsBuildingLevelRequirements.MOTORIZED_VEHICLES_FACTORY_LEVEL_FOR_ARTILLERY));
@@ -157,13 +158,13 @@ public class UnitRecruitmentUtils {
         /* Recon Plane */
         if (units.containsKey(UnitNames.AIR_RECON.getLabel()) && units.get(UnitNames.AIR_RECON.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_RECON_PLANE) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.AIR_RECON.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_RECON_PLANE));
             }
             if (aircraftFactoryLevel == null || aircraftFactoryLevel < UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_RECON_PLANE) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.AIR_RECON.getLabel(),
                         BuildingNames.AIRCRAFT_FACTORY.getLabel(),
                         UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_RECON_PLANE));
@@ -173,13 +174,13 @@ public class UnitRecruitmentUtils {
         /* Jet Fighter */
         if (units.containsKey(UnitNames.AIR_FIGHTER.getLabel()) && units.get(UnitNames.AIR_FIGHTER.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_JET_FIGHTER) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.AIR_FIGHTER.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_JET_FIGHTER));
             }
             if (aircraftFactoryLevel == null || aircraftFactoryLevel < UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_JET_FIGHTER) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.AIR_FIGHTER.getLabel(),
                         BuildingNames.AIRCRAFT_FACTORY.getLabel(),
                         UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_JET_FIGHTER));
@@ -189,13 +190,13 @@ public class UnitRecruitmentUtils {
         /* Bomber */
         if (units.containsKey(UnitNames.AIR_BOMBER.getLabel()) && units.get(UnitNames.AIR_BOMBER.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_BOMBER) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.AIR_BOMBER.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_BOMBER));
             }
             if (aircraftFactoryLevel == null || aircraftFactoryLevel < UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_BOMBER) {
-                throw new InternalServerErrorException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
+                throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
                         UnitNames.AIR_BOMBER.getLabel(),
                         BuildingNames.AIRCRAFT_FACTORY.getLabel(),
                         UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_BOMBER));
@@ -230,7 +231,7 @@ public class UnitRecruitmentUtils {
             double resourceAmount = baseResources.get(resourceName);
 
             if (resourceAmount < 0) {
-                throw new InternalServerErrorException(BaseManagerConstants.NOT_ENOUGH_RESOURCES_TO_RECRUIT_UNITS);
+                throw new BadRequestException(BaseManagerConstants.NOT_ENOUGH_RESOURCES_TO_RECRUIT_UNITS);
             }
         }
 

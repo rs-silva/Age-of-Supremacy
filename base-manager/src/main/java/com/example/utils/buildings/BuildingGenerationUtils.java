@@ -3,7 +3,7 @@ package com.example.utils.buildings;
 import com.example.dto.BuildingUpgradeEventDTO;
 import com.example.enums.BuildingNames;
 import com.example.enums.BuildingsPropertiesNames;
-import com.example.exceptions.InternalServerErrorException;
+import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
 import com.example.models.Building;
 import com.example.services.buildings.BuildingUtilsService;
@@ -115,7 +115,7 @@ public class BuildingGenerationUtils {
 
         if (doesBuildingAlreadyExist) {
             LOG.info("Attempted to create building {} in base {}, but this building already exists in this base.", buildingType, base.getId());
-            throw new InternalServerErrorException(BaseManagerConstants.BUILDING_ALREADY_EXISTS);
+            throw new BadRequestException(BaseManagerConstants.BUILDING_ALREADY_EXISTS);
         }
 
         /* TODO Call the generate method for the corresponding building */
@@ -123,7 +123,7 @@ public class BuildingGenerationUtils {
 
         if (newBuilding == null) {
             LOG.info("Attempted to finish generation of building {} in base {}, but the building's name is invalid.", buildingType, base.getId());
-            throw new InternalServerErrorException(BaseManagerConstants.INVALID_BUILDING_NAME);
+            throw new BadRequestException(BaseManagerConstants.INVALID_BUILDING_NAME);
         }
 
         return newBuilding;
