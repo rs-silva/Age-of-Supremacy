@@ -32,6 +32,11 @@
             <artifactId>event-manager</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>combat-manager</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

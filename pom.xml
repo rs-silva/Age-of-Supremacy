@@ -20,6 +20,7 @@
 		<module>base-manager</module>
 		<module>lib</module>
         <module>event-manager</module>
+        <module>combat-manager</module>
     </modules>
 	<properties>
 		<java.version>17</java.version>
