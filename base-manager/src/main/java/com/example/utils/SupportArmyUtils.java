@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Map;
 
 @Component
@@ -29,7 +28,7 @@ public class SupportArmyUtils {
 
         baseUtils.removeUnitsFromBase(originBase, armyToSend);
 
-        Timestamp arrivalTime = calculateArrivalTime(originBase, destinationBase, armyDTO);
+        Timestamp arrivalTime = baseUtils.calculateArmyArrivalTime(originBase, destinationBase, armyDTO);
 
         SupportArmyEventDTO supportArmyEventDTO = SupportArmyEventDTO.builder()
                 .ownerBaseId(originBase.getId())
@@ -66,7 +65,7 @@ public class SupportArmyUtils {
             }
         }
 
-        Timestamp arrivalTime = calculateArrivalTime(supportArmy.getBaseBeingSupported(), ownerBase, armyDTO);
+        Timestamp arrivalTime = baseUtils.calculateArmyArrivalTime(supportArmy.getBaseBeingSupported(), ownerBase, armyDTO);
 
         SupportArmyEventDTO supportArmyEventDTO = SupportArmyEventDTO.builder()
                 .ownerBaseId(ownerBase.getId())
@@ -80,13 +79,6 @@ public class SupportArmyUtils {
         /* Send Support Army Event to event-manager module */
         String url = "http://localhost:8083/api/event/supportArmy";
         restTemplate.postForObject(url, supportArmyEventDTO, SupportArmyEventDTO.class);
-    }
-
-    private Timestamp calculateArrivalTime(Base originBase, Base destinationBase, ArmyDTO armyDTO) {
-        /* TODO calculate travelling time based on the bases' coordinates and the units' movement speed */
-        int travellingTimeInSeconds = 5;
-
-        return Timestamp.from(Instant.now().plusMillis(travellingTimeInSeconds * 1000));
     }
 
 }
