@@ -12,13 +12,6 @@ import java.util.Map;
 @Component
 public class BaseUtils {
 
-    public Timestamp calculateArmyArrivalTime(Base originBase, Base destinationBase, ArmyDTO armyDTO) {
-        /* TODO calculate travelling time based on the bases' coordinates and the units' movement speed */
-        int travellingTimeInSeconds = 5;
-
-        return Timestamp.from(Instant.now().plusMillis(travellingTimeInSeconds * 1000));
-    }
-
     public void removeUnitsFromBase(Base base, Map<String, Integer> unitsToRemove) {
         Map<String, Integer> baseUnits = base.getUnits();
 

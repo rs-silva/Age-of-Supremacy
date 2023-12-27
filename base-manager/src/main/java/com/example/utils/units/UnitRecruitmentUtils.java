@@ -11,7 +11,7 @@ import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
 import com.example.models.Building;
 import com.example.utils.BaseManagerConstants;
-import com.example.utils.buildings.BuildingUtils;
+import com.example.utils.buildings.BuildingsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -29,13 +29,13 @@ public class UnitRecruitmentUtils {
 
     private final UnitConfigUtils unitConfigUtils;
 
-    private final BuildingUtils buildingUtils;
+    private final BuildingsUtils buildingsUtils;
 
     private final RestTemplate restTemplate;
 
-    public UnitRecruitmentUtils(UnitConfigUtils unitConfigUtils, BuildingUtils buildingUtils, RestTemplate restTemplate) {
+    public UnitRecruitmentUtils(UnitConfigUtils unitConfigUtils, BuildingsUtils buildingsUtils, RestTemplate restTemplate) {
         this.unitConfigUtils = unitConfigUtils;
-        this.buildingUtils = buildingUtils;
+        this.buildingsUtils = buildingsUtils;
         this.restTemplate = restTemplate;
     }
 
@@ -58,9 +58,9 @@ public class UnitRecruitmentUtils {
     }
 
     public void validateBuildingLevelRequirements(Base base, Map<String, Integer> units) {
-        Building barracks = buildingUtils.getBuilding(base, BuildingNames.BARRACKS.getLabel());
-        Building motorizedVehiclesFactory = buildingUtils.getBuilding(base, BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel());
-        Building aircraftFactory = buildingUtils.getBuilding(base, BuildingNames.AIRCRAFT_FACTORY.getLabel());
+        Building barracks = buildingsUtils.getBuilding(base, BuildingNames.BARRACKS.getLabel());
+        Building motorizedVehiclesFactory = buildingsUtils.getBuilding(base, BuildingNames.MOTORIZED_VEHICLES_FACTORY.getLabel());
+        Building aircraftFactory = buildingsUtils.getBuilding(base, BuildingNames.AIRCRAFT_FACTORY.getLabel());
 
         Integer barracksLevel = barracks == null ? null : barracks.getLevel();
         Integer motorizedVehiclesFactoryLevel = motorizedVehiclesFactory == null ? null : motorizedVehiclesFactory.getLevel();

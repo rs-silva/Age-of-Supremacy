@@ -5,6 +5,7 @@ import com.example.dto.SupportArmyEventDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
 import com.example.models.SupportArmy;
+import com.example.utils.units.UnitsUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,10 +17,13 @@ public class SupportArmyUtils {
 
     private final BaseUtils baseUtils;
 
+    private final UnitsUtils unitsUtils;
+
     private final RestTemplate restTemplate;
 
-    public SupportArmyUtils(BaseUtils baseUtils, RestTemplate restTemplate) {
+    public SupportArmyUtils(BaseUtils baseUtils, UnitsUtils unitsUtils, RestTemplate restTemplate) {
         this.baseUtils = baseUtils;
+        this.unitsUtils = unitsUtils;
         this.restTemplate = restTemplate;
     }
 
@@ -28,7 +32,7 @@ public class SupportArmyUtils {
 
         baseUtils.removeUnitsFromBase(originBase, armyToSend);
 
-        Timestamp arrivalTime = baseUtils.calculateArmyArrivalTime(originBase, destinationBase, armyDTO);
+        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armyDTO);
 
         SupportArmyEventDTO supportArmyEventDTO = SupportArmyEventDTO.builder()
                 .ownerBaseId(originBase.getId())
@@ -65,7 +69,7 @@ public class SupportArmyUtils {
             }
         }
 
-        Timestamp arrivalTime = baseUtils.calculateArmyArrivalTime(supportArmy.getBaseBeingSupported(), ownerBase, armyDTO);
+        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(supportArmy.getBaseBeingSupported(), ownerBase, armyDTO);
 
         SupportArmyEventDTO supportArmyEventDTO = SupportArmyEventDTO.builder()
                 .ownerBaseId(ownerBase.getId())

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class BuildingUtils {
+public class BuildingsUtils {
 
     public Building getBuilding(Base base, String buildingName) {
         List<Building> buildingList = base.getBuildings();
