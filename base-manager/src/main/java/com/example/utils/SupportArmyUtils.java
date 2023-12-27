@@ -15,32 +15,19 @@ import java.util.Map;
 @Component
 public class SupportArmyUtils {
 
+    private final BaseUtils baseUtils;
+
     private final RestTemplate restTemplate;
 
-    public SupportArmyUtils(RestTemplate restTemplate) {
+    public SupportArmyUtils(BaseUtils baseUtils, RestTemplate restTemplate) {
+        this.baseUtils = baseUtils;
         this.restTemplate = restTemplate;
     }
 
     public void createSupportArmySendRequest(Base originBase, Base destinationBase, ArmyDTO armyDTO) {
-        Map<String, Integer> baseUnits = originBase.getUnits();
         Map<String, Integer> armyToSend = armyDTO.getUnits();
 
-        for (String unitName : armyToSend.keySet()) {
-            int baseUnitCurrentAmount = baseUnits.get(unitName);
-            int unitAmountToSend = armyToSend.get(unitName);
-
-            int unitUpdatedAmount = baseUnitCurrentAmount - unitAmountToSend;
-            baseUnits.put(unitName, unitUpdatedAmount);
-        }
-
-        /* Check if the base had the necessary units to send (i.e. all base units' amounts are positive) */
-        for (String unitName : baseUnits.keySet()) {
-            int unitCurrentAmount = baseUnits.get(unitName);
-
-            if (unitCurrentAmount < 0) {
-                throw new BadRequestException(BaseManagerConstants.NOT_ENOUGH_UNITS_TO_SEND);
-            }
-        }
+        baseUtils.removeUnitsFromBase(originBase, armyToSend);
 
         Timestamp arrivalTime = calculateArrivalTime(originBase, destinationBase, armyDTO);
 
