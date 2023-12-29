@@ -28,7 +28,7 @@ public class SecurityConfig {
     }
 
     /* List of APIs to be accessible only via localhost (i.e. other microservices) for POST method */
-    private final String[] PRIVATE_API_LIST = {
+    private final String[] API_ACCESSED_ONLY_BY_LOCALHOST_LIST = {
             "/api/building/completeUpgrade/**",
             "/api/base/*/finishBuilding/**",
             "/api/base/*/completeUnitsRecruitment",
@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .requestMatchers(antMatcher("/error")).permitAll()
                 .requestMatchers(antMatcher("/h2-console/**")).permitAll());
 
-        for (String endpoint : PRIVATE_API_LIST) {
+        for (String endpoint : API_ACCESSED_ONLY_BY_LOCALHOST_LIST) {
                http
                    .authorizeHttpRequests(auth -> auth
                    .requestMatchers(antMatcher(HttpMethod.POST, endpoint))

@@ -2,7 +2,7 @@ package com.example.controllers;
 
 import com.example.dto.ArmyDTO;
 import com.example.models.SupportArmy;
-import com.example.services.CombatService;
+import com.example.services.BattleService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.UUID;
 
-@Controller
-@RequestMapping("api/combat")
-public class CombatController {
+@Controller("base-manager microservice")
+@RequestMapping("api/battle")
+public class BattleController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CombatController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BattleController.class);
 
-    private final CombatService combatService;
+    private final BattleService battleService;
 
-    public CombatController(CombatService combatService) {
-        this.combatService = combatService;
+    public BattleController(BattleService battleService) {
+        this.battleService = battleService;
     }
 
     @PostMapping("sendAttack/{originBaseId}/to/{destinationBaseId}")
@@ -34,7 +34,7 @@ public class CombatController {
 
         LOG.info("Sending attack with {} from base {} to base {}", armyDTO, originBaseId, destinationBaseId);
 
-        combatService.createAttackSendRequest(originBaseId, destinationBaseId, armyDTO);
+        battleService.createAttackSendRequest(originBaseId, destinationBaseId, armyDTO);
 
         return ResponseEntity.ok().build();
     }

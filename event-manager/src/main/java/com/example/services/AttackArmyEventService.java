@@ -62,16 +62,16 @@ public class AttackArmyEventService {
             else {
                 LOG.info("Triggering event to complete attack army return to owner base {}. {}", attackArmyEvent.getOwnerBaseId(), attackArmyEvent.getUnits());
                 /* TODO Remove hardcoded url */
-                url = "http://localhost:8082/api/supportArmy/completeReturn/" + ownerBaseId;
+                url = "http://localhost:8082/api/attackArmy/completeReturn/" + ownerBaseId;
             }
 
             ArmyDTO armyDTO = ArmyDTO.builder()
-                    .units(supportArmyEvent.getUnits())
+                    .units(attackArmyEvent.getUnits())
                     .build();
 
             restTemplate.postForObject(url, armyDTO, ArmyDTO.class);
 
-            attackArmyEventRepository.delete(supportArmyEvent);
+            attackArmyEventRepository.delete(attackArmyEvent);
         }
 
     }

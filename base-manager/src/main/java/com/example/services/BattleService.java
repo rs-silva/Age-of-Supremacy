@@ -14,8 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Service
-public class CombatService {
+@Service("base-manager microservice")
+public class BattleService {
 
     private final BaseService baseService;
 
@@ -25,7 +25,7 @@ public class CombatService {
 
     private final RestTemplate restTemplate;
 
-    public CombatService(BaseService baseService, BaseUtils baseUtils, UnitsUtils unitsUtils, RestTemplate restTemplate) {
+    public BattleService(BaseService baseService, BaseUtils baseUtils, UnitsUtils unitsUtils, RestTemplate restTemplate) {
         this.baseService = baseService;
         this.baseUtils = baseUtils;
         this.unitsUtils = unitsUtils;
@@ -57,7 +57,7 @@ public class CombatService {
 
         /* TODO Remove hardcoded url */
         /* Send Support Army Event to event-manager module */
-        String url = "http://localhost:8083/api/event/supportArmy";
+        String url = "http://localhost:8083/api/event/attackArmy";
         restTemplate.postForObject(url, armyMovementEventDTO, ArmyMovementEventDTO.class);
     }
 
