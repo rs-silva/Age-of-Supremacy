@@ -1,12 +1,12 @@
 package com.example.mappers;
 
 import com.example.dto.ArmyMovementEventDTO;
-import com.example.models.SupportArmyEvent;
+import com.example.models.AttackArmyEvent;
 
-public abstract class SupportArmyEventMapper {
+public abstract class AttackArmyEventMapper {
 
-    public static SupportArmyEvent fromDtoToEntity(ArmyMovementEventDTO armyMovementEventDTO) {
-        return SupportArmyEvent.builder()
+    public static AttackArmyEvent fromDtoToEntity(ArmyMovementEventDTO armyMovementEventDTO) {
+        return AttackArmyEvent.builder()
                 .ownerBaseId(armyMovementEventDTO.getOwnerBaseId())
                 .originBaseId(armyMovementEventDTO.getOriginBaseId())
                 .destinationBaseId(armyMovementEventDTO.getDestinationBaseId())

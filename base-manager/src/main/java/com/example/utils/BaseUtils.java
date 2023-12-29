@@ -1,12 +1,9 @@
 package com.example.utils;
 
-import com.example.dto.ArmyDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Map;
 
 @Component
@@ -17,9 +14,9 @@ public class BaseUtils {
 
         for (String unitName : unitsToRemove.keySet()) {
             int baseUnitCurrentAmount = baseUnits.get(unitName);
-            int unitAmountToSend = unitsToRemove.get(unitName);
+            int unitAmountToRemove = unitsToRemove.get(unitName);
 
-            int unitUpdatedAmount = baseUnitCurrentAmount - unitAmountToSend;
+            int unitUpdatedAmount = baseUnitCurrentAmount - unitAmountToRemove;
             baseUnits.put(unitName, unitUpdatedAmount);
         }
 

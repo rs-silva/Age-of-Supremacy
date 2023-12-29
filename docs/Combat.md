@@ -27,3 +27,15 @@ creates a return event to the attackers' origin base.
 - A battle report is created for the battle, which is updated each round and can be retrieved by the players
 involved. Each player will only be able to retrieve the information for the rounds
 they participated.
+
+### Communication Flow
+
+**Send Support Army:** base-manager --> event-manager -> base-manager
+
+**Cancel Support Army (out of battle):** base-manager --> event-manager --> base-manager
+
+**Cancel Support Army (in battle):** combat-manager --> event-manager --> base-manager
+
+**Send Attack Army:** base-manager --> event-manager --> combat-manager
+
+**Cancel Attack Army:** combat-manager --> event-manager --> base-manager

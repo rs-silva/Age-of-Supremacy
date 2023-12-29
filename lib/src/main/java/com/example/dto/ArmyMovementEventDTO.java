@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SupportArmyEventDTO {
+public class ArmyMovementEventDTO {
 
     private UUID ownerBaseId;
 

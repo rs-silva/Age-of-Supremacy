@@ -1,15 +1,17 @@
 package com.example.services;
 
 import com.example.dto.ArmyDTO;
+import com.example.dto.ArmyMovementEventDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
-import com.example.models.SupportArmy;
 import com.example.utils.BaseManagerConstants;
+import com.example.utils.BaseUtils;
+import com.example.utils.units.UnitsUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Service
@@ -17,8 +19,17 @@ public class CombatService {
 
     private final BaseService baseService;
 
-    public CombatService(BaseService baseService) {
+    private final BaseUtils baseUtils;
+
+    private final UnitsUtils unitsUtils;
+
+    private final RestTemplate restTemplate;
+
+    public CombatService(BaseService baseService, BaseUtils baseUtils, UnitsUtils unitsUtils, RestTemplate restTemplate) {
         this.baseService = baseService;
+        this.baseUtils = baseUtils;
+        this.unitsUtils = unitsUtils;
+        this.restTemplate = restTemplate;
     }
 
     @Transactional
@@ -32,45 +43,22 @@ public class CombatService {
 
         Base destinationBase = baseService.findById(destinationBaseId);
 
-        supportArmyUtils.createSupportArmySendRequest(originBase, destinationBase, armyDTO);
-    }
+        baseUtils.removeUnitsFromBase(originBase, armyDTO.getUnits());
 
-    @Transactional
-    public void completeSupportArmySendRequest(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
-        Base destinationBase = baseService.findById(destinationBaseId);
-        List<SupportArmy> destinationBaseCurrentSupportArmyList = destinationBase.getSupportArmies();
-        Map<String, Integer> newSupportUnits = armyDTO.getUnits();
+        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armyDTO);
 
-        SupportArmy supportArmy = findByOwnerBaseId(destinationBaseCurrentSupportArmyList, originBaseId);
+        ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
+                .ownerBaseId(originBaseId)
+                .originBaseId(originBaseId)
+                .destinationBaseId(destinationBaseId)
+                .units(armyDTO.getUnits())
+                .arrivalTime(arrivalTime)
+                .build();
 
-        /* If a support army from the origin base does not exist, create a new one */
-        if (supportArmy == null) {
-            SupportArmy newSupportArmy = SupportArmy.builder()
-                    .ownerBaseId(originBaseId)
-                    .baseBeingSupported(destinationBase)
-                    .units(newSupportUnits)
-                    .build();
-
-            supportArmyRepository.save(newSupportArmy);
-        }
-        /* If there's already a support army from the origin base, add the units from this new request */
-        else {
-            Map<String, Integer> destinationBaseCurrentSupportArmyUnits = supportArmy.getUnits();
-            for (String unitName : newSupportUnits.keySet()) {
-                int unitAmountToAdd = newSupportUnits.get(unitName);
-
-                if (destinationBaseCurrentSupportArmyUnits.containsKey(unitName)) {
-                    int unitCurrentAmount = destinationBaseCurrentSupportArmyUnits.get(unitName);
-
-                    int unitUpdatedAmount = unitCurrentAmount + unitAmountToAdd;
-
-                    destinationBaseCurrentSupportArmyUnits.put(unitName, unitUpdatedAmount);
-                }
-                else {
-                    destinationBaseCurrentSupportArmyUnits.put(unitName, unitAmountToAdd);
-                }
-            }
-        }
+        /* TODO Remove hardcoded url */
+        /* Send Support Army Event to event-manager module */
+        String url = "http://localhost:8083/api/event/supportArmy";
+        restTemplate.postForObject(url, armyMovementEventDTO, ArmyMovementEventDTO.class);
     }
 
 }

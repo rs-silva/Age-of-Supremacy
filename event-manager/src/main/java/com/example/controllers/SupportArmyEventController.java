@@ -1,7 +1,6 @@
 package com.example.controllers;
 
-import com.example.dto.BuildingUpgradeEventDTO;
-import com.example.dto.SupportArmyEventDTO;
+import com.example.dto.ArmyMovementEventDTO;
 import com.example.services.SupportArmyEventService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -25,10 +24,10 @@ public class SupportArmyEventController {
     }
 
     @PostMapping()
-    public ResponseEntity<BuildingUpgradeEventDTO> registerSupportArmyEvent(@Valid @RequestBody SupportArmyEventDTO supportArmyEventDTO) {
-        LOG.info("Registering event = {}", supportArmyEventDTO);
+    public ResponseEntity<ArmyMovementEventDTO> registerSupportArmyEvent(@Valid @RequestBody ArmyMovementEventDTO armyMovementEventDTO) {
+        LOG.info("Registering event = {}", armyMovementEventDTO);
 
-        supportArmyEventService.registerEvent(supportArmyEventDTO);
+        supportArmyEventService.registerEvent(armyMovementEventDTO);
 
         return ResponseEntity.ok().build();
     }

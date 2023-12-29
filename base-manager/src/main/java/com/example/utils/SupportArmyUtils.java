@@ -1,7 +1,7 @@
 package com.example.utils;
 
 import com.example.dto.ArmyDTO;
-import com.example.dto.SupportArmyEventDTO;
+import com.example.dto.ArmyMovementEventDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
 import com.example.models.SupportArmy;
@@ -34,7 +34,7 @@ public class SupportArmyUtils {
 
         Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armyDTO);
 
-        SupportArmyEventDTO supportArmyEventDTO = SupportArmyEventDTO.builder()
+        ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
                 .ownerBaseId(originBase.getId())
                 .originBaseId(originBase.getId())
                 .destinationBaseId(destinationBase.getId())
@@ -45,7 +45,7 @@ public class SupportArmyUtils {
         /* TODO Remove hardcoded url */
         /* Send Support Army Event to event-manager module */
         String url = "http://localhost:8083/api/event/supportArmy";
-        restTemplate.postForObject(url, supportArmyEventDTO, SupportArmyEventDTO.class);
+        restTemplate.postForObject(url, armyMovementEventDTO, ArmyMovementEventDTO.class);
     }
 
     public void createSupportArmyReturnRequest(Base ownerBase, SupportArmy supportArmy, ArmyDTO armyDTO) {
@@ -71,7 +71,7 @@ public class SupportArmyUtils {
 
         Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(supportArmy.getBaseBeingSupported(), ownerBase, armyDTO);
 
-        SupportArmyEventDTO supportArmyEventDTO = SupportArmyEventDTO.builder()
+        ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
                 .ownerBaseId(ownerBase.getId())
                 .originBaseId(supportArmy.getBaseBeingSupported().getId())
                 .destinationBaseId(ownerBase.getId())
@@ -82,7 +82,7 @@ public class SupportArmyUtils {
         /* TODO Remove hardcoded url */
         /* Send Support Army Event to event-manager module */
         String url = "http://localhost:8083/api/event/supportArmy";
-        restTemplate.postForObject(url, supportArmyEventDTO, SupportArmyEventDTO.class);
+        restTemplate.postForObject(url, armyMovementEventDTO, ArmyMovementEventDTO.class);
     }
 
 }

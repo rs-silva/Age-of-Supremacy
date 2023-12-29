@@ -1,7 +1,7 @@
 package com.example.services;
 
 import com.example.dto.ArmyDTO;
-import com.example.dto.SupportArmyEventDTO;
+import com.example.dto.ArmyMovementEventDTO;
 import com.example.mappers.SupportArmyEventMapper;
 import com.example.models.SupportArmyEvent;
 import com.example.repositories.SupportArmyEventRepository;
@@ -31,8 +31,8 @@ public class SupportArmyEventService {
         this.restTemplate = restTemplate;
     }
 
-    public void registerEvent(SupportArmyEventDTO supportArmyEventDTO) {
-        SupportArmyEvent supportArmyEvent = SupportArmyEventMapper.fromDtoToEntity(supportArmyEventDTO);
+    public void registerEvent(ArmyMovementEventDTO armyMovementEventDTO) {
+        SupportArmyEvent supportArmyEvent = SupportArmyEventMapper.fromDtoToEntity(armyMovementEventDTO);
         supportArmyEventRepository.save(supportArmyEvent);
     }
 
