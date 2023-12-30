@@ -56,7 +56,7 @@ public class BattleService {
                 .build();
 
         /* TODO Remove hardcoded url */
-        /* Send Support Army Event to event-manager module */
+        /* Send Attack Army Event to event-manager module */
         String url = "http://localhost:8083/api/event/attackArmy";
         restTemplate.postForObject(url, armyMovementEventDTO, ArmyMovementEventDTO.class);
     }

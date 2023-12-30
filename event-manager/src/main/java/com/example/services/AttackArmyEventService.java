@@ -44,7 +44,8 @@ public class AttackArmyEventService {
 
         List<AttackArmyEvent> attackArmyEventList = attackArmyEventRepository.findByCompletionTimeBefore(Timestamp.from(Instant.now()));
 
-        /* Trigger an event that sends a call to base-manager to recruit the units */
+        /* Trigger an event that sends a call to combat-manager with the attack units
+        * or to base-manager to return the units back to the origin base */
         for (AttackArmyEvent attackArmyEvent : attackArmyEventList) {
             UUID ownerBaseId = attackArmyEvent.getOwnerBaseId();
             UUID originBaseId = attackArmyEvent.getOriginBaseId();
