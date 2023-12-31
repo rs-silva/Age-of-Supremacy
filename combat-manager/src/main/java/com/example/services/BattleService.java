@@ -1,5 +1,7 @@
 package com.example.services;
 
+import com.example.dto.ArmyDTO;
+import com.example.models.Battle;
 import com.example.repositories.BattleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,5 +20,14 @@ public class BattleService {
         this.battleRepository = battleRepository;
     }
 
-    public findById(UUID )
+    public void generateBattle(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
+
+    }
+
+    public boolean isBattleInProgress(UUID baseId) {
+        Battle battle = battleRepository.findByBaseId(baseId);
+
+        return battle != null;
+    }
+
 }
