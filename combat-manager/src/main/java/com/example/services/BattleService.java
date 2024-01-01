@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service("combat-manager microservice")
@@ -22,6 +23,9 @@ public class BattleService {
 
     public void generateBattle(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
 
+        Battle battle = Battle.builder()
+                .defendingArmies(new ArrayList<>())
+                .build();
     }
 
     public boolean isBattleInProgress(UUID baseId) {

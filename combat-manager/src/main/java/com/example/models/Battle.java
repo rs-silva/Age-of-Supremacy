@@ -39,4 +39,12 @@ public class Battle {
     @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
     private List<Army> defendingArmies;
 
+    public void addAttackingArmy(Army army) {
+        this.attackingArmies.add(army);
+    }
+
+    public void addDefendingArmy(Army army) {
+        this.defendingArmies.add(army);
+    }
+
 }

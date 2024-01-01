@@ -21,11 +21,13 @@ public class AttackArmyService {
     public void addAttackArmy(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
         boolean isBattleInProgress = battleService.isBattleInProgress(destinationBaseId);
 
+        /* If there is a battle already ongoing, join this army in the attacking side */
         if (isBattleInProgress) {
 
         }
+        /* In case there isn't a battle already ongoing, start one */
         else {
-
+            battleService.generateBattle(originBaseId, destinationBaseId, armyDTO);
         }
 
     }
