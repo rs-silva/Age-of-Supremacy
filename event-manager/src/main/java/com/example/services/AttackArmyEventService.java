@@ -47,6 +47,7 @@ public class AttackArmyEventService {
         /* Trigger an event that sends a call to combat-manager with the attack units
         * or to base-manager to return the units back to the origin base */
         for (AttackArmyEvent attackArmyEvent : attackArmyEventList) {
+            UUID ownerPlayerId = attackArmyEvent.getOwnerPlayerId();
             UUID ownerBaseId = attackArmyEvent.getOwnerBaseId();
             UUID originBaseId = attackArmyEvent.getOriginBaseId();
             UUID destinationBaseId = attackArmyEvent.getDestinationBaseId();
@@ -57,7 +58,7 @@ public class AttackArmyEventService {
             if (ownerBaseId.equals(originBaseId)) {
                 LOG.info("Triggering event to complete attack army deployment from base {} to base {}. {}", attackArmyEvent.getOriginBaseId(), attackArmyEvent.getDestinationBaseId(), attackArmyEvent.getUnits());
                 /* TODO Remove hardcoded url */
-                url = "http://localhost:8084/api/attackArmy/completeSend/" + originBaseId + "/to/" + destinationBaseId;
+                url = "http://localhost:8084/api/attackArmy/completeSend/player/" + ownerPlayerId + "/from/" + originBaseId + "/to/" + destinationBaseId;
             }
             /* In case it is a return event */
             else {

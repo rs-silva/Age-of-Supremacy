@@ -27,14 +27,15 @@ public class AttackArmyController {
         this.attackArmyService = attackArmyService;
     }
 
-    @PostMapping("completeSend/{originBaseId}/to/{destinationBaseId}")
-    public ResponseEntity<ArmyMovementEventDTO> completeAttackArmySendRequest(@PathVariable UUID originBaseId,
+    @PostMapping("completeSend/player/{ownerPlayerId}/from/{originBaseId}/to/{destinationBaseId}")
+    public ResponseEntity<ArmyMovementEventDTO> completeAttackArmySendRequest(@PathVariable UUID ownerPlayerId,
+                                                                              @PathVariable UUID originBaseId,
                                                                               @PathVariable UUID destinationBaseId,
                                                                               @Valid @RequestBody ArmyDTO armyDTO) {
 
         LOG.info("Attack army {} is arriving to city {}", armyDTO.getUnits(), destinationBaseId);
 
-        attackArmyService.addAttackArmy(originBaseId, destinationBaseId, armyDTO);
+        attackArmyService.addAttackArmy(ownerPlayerId, originBaseId, destinationBaseId, armyDTO);
 
         return ResponseEntity.ok().build();
     }

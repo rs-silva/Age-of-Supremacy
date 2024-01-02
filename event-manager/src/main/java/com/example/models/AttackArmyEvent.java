@@ -32,6 +32,8 @@ public class AttackArmyEvent {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private UUID ownerPlayerId;
+
     private UUID ownerBaseId;
 
     private UUID originBaseId;

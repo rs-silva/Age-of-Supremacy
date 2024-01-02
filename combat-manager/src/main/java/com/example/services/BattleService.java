@@ -1,6 +1,6 @@
 package com.example.services;
 
-import com.example.dto.ArmyDTO;
+import com.example.models.Army;
 import com.example.models.Battle;
 import com.example.repositories.BattleRepository;
 import org.slf4j.Logger;
@@ -21,11 +21,16 @@ public class BattleService {
         this.battleRepository = battleRepository;
     }
 
-    public void generateBattle(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
-
+    public void generateBattle(Army attackingArmy, UUID destinationBaseId) {
         Battle battle = Battle.builder()
-                .defendingArmies(new ArrayList<>())
+                .baseId(destinationBaseId)
+                .defenseHealthPoints(500) /* TODO get defense HP */
+                .armies(new ArrayList<>())
                 .build();
+
+        battle.addArmy(attackingArmy);
+
+        battleRepository.save(battle);
     }
 
     public boolean isBattleInProgress(UUID baseId) {

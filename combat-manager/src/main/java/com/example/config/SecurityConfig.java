@@ -29,7 +29,7 @@ public class SecurityConfig {
 
     /* List of APIs to be accessible only via localhost (i.e. other microservices) for POST method */
     private final String[] API_ACCESSED_ONLY_BY_LOCALHOST_LIST = {
-            "/api/attackArmy/completeSend/*/to/**"
+            "/api/attackArmy/completeSend/player/*/from/*/to/**"
     };
 
     @Bean

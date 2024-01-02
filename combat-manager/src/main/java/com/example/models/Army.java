@@ -1,10 +1,13 @@
 package com.example.models;
 
+import com.example.enums.ArmyRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,6 +39,9 @@ public class Army {
     private UUID ownerPlayerId;
 
     private UUID ownerBaseId;
+
+    @Enumerated(EnumType.STRING)
+    private ArmyRole role;
 
     @JsonIgnore
     @ManyToOne

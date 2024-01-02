@@ -7,6 +7,7 @@ public abstract class AttackArmyEventMapper {
 
     public static AttackArmyEvent fromDtoToEntity(ArmyMovementEventDTO armyMovementEventDTO) {
         return AttackArmyEvent.builder()
+                .ownerPlayerId(armyMovementEventDTO.getOwnerPlayerId())
                 .ownerBaseId(armyMovementEventDTO.getOwnerBaseId())
                 .originBaseId(armyMovementEventDTO.getOriginBaseId())
                 .destinationBaseId(armyMovementEventDTO.getDestinationBaseId())

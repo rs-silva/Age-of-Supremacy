@@ -48,6 +48,7 @@ public class BattleService {
         Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armyDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
+                .ownerPlayerId(originBase.getPlayer().getId())
                 .ownerBaseId(originBaseId)
                 .originBaseId(originBaseId)
                 .destinationBaseId(destinationBaseId)

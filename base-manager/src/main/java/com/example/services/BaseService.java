@@ -111,7 +111,7 @@ public class BaseService {
                 .stream()
                 .map(supportArmy -> {
                     String ownerBaseName = getBaseName(supportArmy.getOwnerBaseId());
-                    return SupportArmyMapper.fromEntityToDto(supportArmy, ownerBaseName);
+                    return SupportArmyMapper.buildDTO(supportArmy, ownerBaseName);
                     })
                 .toList();
 

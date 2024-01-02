@@ -35,6 +35,7 @@ public class SupportArmyUtils {
         Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armyDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
+                .ownerPlayerId(originBase.getPlayer().getId())
                 .ownerBaseId(originBase.getId())
                 .originBaseId(originBase.getId())
                 .destinationBaseId(destinationBase.getId())
@@ -72,6 +73,7 @@ public class SupportArmyUtils {
         Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(supportArmy.getBaseBeingSupported(), ownerBase, armyDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
+                .ownerPlayerId(ownerBase.getPlayer().getId())
                 .ownerBaseId(ownerBase.getId())
                 .originBaseId(supportArmy.getBaseBeingSupported().getId())
                 .destinationBaseId(ownerBase.getId())

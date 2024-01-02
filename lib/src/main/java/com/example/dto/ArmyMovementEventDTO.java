@@ -15,6 +15,8 @@ import java.util.UUID;
 @Data
 public class ArmyMovementEventDTO {
 
+    private UUID ownerPlayerId;
+
     private UUID ownerBaseId;
 
     private UUID originBaseId;
