@@ -118,7 +118,6 @@ public class BuildingGenerationUtils {
             throw new BadRequestException(BaseManagerConstants.BUILDING_ALREADY_EXISTS);
         }
 
-        /* TODO Call the generate method for the corresponding building */
         Building newBuilding = buildingUtilsService.generateBuilding(buildingType);
 
         if (newBuilding == null) {
