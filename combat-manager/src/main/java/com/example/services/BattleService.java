@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.UUID;
 
-@Service("combat-manager microservice")
+@Service("combat-manager microservice BattleService")
 public class BattleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(BattleService.class);
@@ -28,7 +28,7 @@ public class BattleService {
                 .armies(new ArrayList<>())
                 .build();
 
-        battle.addArmy(attackingArmy);
+        attackingArmy.setBattle(battle);
 
         battleRepository.save(battle);
     }

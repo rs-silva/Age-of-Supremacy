@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.UUID;
 
-@Controller("combat-manager microservice")
+@Controller("combat-manager microservice AttackArmyController")
 @RequestMapping("api/attackArmy/")
 public class AttackArmyController {
 

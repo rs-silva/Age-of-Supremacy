@@ -95,6 +95,7 @@ public class BaseService {
     @Transactional
     public BaseDTO getBaseInformation(UUID baseId) {
         Base base = findById(baseId);
+        validateBaseOwnership(base.getPlayer().getId());
 
         List<Building> buildingList = base.getBuildings();
         List<SupportArmy> supportArmyList = base.getSupportArmies();

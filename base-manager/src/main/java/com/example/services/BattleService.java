@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Service("base-manager microservice")
+@Service("base-manager microservice BattleService")
 public class BattleService {
 
     private final BaseService baseService;
