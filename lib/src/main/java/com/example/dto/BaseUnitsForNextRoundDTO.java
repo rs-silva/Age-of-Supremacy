@@ -5,14 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class BaseCurrentUnitsDTO {
+public class BaseUnitsForNextRoundDTO {
 
     Map<String, Integer> ownUnits;
+
+    List<SupportArmyDTO> supportArmies;
 
 }

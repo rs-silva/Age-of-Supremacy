@@ -151,4 +151,8 @@ public class SupportArmyService {
         return true;
     }
 
+    public void delete(SupportArmy supportArmy) {
+        supportArmyRepository.delete(supportArmy);
+    }
+
 }

@@ -33,7 +33,8 @@ public class SecurityConfig {
             "/api/base/*/finishBuilding/**",
             "/api/base/*/completeUnitsRecruitment",
             "/api/supportArmy/completeSend/*/to/**",
-            "/api/supportArmy/completeReturn/**"
+            "/api/supportArmy/completeReturn/**",
+            "api/base/*/getUnitsForNextRound"
     };
 
     @Bean

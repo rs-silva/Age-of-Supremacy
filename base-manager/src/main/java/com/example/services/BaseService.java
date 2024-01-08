@@ -1,6 +1,7 @@
 package com.example.services;
 
 import com.example.dto.BaseDTO;
+import com.example.dto.BaseUnitsForNextRoundDTO;
 import com.example.dto.BuildingDTO;
 import com.example.dto.SupportArmyDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
@@ -17,6 +18,7 @@ import com.example.models.Player;
 import com.example.models.SupportArmy;
 import com.example.repositories.BaseRepository;
 import com.example.services.buildings.BuildingUtilsService;
+import com.example.utils.BaseUtils;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import com.example.interfaces.BaseSimpleView;
@@ -56,7 +58,11 @@ public class BaseService {
 
     private final UnitRecruitmentUtils unitRecruitmentUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils) {
+    private final BaseUtils baseUtils;
+
+    private final SupportArmyService supportArmyService;
+
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, BaseUtils baseUtils, SupportArmyService supportArmyService) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
@@ -64,6 +70,8 @@ public class BaseService {
         this.buildingUtilsService = buildingUtilsService;
         this.playerService = playerService;
         this.unitRecruitmentUtils = unitRecruitmentUtils;
+        this.baseUtils = baseUtils;
+        this.supportArmyService = supportArmyService;
     }
 
     public void generateBase(Player player) {
@@ -195,6 +203,33 @@ public class BaseService {
             LOG.error("User with id {} attempted to perform an operation in a base that belong to {}", playerIdFromToken, basePlayerId);
             throw new ForbiddenException(BaseManagerConstants.BASE_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
         }
+    }
+
+    @Transactional
+    public BaseUnitsForNextRoundDTO getBaseCurrentUnitsForNextRound(UUID baseId) {
+        Base base = findById(baseId);
+        BaseUnitsForNextRoundDTO baseUnitsForNextRoundDTO = new BaseUnitsForNextRoundDTO();
+        List<SupportArmyDTO> supportArmyDTOList = new ArrayList<>();
+
+        Map<String, Integer> ownUnits = base.getUnits();
+        baseUtils.removeUnitsFromBase(base, ownUnits);
+        baseUnitsForNextRoundDTO.setOwnUnits(ownUnits);
+
+        List<SupportArmy> supportArmiesList = base.getSupportArmies();
+        for (SupportArmy supportArmy : supportArmiesList) {
+            SupportArmyDTO supportArmyDTO = SupportArmyDTO.builder()
+                    .id(supportArmy.getId())
+                    .units(supportArmy.getUnits())
+                    .ownerBaseId(supportArmy.getOwnerBaseId())
+                    .build();
+
+            supportArmyDTOList.add(supportArmyDTO);
+
+            supportArmyService.delete(supportArmy);
+        }
+
+        baseUnitsForNextRoundDTO.setSupportArmies(supportArmyDTOList);
+        return baseUnitsForNextRoundDTO;
     }
 
     public List<BaseSimpleView> findAllByPlayerId(UUID playerId) {
