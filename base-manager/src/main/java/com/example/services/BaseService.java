@@ -218,7 +218,6 @@ public class BaseService {
         List<SupportArmy> supportArmiesList = base.getSupportArmies();
         for (SupportArmy supportArmy : supportArmiesList) {
             SupportArmyDTO supportArmyDTO = SupportArmyDTO.builder()
-                    .id(supportArmy.getId())
                     .units(supportArmy.getUnits())
                     .ownerBaseId(supportArmy.getOwnerBaseId())
                     .build();
