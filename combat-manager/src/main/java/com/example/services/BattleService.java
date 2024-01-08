@@ -24,9 +24,9 @@ public class BattleService {
         this.battleRepository = battleRepository;
     }
 
-    public void generateBattle(Army attackingArmy, UUID destinationBaseId) {
+    public void generateBattle(Army attackingArmy, UUID baseId) {
         Battle battle = Battle.builder()
-                .baseId(destinationBaseId)
+                .baseId(baseId)
                 .defenseHealthPoints(500) /* TODO get defense HP */
                 .armies(new ArrayList<>())
                 .build();

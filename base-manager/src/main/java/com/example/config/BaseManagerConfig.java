@@ -47,5 +47,4 @@ public class BaseManagerConfig {
         return new RestTemplate();
     }
 
-
 }

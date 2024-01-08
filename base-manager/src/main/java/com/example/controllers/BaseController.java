@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import com.example.dto.BaseCurrentUnitsDTO;
 import com.example.dto.BaseDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.dto.ArmyDTO;
@@ -77,6 +78,16 @@ public class BaseController {
                                                            @Valid @RequestBody UnitsRecruitmentEventDTO unitsRecruitmentEventDTO) {
 
         LOG.info("Received request to complete recruitment of {} in base {}", unitsRecruitmentEventDTO.getUnits(), baseId);
+
+        baseService.completeUnitsRecruitment(baseId, unitsRecruitmentEventDTO);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("{baseId}/getCurrentUnits")
+    public ResponseEntity<BaseCurrentUnitsDTO> getBaseCurrentUnits(@PathVariable UUID baseId) {
+
+        LOG.info("Received request to fetch base {} own units", baseId);
 
         baseService.completeUnitsRecruitment(baseId, unitsRecruitmentEventDTO);
 
