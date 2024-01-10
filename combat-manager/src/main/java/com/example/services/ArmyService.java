@@ -22,7 +22,7 @@ public class ArmyService {
         return armyRepository.findByBattleIdAndOwnerBaseId(battleId, ownerBaseId);
     }
 
-    public Army generateAttackingArmy(UUID ownerPlayerId, UUID originBaseId, ArmyDTO armyDTO, Battle battle) {
+    public void generateAttackingArmy(UUID ownerPlayerId, UUID originBaseId, ArmyDTO armyDTO, Battle battle) {
         Army army = Army.builder()
                 .ownerPlayerId(ownerPlayerId)
                 .ownerBaseId(originBaseId)
@@ -31,10 +31,10 @@ public class ArmyService {
                 .units(armyDTO.getUnits())
                 .build();
 
-        return armyRepository.save(army);
+        armyRepository.save(army);
     }
 
-    public Army generateDefendingArmy(UUID ownerPlayerId, UUID originBaseId, ArmyDTO armyDTO) {
+    public void generateDefendingArmy(UUID ownerPlayerId, UUID originBaseId, ArmyDTO armyDTO) {
         Army army = Army.builder()
                 .ownerPlayerId(ownerPlayerId)
                 .ownerBaseId(originBaseId)
@@ -42,6 +42,6 @@ public class ArmyService {
                 .units(armyDTO.getUnits())
                 .build();
 
-        return armyRepository.save(army);
+        armyRepository.save(army);
     }
 }
