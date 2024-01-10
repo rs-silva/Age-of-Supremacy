@@ -1,6 +1,6 @@
 package com.example.services;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
@@ -33,7 +33,7 @@ public class SupportArmyService {
     }
 
     @Transactional
-    public void createSupportArmySendRequest(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
+    public void createSupportArmySendRequest(UUID originBaseId, UUID destinationBaseId, ArmySimpleDTO armySimpleDTO) {
         if (originBaseId.equals(destinationBaseId)) {
             throw new BadRequestException(BaseManagerConstants.SUPPORT_ARMY_ORIGIN_BASE_AND_DESTINATION_BASE_ARE_EQUAL);
         }
@@ -43,14 +43,14 @@ public class SupportArmyService {
 
         Base destinationBase = baseService.findById(destinationBaseId);
 
-        supportArmyUtils.createSupportArmySendRequest(originBase, destinationBase, armyDTO);
+        supportArmyUtils.createSupportArmySendRequest(originBase, destinationBase, armySimpleDTO);
     }
 
     @Transactional
-    public void completeSupportArmySendRequest(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
+    public void completeSupportArmySendRequest(UUID originBaseId, UUID destinationBaseId, ArmySimpleDTO armySimpleDTO) {
         Base destinationBase = baseService.findById(destinationBaseId);
         List<SupportArmy> destinationBaseCurrentSupportArmyList = destinationBase.getSupportArmies();
-        Map<String, Integer> newSupportUnits = armyDTO.getUnits();
+        Map<String, Integer> newSupportUnits = armySimpleDTO.getUnits();
 
         SupportArmy supportArmy = findByOwnerBaseId(destinationBaseCurrentSupportArmyList, originBaseId);
 
@@ -73,13 +73,13 @@ public class SupportArmyService {
     }
 
     @Transactional
-    public void createSupportArmyReturnRequest(UUID supportArmyId, ArmyDTO armyDTO) {
+    public void createSupportArmyReturnRequest(UUID supportArmyId, ArmySimpleDTO armySimpleDTO) {
         SupportArmy supportArmy = findById(supportArmyId);
         Base ownerBase = baseService.findById(supportArmy.getOwnerBaseId());
 
         baseService.validateBaseOwnership(ownerBase.getPlayer().getId());
 
-        supportArmyUtils.createSupportArmyReturnRequest(ownerBase, supportArmy, armyDTO);
+        supportArmyUtils.createSupportArmyReturnRequest(ownerBase, supportArmy, armySimpleDTO);
 
         boolean isSupportArmyEmpty = isSupportArmyEmpty(supportArmy);
 
@@ -89,10 +89,10 @@ public class SupportArmyService {
     }
 
     @Transactional
-    public void completeSupportArmyReturnRequest(UUID ownerBaseId, ArmyDTO armyDTO) {
+    public void completeSupportArmyReturnRequest(UUID ownerBaseId, ArmySimpleDTO armySimpleDTO) {
         Base ownerBase = baseService.findById(ownerBaseId);
 
-        Map<String, Integer> unitsToReturn = armyDTO.getUnits();
+        Map<String, Integer> unitsToReturn = armySimpleDTO.getUnits();
         Map<String, Integer> ownerBaseUnits = ownerBase.getUnits();
 
         for (String unitName : unitsToReturn.keySet()) {

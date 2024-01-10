@@ -1,9 +1,9 @@
 package com.example.controllers;
 
-import com.example.dto.BaseUnitsForNextRoundDTO;
+import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.BaseDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.services.BaseService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -64,11 +64,11 @@ public class BaseController {
 
     @PostMapping("{baseId}/recruitUnits")
     public ResponseEntity<String> createUnitRecruitmentRequest(@PathVariable UUID baseId,
-                                                               @Valid @RequestBody ArmyDTO armyDTO) {
+                                                               @Valid @RequestBody ArmySimpleDTO armySimpleDTO) {
 
-        LOG.info("Received request to create {} in base {}", armyDTO, baseId);
+        LOG.info("Received request to create {} in base {}", armySimpleDTO, baseId);
 
-        baseService.createUnitRecruitmentRequest(baseId, armyDTO);
+        baseService.createUnitRecruitmentRequest(baseId, armySimpleDTO);
 
         return ResponseEntity.ok().build();
     }
@@ -85,12 +85,14 @@ public class BaseController {
     }
 
     @GetMapping("{baseId}/getUnitsForNextRound")
-    public ResponseEntity<BaseUnitsForNextRoundDTO> getBaseCurrentUnitsForNextRound(@PathVariable UUID baseId) {
+    public ResponseEntity<BattleNewUnitsForNextRoundDTO> getBaseCurrentUnitsForNextRound(@PathVariable UUID baseId) {
 
-        LOG.info("Received request to fetch base {} own units", baseId);
+        LOG.info("Received request to fetch base {} own units and support armies", baseId);
 
-        BaseUnitsForNextRoundDTO baseUnitsForNextRoundDTO = baseService.getBaseCurrentUnitsForBattlesNextRound(baseId);
+        BattleNewUnitsForNextRoundDTO battleNewUnitsForNextRoundDTO = baseService.getBaseCurrentUnitsForBattlesNextRound(baseId);
 
-        return ResponseEntity.ok().body(baseUnitsForNextRoundDTO);
+        LOG.info("New Units = {}", battleNewUnitsForNextRoundDTO);
+
+        return ResponseEntity.ok().body(battleNewUnitsForNextRoundDTO);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.controllers;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.models.SupportArmy;
 import com.example.services.BattleService;
 import jakarta.validation.Valid;
@@ -30,11 +30,11 @@ public class BattleController {
     @PostMapping("sendAttack/{originBaseId}/to/{destinationBaseId}")
     public ResponseEntity<SupportArmy> createSupportArmySendRequest(@PathVariable UUID originBaseId,
                                                                     @PathVariable UUID destinationBaseId,
-                                                                    @Valid @RequestBody ArmyDTO armyDTO) {
+                                                                    @Valid @RequestBody ArmySimpleDTO armySimpleDTO) {
 
-        LOG.info("Sending attack with {} from base {} to base {}", armyDTO, originBaseId, destinationBaseId);
+        LOG.info("Sending attack with {} from base {} to base {}", armySimpleDTO, originBaseId, destinationBaseId);
 
-        battleService.createAttackSendRequest(originBaseId, destinationBaseId, armyDTO);
+        battleService.createAttackSendRequest(originBaseId, destinationBaseId, armySimpleDTO);
 
         return ResponseEntity.ok().build();
     }

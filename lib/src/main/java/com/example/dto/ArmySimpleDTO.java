@@ -11,7 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Data
 @Builder
-public class ArmyDTO {
+public class ArmySimpleDTO {
 
     Map<String, Integer> units;
 

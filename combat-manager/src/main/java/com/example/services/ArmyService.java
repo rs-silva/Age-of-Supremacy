@@ -1,6 +1,5 @@
 package com.example.services;
 
-import com.example.dto.ArmyDTO;
 import com.example.enums.ArmyRole;
 import com.example.models.Army;
 import com.example.models.Battle;
@@ -8,6 +7,7 @@ import com.example.repositories.ArmyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -23,30 +23,28 @@ public class ArmyService {
         return armyRepository.findByBattleIdAndOwnerBaseId(battleId, ownerBaseId);
     }
 
-    public List<Army> findByBattleId(UUID battleId) {
-        return armyRepository.findByBattleId(battleId);
+    public List<Army> findByBattleIdAndRole(UUID battleId, ArmyRole armyRole) {
+        return armyRepository.findByBattleIdAndRole(battleId, armyRole);
     }
 
-    public void generateAttackingArmy(UUID ownerPlayerId, UUID originBaseId, ArmyDTO armyDTO, Battle battle) {
+    public void generateAttackingArmy(UUID ownerPlayerId, UUID ownerBaseId, Map<String, Integer> units, Battle battle) {
+        generateArmy(ownerPlayerId, ownerBaseId, units, battle, ArmyRole.ATTACKING);
+    }
+
+    public void generateDefendingArmy(UUID ownerPlayerId, UUID ownerBaseId, Map<String, Integer> units, Battle battle) {
+        generateArmy(ownerPlayerId, ownerBaseId, units, battle, ArmyRole.DEFENDING);
+    }
+
+    private void generateArmy(UUID ownerPlayerId, UUID ownerBaseId, Map<String, Integer> units, Battle battle, ArmyRole armyRole) {
         Army army = Army.builder()
                 .ownerPlayerId(ownerPlayerId)
-                .ownerBaseId(originBaseId)
-                .role(ArmyRole.ATTACKING)
+                .ownerBaseId(ownerBaseId)
+                .role(armyRole)
                 .battle(battle)
-                .units(armyDTO.getUnits())
+                .units(units)
                 .build();
 
         armyRepository.save(army);
     }
 
-    public void generateDefendingArmy(UUID ownerPlayerId, UUID originBaseId, ArmyDTO armyDTO) {
-        Army army = Army.builder()
-                .ownerPlayerId(ownerPlayerId)
-                .ownerBaseId(originBaseId)
-                .role(ArmyRole.DEFENDING)
-                .units(armyDTO.getUnits())
-                .build();
-
-        armyRepository.save(army);
-    }
 }

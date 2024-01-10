@@ -1,6 +1,6 @@
 package com.example.services;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.dto.ArmyMovementEventDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
@@ -33,7 +33,7 @@ public class BattleService {
     }
 
     @Transactional
-    public void createAttackSendRequest(UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
+    public void createAttackSendRequest(UUID originBaseId, UUID destinationBaseId, ArmySimpleDTO armySimpleDTO) {
         if (originBaseId.equals(destinationBaseId)) {
             throw new BadRequestException(BaseManagerConstants.ATTACK_ORIGIN_BASE_AND_DESTINATION_BASE_ARE_EQUAL);
         }
@@ -43,16 +43,16 @@ public class BattleService {
 
         Base destinationBase = baseService.findById(destinationBaseId);
 
-        baseUtils.removeUnitsFromBase(originBase, armyDTO.getUnits());
+        baseUtils.removeUnitsFromBase(originBase, armySimpleDTO.getUnits());
 
-        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armyDTO);
+        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armySimpleDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
                 .ownerPlayerId(originBase.getPlayer().getId())
                 .ownerBaseId(originBaseId)
                 .originBaseId(originBaseId)
                 .destinationBaseId(destinationBaseId)
-                .units(armyDTO.getUnits())
+                .units(armySimpleDTO.getUnits())
                 .arrivalTime(arrivalTime)
                 .build();
 

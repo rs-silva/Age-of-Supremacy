@@ -1,11 +1,12 @@
 package com.example.services;
 
+import com.example.dto.ArmyExtendedDTO;
 import com.example.dto.BaseDTO;
-import com.example.dto.BaseUnitsForNextRoundDTO;
+import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.BuildingDTO;
 import com.example.dto.SupportArmyDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.enums.BasePropertiesNames;
 import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceNotFoundException;
@@ -144,18 +145,18 @@ public class BaseService {
     }
 
     @Transactional
-    public void createUnitRecruitmentRequest(UUID baseId, ArmyDTO armyDTO) {
+    public void createUnitRecruitmentRequest(UUID baseId, ArmySimpleDTO armySimpleDTO) {
         Base base = findById(baseId);
 
         validateBaseOwnership(base.getPlayer().getId());
-        unitRecruitmentUtils.validateUnitsNames(armyDTO.getUnits());
-        unitRecruitmentUtils.validateBuildingLevelRequirements(base, armyDTO.getUnits());
+        unitRecruitmentUtils.validateUnitsNames(armySimpleDTO.getUnits());
+        unitRecruitmentUtils.validateBuildingLevelRequirements(base, armySimpleDTO.getUnits());
 
         resourcesUtils.updateBaseResources(base);
 
-        LOG.info("unitsRecruitmentDTO = {}", armyDTO);
+        LOG.info("unitsRecruitmentDTO = {}", armySimpleDTO);
 
-        unitRecruitmentUtils.createNewUnitRecruitmentRequest(base, armyDTO.getUnits());
+        unitRecruitmentUtils.createNewUnitRecruitmentRequest(base, armySimpleDTO.getUnits());
     }
 
     @Transactional
@@ -206,29 +207,40 @@ public class BaseService {
     }
 
     @Transactional
-    public BaseUnitsForNextRoundDTO getBaseCurrentUnitsForBattlesNextRound(UUID baseId) {
+    public BattleNewUnitsForNextRoundDTO getBaseCurrentUnitsForBattlesNextRound(UUID baseId) {
         Base base = findById(baseId);
-        BaseUnitsForNextRoundDTO baseUnitsForNextRoundDTO = new BaseUnitsForNextRoundDTO();
+        BattleNewUnitsForNextRoundDTO battleNewUnitsForNextRoundDTO = new BattleNewUnitsForNextRoundDTO();
+        List<ArmyExtendedDTO> armyExtendedDTOList = new ArrayList<>();
 
+        /* Base's own units */
         Map<String, Integer> ownUnits = base.getUnits();
         baseUtils.removeUnitsFromBase(base, ownUnits);
-        baseUnitsForNextRoundDTO.setOwnUnits(ownUnits);
+        ArmyExtendedDTO armyExtendedDTO = ArmyExtendedDTO.builder()
+                .ownerPlayerId(base.getPlayer().getId())
+                .ownerBaseId(baseId)
+                .units(ownUnits)
+                .build();
+        armyExtendedDTOList.add(armyExtendedDTO);
 
-        List<SupportArmyDTO> supportArmyDTOList = new ArrayList<>();
+        /* Support armies currently in the base */
         List<SupportArmy> supportArmiesList = base.getSupportArmies();
         for (SupportArmy supportArmy : supportArmiesList) {
-            SupportArmyDTO supportArmyDTO = SupportArmyDTO.builder()
+            UUID supportArmyOwnerBaseId = supportArmy.getOwnerBaseId();
+            Base supportArmyBase = findById(supportArmyOwnerBaseId);
+
+            ArmyExtendedDTO armyDTO = ArmyExtendedDTO.builder()
+                    .ownerPlayerId(supportArmyBase.getPlayer().getId())
+                    .ownerBaseId(supportArmyOwnerBaseId)
                     .units(supportArmy.getUnits())
-                    .ownerBaseId(supportArmy.getOwnerBaseId())
                     .build();
 
-            supportArmyDTOList.add(supportArmyDTO);
+            armyExtendedDTOList.add(armyDTO);
 
             supportArmyService.delete(supportArmy);
         }
 
-        baseUnitsForNextRoundDTO.setSupportArmies(supportArmyDTOList);
-        return baseUnitsForNextRoundDTO;
+        battleNewUnitsForNextRoundDTO.setSupportArmies(armyExtendedDTOList);
+        return battleNewUnitsForNextRoundDTO;
     }
 
     public List<BaseSimpleView> findAllByPlayerId(UUID playerId) {

@@ -1,6 +1,6 @@
 package com.example.services;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.models.Battle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class AttackArmyService {
     }
 
     @Transactional
-    public void addAttackArmy(UUID ownerPlayerId, UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
+    public void addAttackArmy(UUID ownerPlayerId, UUID originBaseId, UUID destinationBaseId, ArmySimpleDTO armySimpleDTO) {
         Battle battle = battleService.findByBaseId(destinationBaseId);
 
         /* If there is a battle already ongoing, join this army in the attacking side */
@@ -34,7 +34,7 @@ public class AttackArmyService {
         /* In case there isn't a battle already ongoing, start one */
         else {
             Battle newBattle = battleService.generateBattle(destinationBaseId);
-            armyService.generateAttackingArmy(ownerPlayerId, originBaseId, armyDTO, newBattle);
+            armyService.generateAttackingArmy(ownerPlayerId, originBaseId, armySimpleDTO.getUnits(), newBattle);
         }
 
     }

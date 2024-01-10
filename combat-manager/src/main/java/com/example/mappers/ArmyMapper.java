@@ -1,16 +1,16 @@
 package com.example.mappers;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.models.Army;
 
 import java.util.UUID;
 
 public abstract class ArmyMapper {
 
-    public Army buildDTO(UUID ownerBaseId, ArmyDTO armyDTO) {
+    public Army buildDTO(UUID ownerBaseId, ArmySimpleDTO armySimpleDTO) {
         return Army.builder()
                 .ownerBaseId(ownerBaseId)
-                .units(armyDTO.getUnits())
+                .units(armySimpleDTO.getUnits())
                 .build();
     }
 

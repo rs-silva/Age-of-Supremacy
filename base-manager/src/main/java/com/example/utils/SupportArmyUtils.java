@@ -1,6 +1,6 @@
 package com.example.utils;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.dto.ArmyMovementEventDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
@@ -27,12 +27,12 @@ public class SupportArmyUtils {
         this.restTemplate = restTemplate;
     }
 
-    public void createSupportArmySendRequest(Base originBase, Base destinationBase, ArmyDTO armyDTO) {
-        Map<String, Integer> armyToSend = armyDTO.getUnits();
+    public void createSupportArmySendRequest(Base originBase, Base destinationBase, ArmySimpleDTO armySimpleDTO) {
+        Map<String, Integer> armyToSend = armySimpleDTO.getUnits();
 
         baseUtils.removeUnitsFromBase(originBase, armyToSend);
 
-        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armyDTO);
+        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armySimpleDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
                 .ownerPlayerId(originBase.getPlayer().getId())
@@ -49,9 +49,9 @@ public class SupportArmyUtils {
         restTemplate.postForObject(url, armyMovementEventDTO, ArmyMovementEventDTO.class);
     }
 
-    public void createSupportArmyReturnRequest(Base ownerBase, SupportArmy supportArmy, ArmyDTO armyDTO) {
+    public void createSupportArmyReturnRequest(Base ownerBase, SupportArmy supportArmy, ArmySimpleDTO armySimpleDTO) {
         Map<String, Integer> supportArmyUnits = supportArmy.getUnits();
-        Map<String, Integer> armyToReturn = armyDTO.getUnits();
+        Map<String, Integer> armyToReturn = armySimpleDTO.getUnits();
 
         for (String unitName : armyToReturn.keySet()) {
             int supportArmyUnitCurrentAmount = supportArmyUnits.get(unitName);
@@ -70,7 +70,7 @@ public class SupportArmyUtils {
             }
         }
 
-        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(supportArmy.getBaseBeingSupported(), ownerBase, armyDTO);
+        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(supportArmy.getBaseBeingSupported(), ownerBase, armySimpleDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
                 .ownerPlayerId(ownerBase.getPlayer().getId())

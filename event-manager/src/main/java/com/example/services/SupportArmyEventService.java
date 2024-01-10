@@ -1,6 +1,6 @@
 package com.example.services;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.dto.ArmyMovementEventDTO;
 import com.example.mappers.SupportArmyEventMapper;
 import com.example.models.SupportArmyEvent;
@@ -65,11 +65,11 @@ public class SupportArmyEventService {
                 url = "http://localhost:8082/api/supportArmy/completeReturn/" + ownerBaseId;
             }
 
-            ArmyDTO armyDTO = ArmyDTO.builder()
+            ArmySimpleDTO armySimpleDTO = ArmySimpleDTO.builder()
                     .units(supportArmyEvent.getUnits())
                     .build();
 
-            restTemplate.postForObject(url, armyDTO, ArmyDTO.class);
+            restTemplate.postForObject(url, armySimpleDTO, ArmySimpleDTO.class);
 
             supportArmyEventRepository.delete(supportArmyEvent);
         }

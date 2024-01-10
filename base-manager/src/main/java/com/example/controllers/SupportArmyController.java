@@ -1,6 +1,6 @@
 package com.example.controllers;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.models.SupportArmy;
 import com.example.services.SupportArmyService;
 import jakarta.validation.Valid;
@@ -30,11 +30,11 @@ public class SupportArmyController {
     @PostMapping("send/{originBaseId}/to/{destinationBaseId}")
     public ResponseEntity<SupportArmy> createSupportArmySendRequest(@PathVariable UUID originBaseId,
                                                                     @PathVariable UUID destinationBaseId,
-                                                                    @Valid @RequestBody ArmyDTO armyDTO) {
+                                                                    @Valid @RequestBody ArmySimpleDTO armySimpleDTO) {
 
-        LOG.info("Sending support army with {} from base {} to base {}", armyDTO, originBaseId, destinationBaseId);
+        LOG.info("Sending support army with {} from base {} to base {}", armySimpleDTO, originBaseId, destinationBaseId);
 
-        supportArmyService.createSupportArmySendRequest(originBaseId, destinationBaseId, armyDTO);
+        supportArmyService.createSupportArmySendRequest(originBaseId, destinationBaseId, armySimpleDTO);
 
         return ResponseEntity.ok().build();
     }
@@ -42,33 +42,33 @@ public class SupportArmyController {
     @PostMapping("completeSend/{originBaseId}/to/{destinationBaseId}")
     public ResponseEntity<SupportArmy> completeSupportArmySendRequest(@PathVariable UUID originBaseId,
                                                                       @PathVariable UUID destinationBaseId,
-                                                                      @Valid @RequestBody ArmyDTO armyDTO) {
+                                                                      @Valid @RequestBody ArmySimpleDTO armySimpleDTO) {
 
-        LOG.info("{} are arriving to base {}", armyDTO, destinationBaseId);
+        LOG.info("{} are arriving to base {}", armySimpleDTO, destinationBaseId);
 
-        supportArmyService.completeSupportArmySendRequest(originBaseId, destinationBaseId, armyDTO);
+        supportArmyService.completeSupportArmySendRequest(originBaseId, destinationBaseId, armySimpleDTO);
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("return/{supportArmyId}")
     public ResponseEntity<SupportArmy> createSupportArmyReturnRequest(@PathVariable UUID supportArmyId,
-                                                                      @Valid @RequestBody ArmyDTO armyDTO) {
+                                                                      @Valid @RequestBody ArmySimpleDTO armySimpleDTO) {
 
-        LOG.info("Returning {} from support army with id {}", armyDTO, supportArmyId);
+        LOG.info("Returning {} from support army with id {}", armySimpleDTO, supportArmyId);
 
-        supportArmyService.createSupportArmyReturnRequest(supportArmyId, armyDTO);
+        supportArmyService.createSupportArmyReturnRequest(supportArmyId, armySimpleDTO);
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("completeReturn/{ownerBaseId}")
     public ResponseEntity<SupportArmy> completeSupportArmyReturnRequest(@PathVariable UUID ownerBaseId,
-                                                                        @Valid @RequestBody ArmyDTO armyDTO) {
+                                                                        @Valid @RequestBody ArmySimpleDTO armySimpleDTO) {
 
-        LOG.info("{} are returning to owner base {}.", armyDTO, ownerBaseId);
+        LOG.info("{} are returning to owner base {}.", armySimpleDTO, ownerBaseId);
 
-        supportArmyService.completeSupportArmyReturnRequest(ownerBaseId, armyDTO);
+        supportArmyService.completeSupportArmyReturnRequest(ownerBaseId, armySimpleDTO);
 
         return ResponseEntity.ok().build();
     }

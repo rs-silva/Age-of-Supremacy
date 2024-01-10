@@ -1,6 +1,6 @@
 package com.example.controllers;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.dto.ArmyMovementEventDTO;
 import com.example.services.AttackArmyService;
 import jakarta.validation.Valid;
@@ -31,11 +31,11 @@ public class AttackArmyController {
     public ResponseEntity<ArmyMovementEventDTO> completeAttackArmySendRequest(@PathVariable UUID ownerPlayerId,
                                                                               @PathVariable UUID originBaseId,
                                                                               @PathVariable UUID destinationBaseId,
-                                                                              @Valid @RequestBody ArmyDTO armyDTO) {
+                                                                              @Valid @RequestBody ArmySimpleDTO armySimpleDTO) {
 
-        LOG.info("Attack army {} is arriving to city {}", armyDTO.getUnits(), destinationBaseId);
+        LOG.info("Attack army {} is arriving to city {}", armySimpleDTO.getUnits(), destinationBaseId);
 
-        attackArmyService.addAttackArmy(ownerPlayerId, originBaseId, destinationBaseId, armyDTO);
+        attackArmyService.addAttackArmy(ownerPlayerId, originBaseId, destinationBaseId, armySimpleDTO);
 
         return ResponseEntity.ok().build();
     }
