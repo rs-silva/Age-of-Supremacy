@@ -51,13 +51,21 @@ public class BattleService {
         for (Battle battle : battleList) {
             UUID battleId = battle.getId();
             UUID baseId = battle.getBaseId();
+            List<Army> attackingArmies = new ArrayList<>();
+            List<Army> defendingArmies = new ArrayList<>();
 
-            /* Fetch the new own units and/or support armies in the base from base-manager */
-            BaseUnitsForNextRoundDTO baseUnitsForNextRoundDTO = battleUtils.getBaseCurrentUnitsForNextRound(battle);
+            List<Army> allArmies = armyService.findByBattleId(battleId);
 
-            /* Update base own units */
-            Army baseCurrentOwnUnits = armyService.findByBattleIdAndOwnerBaseId(battleId, baseId);
+            setupRoundNewUnits(battle);
         }
+    }
+
+    private void setupRoundNewUnits(Battle battle) {
+        /* Fetch the new own units and/or support armies in the base from base-manager */
+        BaseUnitsForNextRoundDTO baseUnitsForNextRoundDTO = battleUtils.getBaseCurrentUnitsForNextRound(battle);
+
+        /* Update base own units */
+        Army baseCurrentOwnUnits = armyService.findByBattleIdAndOwnerBaseId(battle.getId(), battle.getBaseId());
     }
 
     public Battle findByBaseId(UUID baseId) {

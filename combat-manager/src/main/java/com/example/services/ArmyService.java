@@ -7,6 +7,7 @@ import com.example.models.Battle;
 import com.example.repositories.ArmyRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +21,10 @@ public class ArmyService {
 
     public Army findByBattleIdAndOwnerBaseId(UUID battleId, UUID ownerBaseId) {
         return armyRepository.findByBattleIdAndOwnerBaseId(battleId, ownerBaseId);
+    }
+
+    public List<Army> findByBattleId(UUID battleId) {
+        return armyRepository.findByBattleId(battleId);
     }
 
     public void generateAttackingArmy(UUID ownerPlayerId, UUID originBaseId, ArmyDTO armyDTO, Battle battle) {
