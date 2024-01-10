@@ -47,12 +47,13 @@ public class BattleService {
     }
 
     /* Runs the next round for each battle occurring */
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000)
     @Transactional
     public void runNextRoundForEachBattle() {
         List<Battle> battleList = battleRepository.findAll();
 
         for (Battle battle : battleList) {
+            LOG.info("Battle {} next round", battle);
             UUID battleId = battle.getId();
             UUID baseId = battle.getBaseId();
 
@@ -60,6 +61,9 @@ public class BattleService {
 
             List<Army> attackingArmies = armyService.findByBattleIdAndRole(battleId, ArmyRole.ATTACKING);
             List<Army> defendingArmies = armyService.findByBattleIdAndRole(battleId, ArmyRole.DEFENDING);
+
+            LOG.info("Attacking Armies = {}", attackingArmies.toString());
+            LOG.info("Defending Armies = {}", defendingArmies.toString());
         }
     }
 
