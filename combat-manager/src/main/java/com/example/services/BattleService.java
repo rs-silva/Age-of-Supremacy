@@ -1,8 +1,10 @@
 package com.example.services;
 
+import com.example.dto.BaseUnitsForNextRoundDTO;
 import com.example.models.Army;
 import com.example.models.Battle;
 import com.example.repositories.BattleRepository;
+import com.example.utils.BattleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,20 +22,24 @@ public class BattleService {
 
     private final BattleRepository battleRepository;
 
-    public BattleService(BattleRepository battleRepository) {
+    private final BattleUtils battleUtils;
+
+    private final ArmyService armyService;
+
+    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService) {
         this.battleRepository = battleRepository;
+        this.battleUtils = battleUtils;
+        this.armyService = armyService;
     }
 
-    public void generateBattle(Army attackingArmy, UUID baseId) {
+    public Battle generateBattle(UUID baseId) {
         Battle battle = Battle.builder()
                 .baseId(baseId)
                 .defenseHealthPoints(500) /* TODO get defense HP */
                 .armies(new ArrayList<>())
                 .build();
 
-        attackingArmy.setBattle(battle);
-
-        battleRepository.save(battle);
+        return battleRepository.save(battle);
     }
 
     /* Runs the next round for each battle occurring */
@@ -43,14 +49,19 @@ public class BattleService {
         List<Battle> battleList = battleRepository.findAll();
 
         for (Battle battle : battleList) {
+            UUID battleId = battle.getId();
+            UUID baseId = battle.getBaseId();
 
+            /* Fetch the new own units and/or support armies in the base from base-manager */
+            BaseUnitsForNextRoundDTO baseUnitsForNextRoundDTO = battleUtils.getBaseCurrentUnitsForNextRound(battle);
+
+            /* Update base own units */
+            Army baseCurrentOwnUnits = armyService.findByBattleIdAndOwnerBaseId(battleId, baseId);
         }
     }
 
-    public boolean isBattleInProgress(UUID baseId) {
-        Battle battle = battleRepository.findByBaseId(baseId);
-
-        return battle != null;
+    public Battle findByBaseId(UUID baseId) {
+        return battleRepository.findByBaseId(baseId);
     }
 
 }

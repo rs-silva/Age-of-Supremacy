@@ -206,15 +206,15 @@ public class BaseService {
     }
 
     @Transactional
-    public BaseUnitsForNextRoundDTO getBaseCurrentUnitsForNextRound(UUID baseId) {
+    public BaseUnitsForNextRoundDTO getBaseCurrentUnitsForBattlesNextRound(UUID baseId) {
         Base base = findById(baseId);
         BaseUnitsForNextRoundDTO baseUnitsForNextRoundDTO = new BaseUnitsForNextRoundDTO();
-        List<SupportArmyDTO> supportArmyDTOList = new ArrayList<>();
 
         Map<String, Integer> ownUnits = base.getUnits();
         baseUtils.removeUnitsFromBase(base, ownUnits);
         baseUnitsForNextRoundDTO.setOwnUnits(ownUnits);
 
+        List<SupportArmyDTO> supportArmyDTOList = new ArrayList<>();
         List<SupportArmy> supportArmiesList = base.getSupportArmies();
         for (SupportArmy supportArmy : supportArmiesList) {
             SupportArmyDTO supportArmyDTO = SupportArmyDTO.builder()

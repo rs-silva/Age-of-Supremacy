@@ -1,6 +1,6 @@
 package com.example.utils;
 
-import com.example.dto.ArmyDTO;
+import com.example.dto.BaseUnitsForNextRoundDTO;
 import com.example.models.Battle;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -16,15 +16,13 @@ public class BattleUtils {
         this.restTemplate = restTemplate;
     }
 
-    public void getBaseOwnUnits(Battle battle) {
+    public BaseUnitsForNextRoundDTO getBaseCurrentUnitsForNextRound(Battle battle) {
         UUID baseId = battle.getBaseId();
 
         /* TODO Remove hardcoded url */
-        /* Send Support Army Event to event-manager module */
-        String url = "http://localhost:8082/api/event/supportArmy";
-        ArmyDTO armyDTO = restTemplate.getForEntity(url, ArmyDTO.class).getBody();
-
-
+        /* Get current units sit in the base from the base-manager module */
+        String url = "http://localhost:8082/api/base/" + baseId + "/getUnitsForNextRound";
+        return restTemplate.getForEntity(url, BaseUnitsForNextRoundDTO.class).getBody();
     }
 
 }

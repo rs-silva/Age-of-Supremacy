@@ -1,9 +1,7 @@
 package com.example.services;
 
 import com.example.dto.ArmyDTO;
-import com.example.enums.ArmyRole;
-import com.example.models.Army;
-import com.example.repositories.ArmyRepository;
+import com.example.models.Battle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,38 +16,27 @@ public class AttackArmyService {
 
     private final BattleService battleService;
 
-    private final ArmyRepository armyRepository;
+    private final ArmyService armyService;
 
-    public AttackArmyService(BattleService battleService, ArmyRepository armyRepository) {
+    public AttackArmyService(BattleService battleService, ArmyService armyService) {
         this.battleService = battleService;
-        this.armyRepository = armyRepository;
+        this.armyService = armyService;
     }
 
     @Transactional
     public void addAttackArmy(UUID ownerPlayerId, UUID originBaseId, UUID destinationBaseId, ArmyDTO armyDTO) {
-        boolean isBattleInProgress = battleService.isBattleInProgress(destinationBaseId);
+        Battle battle = battleService.findByBaseId(destinationBaseId);
 
         /* If there is a battle already ongoing, join this army in the attacking side */
-        if (isBattleInProgress) {
-
+        if (battle != null) {
+            /* TODO Check via attacking owner base id if there is already an attack army from this base */
         }
         /* In case there isn't a battle already ongoing, start one */
         else {
-            Army army = generateAttackingArmy(ownerPlayerId, originBaseId, armyDTO);
-            battleService.generateBattle(army, destinationBaseId);
+            Battle newBattle = battleService.generateBattle(destinationBaseId);
+            armyService.generateAttackingArmy(ownerPlayerId, originBaseId, armyDTO, newBattle);
         }
 
-    }
-
-    private Army generateAttackingArmy(UUID ownerPlayerId, UUID originBaseId, ArmyDTO armyDTO) {
-        Army army = Army.builder()
-                .ownerPlayerId(ownerPlayerId)
-                .ownerBaseId(originBaseId)
-                .role(ArmyRole.ATTACKING)
-                .units(armyDTO.getUnits())
-                .build();
-
-        return armyRepository.save(army);
     }
 
 }

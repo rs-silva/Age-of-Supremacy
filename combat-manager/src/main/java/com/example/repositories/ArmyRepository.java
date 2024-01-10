@@ -9,5 +9,7 @@ import java.util.UUID;
 @Repository
 public interface ArmyRepository extends JpaRepository<Army, UUID> {
 
+    Army findByBattleIdAndOwnerBaseId(UUID battleId, UUID ownerBaseId);
+
 }
 

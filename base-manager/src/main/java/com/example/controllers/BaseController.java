@@ -89,7 +89,7 @@ public class BaseController {
 
         LOG.info("Received request to fetch base {} own units", baseId);
 
-        BaseUnitsForNextRoundDTO baseUnitsForNextRoundDTO = baseService.getBaseCurrentUnitsForNextRound(baseId);
+        BaseUnitsForNextRoundDTO baseUnitsForNextRoundDTO = baseService.getBaseCurrentUnitsForBattlesNextRound(baseId);
 
         return ResponseEntity.ok().body(baseUnitsForNextRoundDTO);
     }

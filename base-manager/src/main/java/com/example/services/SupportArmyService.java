@@ -6,6 +6,7 @@ import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
 import com.example.models.SupportArmy;
 import com.example.repositories.SupportArmyRepository;
+import com.example.utils.ArmyUtils;
 import com.example.utils.BaseManagerConstants;
 import com.example.utils.SupportArmyUtils;
 import org.springframework.stereotype.Service;
@@ -66,20 +67,8 @@ public class SupportArmyService {
         /* If there's already a support army from the origin base, add the units from this new request */
         else {
             Map<String, Integer> destinationBaseCurrentSupportArmyUnits = supportArmy.getUnits();
-            for (String unitName : newSupportUnits.keySet()) {
-                int unitAmountToAdd = newSupportUnits.get(unitName);
-
-                if (destinationBaseCurrentSupportArmyUnits.containsKey(unitName)) {
-                    int unitCurrentAmount = destinationBaseCurrentSupportArmyUnits.get(unitName);
-
-                    int unitUpdatedAmount = unitCurrentAmount + unitAmountToAdd;
-
-                    destinationBaseCurrentSupportArmyUnits.put(unitName, unitUpdatedAmount);
-                }
-                else {
-                    destinationBaseCurrentSupportArmyUnits.put(unitName, unitAmountToAdd);
-                }
-            }
+            Map<String, Integer> updatedArmy = ArmyUtils.addUnitsToArmy(destinationBaseCurrentSupportArmyUnits, newSupportUnits);
+            supportArmy.setUnits(updatedArmy);
         }
     }
 
