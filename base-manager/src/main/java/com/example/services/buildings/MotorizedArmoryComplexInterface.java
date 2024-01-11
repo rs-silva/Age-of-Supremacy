@@ -1,6 +1,6 @@
 package com.example.services.buildings;
 
-import com.example.interfaces.BuildingUtils;
+import com.example.interfaces.BuildingInterface;
 import com.example.models.Building;
 import com.example.utils.buildings.BuildingUpgradeUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,19 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@Qualifier("Headquarters")
-public class MainBuildingUtils implements BuildingUtils {
+@Qualifier("Motorized Armory Complex")
+public class MotorizedArmoryComplexInterface implements BuildingInterface {
 
     private final BuildingUpgradeUtils buildingUpgradeUtils;
 
-    public MainBuildingUtils(BuildingUpgradeUtils buildingUpgradeUtils) {
+    public MotorizedArmoryComplexInterface(BuildingUpgradeUtils buildingUpgradeUtils) {
         this.buildingUpgradeUtils = buildingUpgradeUtils;
     }
 
     @Override
     public Building generateBuilding(String buildingType) {
         Map<String, String> properties = new HashMap<>();
-        properties.put("123", "123");
 
         int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, 1);
 
@@ -41,7 +40,6 @@ public class MainBuildingUtils implements BuildingUtils {
 
     @Override
     public Map<String, String> getAdditionalProperties(Building building) {
-        return new HashMap<>();
+       return new HashMap<>();
     }
-
 }

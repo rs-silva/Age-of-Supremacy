@@ -1,10 +1,8 @@
 package com.example.services.buildings;
 
-import com.example.enums.BuildingsPropertiesNames;
-import com.example.interfaces.BuildingUtils;
+import com.example.interfaces.BuildingInterface;
 import com.example.models.Building;
 import com.example.utils.buildings.BuildingUpgradeUtils;
-import com.example.utils.ResourcesUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -12,43 +10,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@Qualifier("Warehouse")
-public class WarehouseUtils implements BuildingUtils {
+@Qualifier("Headquarters")
+public class MainBuildingInterface implements BuildingInterface {
 
     private final BuildingUpgradeUtils buildingUpgradeUtils;
 
-    private final ResourcesUtils resourcesUtils;
-
-    public WarehouseUtils(BuildingUpgradeUtils buildingUpgradeUtils, ResourcesUtils resourcesUtils) {
+    public MainBuildingInterface(BuildingUpgradeUtils buildingUpgradeUtils) {
         this.buildingUpgradeUtils = buildingUpgradeUtils;
-        this.resourcesUtils = resourcesUtils;
     }
 
     @Override
     public Building generateBuilding(String buildingType) {
+        Map<String, String> properties = new HashMap<>();
+        properties.put("123", "123");
+
         int score = buildingUpgradeUtils.getBuildingScoreForSpecificLevel(buildingType, 1);
 
         return Building.builder()
                 .type(buildingType)
                 .level(1)
                 .score(score)
-                .properties(new HashMap<>())
+                .properties(properties)
                 .build();
     }
 
     @Override
     public Map<String, String> getBasicProperties(Building building) {
-        Map<String, String> additionalProperties = new HashMap<>();
-
-        Double amountOfResourcesStored = resourcesUtils.getWarehouseCapacityForLevel(building.getLevel());
-        additionalProperties.put(BuildingsPropertiesNames.WAREHOUSE_CAPACITY.getLabel(), amountOfResourcesStored.toString());
-
-        return additionalProperties;
+        return new HashMap<>();
     }
 
     @Override
     public Map<String, String> getAdditionalProperties(Building building) {
-       return new HashMap<>();
+        return new HashMap<>();
     }
 
 }

@@ -37,9 +37,11 @@ public class BattleService {
     }
 
     public Battle generateBattle(UUID baseId) {
+        int baseDefenseHealthPoints = battleUtils.getBaseDefenseHealthPoints(baseId);
+
         Battle battle = Battle.builder()
                 .baseId(baseId)
-                .defenseHealthPoints(500) /* TODO get defense HP */
+                .defenseHealthPoints(baseDefenseHealthPoints)
                 .armies(new ArrayList<>())
                 .build();
 

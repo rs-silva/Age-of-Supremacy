@@ -1,13 +1,16 @@
 package com.example.services;
 
+import com.example.dto.ArmyExtendedDTO;
+import com.example.dto.ArmySimpleDTO;
 import com.example.dto.BaseDTO;
+import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.BuildingDTO;
 import com.example.dto.SupportArmyDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
-import com.example.dto.ArmySimpleDTO;
 import com.example.enums.BasePropertiesNames;
 import com.example.exceptions.ForbiddenException;
 import com.example.exceptions.ResourceNotFoundException;
+import com.example.interfaces.BaseSimpleView;
 import com.example.mappers.BaseMapper;
 import com.example.mappers.BuildingMapper;
 import com.example.mappers.SupportArmyMapper;
@@ -16,11 +19,11 @@ import com.example.models.Building;
 import com.example.models.Player;
 import com.example.models.SupportArmy;
 import com.example.repositories.BaseRepository;
-import com.example.services.buildings.BuildingUtilsService;
+import com.example.services.buildings.BuildingInterfaceService;
+import com.example.utils.BaseManagerConstants;
+import com.example.utils.BaseUtils;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
-import com.example.interfaces.BaseSimpleView;
-import com.example.utils.BaseManagerConstants;
 import com.example.utils.units.UnitRecruitmentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,20 +54,26 @@ public class BaseService {
 
     private final ResourcesUtils resourcesUtils;
 
-    private final BuildingUtilsService buildingUtilsService;
+    private final BuildingInterfaceService buildingInterfaceService;
 
     private final PlayerService playerService;
 
     private final UnitRecruitmentUtils unitRecruitmentUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils) {
+    private final SupportArmyService supportArmyService;
+
+    private final BaseUtils baseUtils;
+
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingInterfaceService buildingInterfaceService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, SupportArmyService supportArmyService, BaseUtils baseUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
         this.resourcesUtils = resourcesUtils;
-        this.buildingUtilsService = buildingUtilsService;
+        this.buildingInterfaceService = buildingInterfaceService;
         this.playerService = playerService;
         this.unitRecruitmentUtils = unitRecruitmentUtils;
+        this.supportArmyService = supportArmyService;
+        this.baseUtils = baseUtils;
     }
 
     public void generateBase(Player player) {
@@ -103,7 +113,7 @@ public class BaseService {
         List<BuildingDTO> buildingDTOList = buildingList
                 .stream()
                 .map(building -> {
-                    Map<String, String> basicProperties = buildingUtilsService.getBasicProperties(building);
+                    Map<String, String> basicProperties = buildingInterfaceService.getBasicProperties(building);
                     return BuildingMapper.buildDTO(building, basicProperties);
                 })
                 .toList();
@@ -155,6 +165,49 @@ public class BaseService {
         Base base = findById(baseId);
 
         unitRecruitmentUtils.completeUnitsRecruitment(base, unitsRecruitmentEventDTO);
+    }
+
+    @Transactional
+    public BattleNewUnitsForNextRoundDTO getBaseCurrentUnitsForBattlesNextRound(UUID baseId) {
+        Base base = findById(baseId);
+        BattleNewUnitsForNextRoundDTO battleNewUnitsForNextRoundDTO = new BattleNewUnitsForNextRoundDTO();
+        List<ArmyExtendedDTO> armyExtendedDTOList = new ArrayList<>();
+
+        /* Base's own units */
+        Map<String, Integer> ownUnits = new HashMap<>(base.getUnits());
+        baseUtils.removeUnitsFromBase(base, ownUnits);
+        ArmyExtendedDTO armyExtendedDTO = ArmyExtendedDTO.builder()
+                .ownerPlayerId(base.getPlayer().getId())
+                .ownerBaseId(baseId)
+                .units(ownUnits)
+                .build();
+        armyExtendedDTOList.add(armyExtendedDTO);
+
+        /* Support armies currently in the base */
+        List<SupportArmy> supportArmiesList = base.getSupportArmies();
+        for (SupportArmy supportArmy : supportArmiesList) {
+            UUID supportArmyOwnerBaseId = supportArmy.getOwnerBaseId();
+            Base supportArmyBase = findById(supportArmyOwnerBaseId);
+
+            ArmyExtendedDTO armyDTO = ArmyExtendedDTO.builder()
+                    .ownerPlayerId(supportArmyBase.getPlayer().getId())
+                    .ownerBaseId(supportArmyOwnerBaseId)
+                    .units(supportArmy.getUnits())
+                    .build();
+
+            armyExtendedDTOList.add(armyDTO);
+
+            supportArmyService.delete(supportArmy);
+        }
+
+        battleNewUnitsForNextRoundDTO.setSupportArmies(armyExtendedDTOList);
+        return battleNewUnitsForNextRoundDTO;
+    }
+
+    public Integer getBaseDefenseHealthPoints(UUID baseId) {
+        Base base = findById(baseId);
+
+        return baseUtils.getBaseDefenseHealthPoints(base);
     }
 
     public Base findById(UUID id) {

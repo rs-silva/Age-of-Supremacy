@@ -1,6 +1,6 @@
 package com.example.services.buildings;
 
-import com.example.interfaces.BuildingUtils;
+import com.example.interfaces.BuildingInterface;
 import com.example.models.Building;
 import com.example.utils.buildings.BuildingUpgradeUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,11 +11,11 @@ import java.util.Map;
 
 @Service
 @Qualifier("Research Lab")
-public class ResearchLabUtils implements BuildingUtils {
+public class ResearchLabInterface implements BuildingInterface {
 
     private final BuildingUpgradeUtils buildingUpgradeUtils;
 
-    public ResearchLabUtils(BuildingUpgradeUtils buildingUpgradeUtils) {
+    public ResearchLabInterface(BuildingUpgradeUtils buildingUpgradeUtils) {
         this.buildingUpgradeUtils = buildingUpgradeUtils;
     }
 

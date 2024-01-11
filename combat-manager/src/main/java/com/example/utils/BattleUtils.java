@@ -25,4 +25,11 @@ public class BattleUtils {
         return restTemplate.getForEntity(url, BattleNewUnitsForNextRoundDTO.class).getBody();
     }
 
+    public int getBaseDefenseHealthPoints(UUID baseId) {
+        /* TODO Remove hardcoded url */
+        /* Get defense Health Points for this base from the base-manager module */
+        String url = "http://localhost:8082/api/battle/" + baseId + "/getBaseDefenseHealthPoints";
+        return restTemplate.getForEntity(url, Integer.class).getBody();
+    }
+
 }

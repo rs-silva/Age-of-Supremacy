@@ -7,7 +7,7 @@ import com.example.exceptions.ResourceNotFoundException;
 import com.example.models.Base;
 import com.example.models.Building;
 import com.example.repositories.BuildingRepository;
-import com.example.services.buildings.BuildingUtilsService;
+import com.example.services.buildings.BuildingInterfaceService;
 import com.example.utils.buildings.BuildingGenerationUtils;
 import com.example.utils.BaseManagerConstants;
 import com.example.dto.BuildingDTO;
@@ -36,7 +36,7 @@ public class BuildingService {
 
     private final BuildingUpgradeUtils buildingUpgradeUtils;
 
-    private final BuildingUtilsService buildingUtilsService;
+    private final BuildingInterfaceService buildingInterfaceService;
 
     private final BuildingGenerationUtils buildingGenerationUtils;
 
@@ -46,10 +46,10 @@ public class BuildingService {
 
     private final JwtAccessTokenUtils jwtAccessTokenUtils;
 
-    public BuildingService(BuildingRepository buildingRepository, BuildingUpgradeUtils buildingUpgradeUtils, BuildingUtilsService buildingUtilsService, BuildingGenerationUtils buildingGenerationUtils, ResourcesUtils resourcesUtils, @Lazy BaseService baseService, JwtAccessTokenUtils jwtAccessTokenUtils) {
+    public BuildingService(BuildingRepository buildingRepository, BuildingUpgradeUtils buildingUpgradeUtils, BuildingInterfaceService buildingInterfaceService, BuildingGenerationUtils buildingGenerationUtils, ResourcesUtils resourcesUtils, @Lazy BaseService baseService, JwtAccessTokenUtils jwtAccessTokenUtils) {
         this.buildingRepository = buildingRepository;
         this.buildingUpgradeUtils = buildingUpgradeUtils;
-        this.buildingUtilsService = buildingUtilsService;
+        this.buildingInterfaceService = buildingInterfaceService;
         this.buildingGenerationUtils = buildingGenerationUtils;
         this.resourcesUtils = resourcesUtils;
         this.baseService = baseService;
@@ -79,8 +79,8 @@ public class BuildingService {
             requirementsToNextLevel = buildingUpgradeUtils.getRequirementsToUpgradeBuilding(building.getType(), building.getLevel());
         }
 
-        Map<String, String> basicProperties = buildingUtilsService.getBasicProperties(building);
-        Map<String, String> additionalProperties = buildingUtilsService.getAdditionalProperties(building);
+        Map<String, String> basicProperties = buildingInterfaceService.getBasicProperties(building);
+        Map<String, String> additionalProperties = buildingInterfaceService.getAdditionalProperties(building);
 
         return BuildingMapper.buildDTO(building, basicProperties, additionalProperties, requirementsToNextLevel);
     }

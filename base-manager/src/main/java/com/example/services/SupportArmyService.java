@@ -92,19 +92,8 @@ public class SupportArmyService {
     public void completeSupportArmyReturnRequest(UUID ownerBaseId, ArmySimpleDTO armySimpleDTO) {
         Base ownerBase = baseService.findById(ownerBaseId);
 
-        Map<String, Integer> unitsToReturn = armySimpleDTO.getUnits();
-        Map<String, Integer> ownerBaseUnits = ownerBase.getUnits();
-
-        for (String unitName : unitsToReturn.keySet()) {
-            int unitAmountToAdd = unitsToReturn.get(unitName);
-
-            int unitCurrentAmount = ownerBaseUnits.get(unitName);
-
-            int unitUpdatedAmount = unitCurrentAmount + unitAmountToAdd;
-
-            ownerBaseUnits.put(unitName, unitUpdatedAmount);
-        }
-
+        Map<String, Integer> updatedArmy = ArmyUtils.addUnitsToArmy(ownerBase.getUnits(), armySimpleDTO.getUnits());
+        ownerBase.setUnits(updatedArmy);
     }
 
     public SupportArmy findById(UUID id) {

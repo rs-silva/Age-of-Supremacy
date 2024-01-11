@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.dto.BaseDTO;
+import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.dto.ArmySimpleDTO;
 import com.example.services.BaseService;
@@ -81,6 +82,30 @@ public class BaseController {
         baseService.completeUnitsRecruitment(baseId, unitsRecruitmentEventDTO);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("{baseId}/getUnitsForNextRound")
+    public ResponseEntity<BattleNewUnitsForNextRoundDTO> getBaseCurrentUnitsForNextRound(@PathVariable UUID baseId) {
+
+        LOG.info("Received request to fetch base {} own units and support armies", baseId);
+
+        BattleNewUnitsForNextRoundDTO battleNewUnitsForNextRoundDTO = baseService.getBaseCurrentUnitsForBattlesNextRound(baseId);
+
+        LOG.info("New Units = {}", battleNewUnitsForNextRoundDTO);
+
+        return ResponseEntity.ok().body(battleNewUnitsForNextRoundDTO);
+    }
+
+    @GetMapping("{baseId}/getDefenseHealthPoints")
+    public ResponseEntity<Integer> getBaseDefenseHealthPoints(@PathVariable UUID baseId) {
+
+        LOG.info("Received request to fetch base {} defense health points", baseId);
+
+        int defenseHealthPoints = baseService.getBaseDefenseHealthPoints(baseId);
+
+        LOG.info("Health Points = {}", defenseHealthPoints);
+
+        return ResponseEntity.ok().body(defenseHealthPoints);
     }
 
 }

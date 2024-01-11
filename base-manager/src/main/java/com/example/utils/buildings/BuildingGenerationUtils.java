@@ -6,7 +6,7 @@ import com.example.enums.BuildingsPropertiesNames;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
 import com.example.models.Building;
-import com.example.services.buildings.BuildingUtilsService;
+import com.example.services.buildings.BuildingInterfaceService;
 import com.example.utils.BaseManagerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,14 +24,14 @@ public class BuildingGenerationUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(BuildingGenerationUtils.class);
 
-    private final BuildingUtilsService buildingUtilsService;
+    private final BuildingInterfaceService buildingInterfaceService;
 
     private final BuildingUpgradeUtils buildingUpgradeUtils;
 
     private final RestTemplate restTemplate;
 
-    public BuildingGenerationUtils(BuildingUtilsService buildingUtilsService, BuildingUpgradeUtils buildingUpgradeUtils, RestTemplate restTemplate) {
-        this.buildingUtilsService = buildingUtilsService;
+    public BuildingGenerationUtils(BuildingInterfaceService buildingInterfaceService, BuildingUpgradeUtils buildingUpgradeUtils, RestTemplate restTemplate) {
+        this.buildingInterfaceService = buildingInterfaceService;
         this.buildingUpgradeUtils = buildingUpgradeUtils;
         this.restTemplate = restTemplate;
     }
@@ -40,26 +40,26 @@ public class BuildingGenerationUtils {
         List<Building> buildingList = new ArrayList<>();
 
         /* Resource Production Buildings */
-        Building resource1Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_1_FACTORY.getLabel());
+        Building resource1Producer = buildingInterfaceService.generateBuilding(BuildingNames.RESOURCE_1_FACTORY.getLabel());
         buildingList.add(resource1Producer);
 
-        Building resource2Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_2_FACTORY.getLabel());
+        Building resource2Producer = buildingInterfaceService.generateBuilding(BuildingNames.RESOURCE_2_FACTORY.getLabel());
         buildingList.add(resource2Producer);
 
-        Building resource3Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_3_FACTORY.getLabel());
+        Building resource3Producer = buildingInterfaceService.generateBuilding(BuildingNames.RESOURCE_3_FACTORY.getLabel());
         buildingList.add(resource3Producer);
 
-        Building resource4Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_4_FACTORY.getLabel());
+        Building resource4Producer = buildingInterfaceService.generateBuilding(BuildingNames.RESOURCE_4_FACTORY.getLabel());
         buildingList.add(resource4Producer);
 
-        Building resource5Producer = buildingUtilsService.generateBuilding(BuildingNames.RESOURCE_5_FACTORY.getLabel());
+        Building resource5Producer = buildingInterfaceService.generateBuilding(BuildingNames.RESOURCE_5_FACTORY.getLabel());
         buildingList.add(resource5Producer);
 
         /* Other Buildings */
-        Building warehouse = buildingUtilsService.generateBuilding(BuildingNames.WAREHOUSE.getLabel());
+        Building warehouse = buildingInterfaceService.generateBuilding(BuildingNames.WAREHOUSE.getLabel());
         buildingList.add(warehouse);
 
-        Building mainBuilding = buildingUtilsService.generateBuilding(BuildingNames.MAIN_BUILDING.getLabel());
+        Building mainBuilding = buildingInterfaceService.generateBuilding(BuildingNames.MAIN_BUILDING.getLabel());
         buildingList.add(mainBuilding);
 
         return buildingList;
@@ -118,7 +118,7 @@ public class BuildingGenerationUtils {
             throw new BadRequestException(BaseManagerConstants.BUILDING_ALREADY_EXISTS);
         }
 
-        Building newBuilding = buildingUtilsService.generateBuilding(buildingType);
+        Building newBuilding = buildingInterfaceService.generateBuilding(buildingType);
 
         if (newBuilding == null) {
             LOG.info("Attempted to finish generation of building {} in base {}, but the building's name is invalid.", buildingType, base.getId());

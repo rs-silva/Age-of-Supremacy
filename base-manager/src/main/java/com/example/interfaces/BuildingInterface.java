@@ -4,7 +4,7 @@ import com.example.models.Building;
 
 import java.util.Map;
 
-public interface BuildingUtils {
+public interface BuildingInterface {
 
     Building generateBuilding(String buildingType);
 

@@ -1,6 +1,6 @@
 package com.example.services.buildings;
 
-import com.example.interfaces.BuildingUtils;
+import com.example.interfaces.BuildingInterface;
 import com.example.models.Building;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-@Qualifier("Fuel Refinery")
-public class Resource3FactoryUtils implements BuildingUtils {
+@Qualifier("Munitions Plant")
+public class Resource5FactoryInterface implements BuildingInterface {
 
     private final ResourceProductionUtils resourceProductionUtils;
 
-    public Resource3FactoryUtils(ResourceProductionUtils resourceProductionUtils) {
+    public Resource5FactoryInterface(ResourceProductionUtils resourceProductionUtils) {
         this.resourceProductionUtils = resourceProductionUtils;
     }
 

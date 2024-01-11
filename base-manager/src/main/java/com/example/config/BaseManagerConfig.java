@@ -1,7 +1,7 @@
 package com.example.config;
 
-import com.example.interfaces.BuildingUtils;
-import com.example.services.buildings.BuildingUtilsService;
+import com.example.interfaces.BuildingInterface;
+import com.example.services.buildings.BuildingInterfaceService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,24 +15,24 @@ import java.util.Map;
 @Configuration
 public class BaseManagerConfig {
 
-    private final List<BuildingUtils> buildingUtilsList;
+    private final List<BuildingInterface> buildingInterfaceList;
 
-    public BaseManagerConfig(List<BuildingUtils> buildingUtilsList) {
-        this.buildingUtilsList = buildingUtilsList;
+    public BaseManagerConfig(List<BuildingInterface> buildingInterfaceList) {
+        this.buildingInterfaceList = buildingInterfaceList;
     }
 
     @Bean
-    public BuildingUtilsService buildingUtilsService() {
-        Map<String, BuildingUtils> buildingUtilsMap = new HashMap<>();
-        for (BuildingUtils buildingUtils : buildingUtilsList) {
-            String buildingType = buildingUtils.getClass().getAnnotation(Qualifier.class).value();
-            buildingUtilsMap.put(buildingType, buildingUtils);
+    public BuildingInterfaceService buildingUtilsService() {
+        Map<String, BuildingInterface> buildingUtilsMap = new HashMap<>();
+        for (BuildingInterface buildingInterface : buildingInterfaceList) {
+            String buildingType = buildingInterface.getClass().getAnnotation(Qualifier.class).value();
+            buildingUtilsMap.put(buildingType, buildingInterface);
         }
 
-        BuildingUtilsService buildingUtilsService = new BuildingUtilsService();
-        buildingUtilsService.setBuildingUtilsMap(buildingUtilsMap);
+        BuildingInterfaceService buildingInterfaceService = new BuildingInterfaceService();
+        buildingInterfaceService.setBuildingInterfacesMap(buildingUtilsMap);
 
-        return buildingUtilsService;
+        return buildingInterfaceService;
     }
 
     @Profile("test")

@@ -1,7 +1,7 @@
 package com.example.services.buildings;
 
 import com.example.enums.BuildingsPropertiesNames;
-import com.example.interfaces.BuildingUtils;
+import com.example.interfaces.BuildingInterface;
 import com.example.models.Building;
 import com.example.utils.buildings.BuildingUpgradeUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,11 +12,11 @@ import java.util.Map;
 
 @Service
 @Qualifier("Strategic Defense Center")
-public class DefenseCenterUtils implements BuildingUtils {
+public class DefenseCenterInterface implements BuildingInterface {
 
     private final BuildingUpgradeUtils buildingUpgradeUtils;
 
-    public DefenseCenterUtils(BuildingUpgradeUtils buildingUpgradeUtils) {
+    public DefenseCenterInterface(BuildingUpgradeUtils buildingUpgradeUtils) {
         this.buildingUpgradeUtils = buildingUpgradeUtils;
     }
 
