@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -63,7 +64,7 @@ public class BaseService {
 
     private final SupportArmyService supportArmyService;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, BaseUtils baseUtils, SupportArmyService supportArmyService) {
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, BaseUtils baseUtils, @Lazy SupportArmyService supportArmyService) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
@@ -213,7 +214,7 @@ public class BaseService {
         List<ArmyExtendedDTO> armyExtendedDTOList = new ArrayList<>();
 
         /* Base's own units */
-        Map<String, Integer> ownUnits = base.getUnits();
+        Map<String, Integer> ownUnits = new HashMap<>(base.getUnits());
         baseUtils.removeUnitsFromBase(base, ownUnits);
         ArmyExtendedDTO armyExtendedDTO = ArmyExtendedDTO.builder()
                 .ownerPlayerId(base.getPlayer().getId())

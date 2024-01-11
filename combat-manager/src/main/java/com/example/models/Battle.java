@@ -40,4 +40,12 @@ public class Battle {
         this.armies.add(army);
     }
 
+    @Override
+    public String toString() {
+        return "Battle{" +
+                "id=" + id +
+                ", baseId=" + baseId +
+                ", defenseHealthPoints=" + defenseHealthPoints +
+                '}';
+    }
 }

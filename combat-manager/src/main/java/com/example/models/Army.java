@@ -54,4 +54,14 @@ public class Army {
     @Column(name = "unit_quantity")
     private Map<String, Integer> units = new HashMap<>();
 
+    @Override
+    public String toString() {
+        return "Army{" +
+                "id=" + id +
+                ", ownerPlayerId=" + ownerPlayerId +
+                ", ownerBaseId=" + ownerBaseId +
+                ", role=" + role +
+                ", units=" + units +
+                '}';
+    }
 }
