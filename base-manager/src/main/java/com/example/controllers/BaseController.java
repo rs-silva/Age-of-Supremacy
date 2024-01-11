@@ -1,6 +1,5 @@
 package com.example.controllers;
 
-import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.BaseDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.dto.ArmySimpleDTO;
@@ -84,15 +83,4 @@ public class BaseController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{baseId}/getUnitsForNextRound")
-    public ResponseEntity<BattleNewUnitsForNextRoundDTO> getBaseCurrentUnitsForNextRound(@PathVariable UUID baseId) {
-
-        LOG.info("Received request to fetch base {} own units and support armies", baseId);
-
-        BattleNewUnitsForNextRoundDTO battleNewUnitsForNextRoundDTO = baseService.getBaseCurrentUnitsForBattlesNextRound(baseId);
-
-        LOG.info("New Units = {}", battleNewUnitsForNextRoundDTO);
-
-        return ResponseEntity.ok().body(battleNewUnitsForNextRoundDTO);
-    }
 }

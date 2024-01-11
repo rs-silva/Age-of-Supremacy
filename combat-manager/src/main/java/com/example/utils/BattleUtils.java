@@ -21,7 +21,7 @@ public class BattleUtils {
 
         /* TODO Remove hardcoded url */
         /* Get current units sit in the base from the base-manager module */
-        String url = "http://localhost:8082/api/base/" + baseId + "/getUnitsForNextRound";
+        String url = "http://localhost:8082/api/battle/" + baseId + "/getUnitsForNextRound";
         return restTemplate.getForEntity(url, BattleNewUnitsForNextRoundDTO.class).getBody();
     }
 

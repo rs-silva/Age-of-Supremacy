@@ -1,8 +1,6 @@
 package com.example.services;
 
-import com.example.dto.ArmyExtendedDTO;
 import com.example.dto.BaseDTO;
-import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.BuildingDTO;
 import com.example.dto.SupportArmyDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
@@ -19,7 +17,6 @@ import com.example.models.Player;
 import com.example.models.SupportArmy;
 import com.example.repositories.BaseRepository;
 import com.example.services.buildings.BuildingUtilsService;
-import com.example.utils.BaseUtils;
 import com.example.utils.JwtAccessTokenUtils;
 import com.example.utils.ResourcesUtils;
 import com.example.interfaces.BaseSimpleView;
@@ -34,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,11 +56,7 @@ public class BaseService {
 
     private final UnitRecruitmentUtils unitRecruitmentUtils;
 
-    private final BaseUtils baseUtils;
-
-    private final SupportArmyService supportArmyService;
-
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, BaseUtils baseUtils, @Lazy SupportArmyService supportArmyService) {
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingUtilsService buildingUtilsService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
@@ -72,8 +64,6 @@ public class BaseService {
         this.buildingUtilsService = buildingUtilsService;
         this.playerService = playerService;
         this.unitRecruitmentUtils = unitRecruitmentUtils;
-        this.baseUtils = baseUtils;
-        this.supportArmyService = supportArmyService;
     }
 
     public void generateBase(Player player) {
@@ -205,43 +195,6 @@ public class BaseService {
             LOG.error("User with id {} attempted to perform an operation in a base that belong to {}", playerIdFromToken, basePlayerId);
             throw new ForbiddenException(BaseManagerConstants.BASE_DOES_NOT_BELONG_TO_THE_LOGGED_IN_PLAYER);
         }
-    }
-
-    @Transactional
-    public BattleNewUnitsForNextRoundDTO getBaseCurrentUnitsForBattlesNextRound(UUID baseId) {
-        Base base = findById(baseId);
-        BattleNewUnitsForNextRoundDTO battleNewUnitsForNextRoundDTO = new BattleNewUnitsForNextRoundDTO();
-        List<ArmyExtendedDTO> armyExtendedDTOList = new ArrayList<>();
-
-        /* Base's own units */
-        Map<String, Integer> ownUnits = new HashMap<>(base.getUnits());
-        baseUtils.removeUnitsFromBase(base, ownUnits);
-        ArmyExtendedDTO armyExtendedDTO = ArmyExtendedDTO.builder()
-                .ownerPlayerId(base.getPlayer().getId())
-                .ownerBaseId(baseId)
-                .units(ownUnits)
-                .build();
-        armyExtendedDTOList.add(armyExtendedDTO);
-
-        /* Support armies currently in the base */
-        List<SupportArmy> supportArmiesList = base.getSupportArmies();
-        for (SupportArmy supportArmy : supportArmiesList) {
-            UUID supportArmyOwnerBaseId = supportArmy.getOwnerBaseId();
-            Base supportArmyBase = findById(supportArmyOwnerBaseId);
-
-            ArmyExtendedDTO armyDTO = ArmyExtendedDTO.builder()
-                    .ownerPlayerId(supportArmyBase.getPlayer().getId())
-                    .ownerBaseId(supportArmyOwnerBaseId)
-                    .units(supportArmy.getUnits())
-                    .build();
-
-            armyExtendedDTOList.add(armyDTO);
-
-            supportArmyService.delete(supportArmy);
-        }
-
-        battleNewUnitsForNextRoundDTO.setSupportArmies(armyExtendedDTOList);
-        return battleNewUnitsForNextRoundDTO;
     }
 
     public List<BaseSimpleView> findAllByPlayerId(UUID playerId) {
