@@ -32,7 +32,6 @@ public class AttackArmyService {
 
         /* If there is a battle already ongoing, join this army in the attacking side */
         if (battle != null) {
-            /* TODO Check via attacking owner base id if there is already an attack army from this base */
             Army currentArmy = armyService.findByBattleIdAndOwnerBaseId(battle.getId(), originBaseId);
 
             /* In case there isn't an army from this owner base in this battle, create one */
