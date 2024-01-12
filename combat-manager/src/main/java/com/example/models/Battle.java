@@ -31,6 +31,12 @@ public class Battle {
     @Column(unique = true)
     private UUID baseId;
 
+    private int groundDefense;
+
+    private int antiTankDefense;
+
+    private int antiAirDefense;
+
     private int defenseHealthPoints;
 
     @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
@@ -45,6 +51,9 @@ public class Battle {
         return "Battle{" +
                 "id=" + id +
                 ", baseId=" + baseId +
+                ", groundDefense=" + groundDefense +
+                ", antiTankDefense=" + antiTankDefense +
+                ", antiAirDefense=" + antiAirDefense +
                 ", defenseHealthPoints=" + defenseHealthPoints +
                 '}';
     }

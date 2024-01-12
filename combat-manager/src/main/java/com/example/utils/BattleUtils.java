@@ -1,5 +1,6 @@
 package com.example.utils;
 
+import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.models.Battle;
 import org.springframework.stereotype.Component;
@@ -25,11 +26,11 @@ public class BattleUtils {
         return restTemplate.getForEntity(url, BattleNewUnitsForNextRoundDTO.class).getBody();
     }
 
-    public int getBaseDefenseHealthPoints(UUID baseId) {
+    public BaseDefenseInformationDTO getBaseDefenseInformation(UUID baseId) {
         /* TODO Remove hardcoded url */
-        /* Get defense Health Points for this base from the base-manager module */
-        String url = "http://localhost:8082/api/base/" + baseId + "/getDefenseHealthPoints";
-        return restTemplate.getForEntity(url, Integer.class).getBody();
+        /* Get defense information for this base from the base-manager module */
+        String url = "http://localhost:8082/api/base/" + baseId + "/getDefenseInformation";
+        return restTemplate.getForEntity(url, BaseDefenseInformationDTO.class).getBody();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.dto.BaseDTO;
+import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
 import com.example.dto.ArmySimpleDTO;
@@ -96,16 +97,16 @@ public class BaseController {
         return ResponseEntity.ok().body(battleNewUnitsForNextRoundDTO);
     }
 
-    @GetMapping("{baseId}/getDefenseHealthPoints")
-    public ResponseEntity<Integer> getBaseDefenseHealthPoints(@PathVariable UUID baseId) {
+    @GetMapping("{baseId}/getDefenseInformation")
+    public ResponseEntity<BaseDefenseInformationDTO> getBaseDefenseHealthPoints(@PathVariable UUID baseId) {
 
-        LOG.info("Received request to fetch base {} defense health points", baseId);
+        LOG.info("Received request to fetch base {} defense information", baseId);
 
-        int defenseHealthPoints = baseService.getBaseDefenseHealthPoints(baseId);
+        BaseDefenseInformationDTO baseDefenseInformation = baseService.getBaseDefenseInformation(baseId);
 
-        LOG.info("Health Points = {}", defenseHealthPoints);
+        LOG.info("Base defense information = {}", baseDefenseInformation);
 
-        return ResponseEntity.ok().body(defenseHealthPoints);
+        return ResponseEntity.ok().body(baseDefenseInformation);
     }
 
 }

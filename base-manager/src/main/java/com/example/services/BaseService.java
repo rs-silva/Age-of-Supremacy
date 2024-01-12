@@ -3,6 +3,7 @@ package com.example.services;
 import com.example.dto.ArmyExtendedDTO;
 import com.example.dto.ArmySimpleDTO;
 import com.example.dto.BaseDTO;
+import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.BuildingDTO;
 import com.example.dto.SupportArmyDTO;
@@ -204,10 +205,10 @@ public class BaseService {
         return battleNewUnitsForNextRoundDTO;
     }
 
-    public Integer getBaseDefenseHealthPoints(UUID baseId) {
+    public BaseDefenseInformationDTO getBaseDefenseInformation(UUID baseId) {
         Base base = findById(baseId);
 
-        return baseUtils.getBaseDefenseHealthPoints(base);
+        return baseUtils.getBaseDefenseInformation(base);
     }
 
     public Base findById(UUID id) {

@@ -1,5 +1,6 @@
 package com.example.utils;
 
+import com.example.dto.BaseDefenseInformationDTO;
 import com.example.enums.BuildingNames;
 import com.example.enums.BuildingsPropertiesNames;
 import com.example.exceptions.BadRequestException;
@@ -44,15 +45,25 @@ public class BaseUtils {
         }
     }
 
-    public Integer getBaseDefenseHealthPoints(Base base) {
+    public BaseDefenseInformationDTO getBaseDefenseInformation(Base base) {
         Building strategicDefenseCenter = buildingsUtils.getBuilding(base, BuildingNames.DEFENSE_CENTER.getLabel());
 
         if (strategicDefenseCenter == null) {
-            return 0;
+            return new BaseDefenseInformationDTO(0, 0, 0, 0);
         }
 
         Map<String, String> strategicDefenseCenterProperties = buildingInterfaceService.getAdditionalProperties(strategicDefenseCenter);
-        return Integer.valueOf(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_OVERALL.getLabel()));
+        int groundDefense = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_GROUND.getLabel()));
+        int antiTankDefense = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_ANTITANK.getLabel()));
+        int antiAirDefense = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_AA.getLabel()));
+        int defenseHealthPoints = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_HEALTH_POINTS.getLabel()));
+
+        return BaseDefenseInformationDTO.builder()
+                .groundDefense(groundDefense)
+                .antiTankDefense(antiTankDefense)
+                .antiAirDefense(antiAirDefense)
+                .defenseHealthPoints(defenseHealthPoints)
+                .build();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.services;
 
 import com.example.dto.ArmyExtendedDTO;
+import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.enums.ArmyRole;
 import com.example.models.Army;
@@ -37,11 +38,14 @@ public class BattleService {
     }
 
     public Battle generateBattle(UUID baseId) {
-        int baseDefenseHealthPoints = battleUtils.getBaseDefenseHealthPoints(baseId);
+        BaseDefenseInformationDTO baseDefenseInformation = battleUtils.getBaseDefenseInformation(baseId);
 
         Battle battle = Battle.builder()
                 .baseId(baseId)
-                .defenseHealthPoints(baseDefenseHealthPoints)
+                .groundDefense(baseDefenseInformation.getGroundDefense())
+                .antiTankDefense(baseDefenseInformation.getAntiTankDefense())
+                .antiAirDefense(baseDefenseInformation.getAntiAirDefense())
+                .defenseHealthPoints(baseDefenseInformation.getDefenseHealthPoints())
                 .armies(new ArrayList<>())
                 .build();
 
