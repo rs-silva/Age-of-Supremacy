@@ -37,7 +37,8 @@ public class SecurityConfig {
     };
 
     private final String[] GET_API_ACCESSED_ONLY_BY_LOCALHOST_LIST = {
-            "/api/battle/*/getUnitsForNextRound",
+            "/api/base/*/getUnitsForNextRound",
+            "/api/base/*/getDefenseHealthPoints"
     };
 
     @Bean

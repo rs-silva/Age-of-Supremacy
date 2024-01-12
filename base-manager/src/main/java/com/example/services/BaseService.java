@@ -64,7 +64,7 @@ public class BaseService {
 
     private final BaseUtils baseUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingInterfaceService buildingInterfaceService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, SupportArmyService supportArmyService, BaseUtils baseUtils) {
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingInterfaceService buildingInterfaceService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, @Lazy SupportArmyService supportArmyService, BaseUtils baseUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;

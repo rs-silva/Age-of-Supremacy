@@ -21,14 +21,14 @@ public class BattleUtils {
 
         /* TODO Remove hardcoded url */
         /* Get current units sit in the base from the base-manager module */
-        String url = "http://localhost:8082/api/battle/" + baseId + "/getUnitsForNextRound";
+        String url = "http://localhost:8082/api/base/" + baseId + "/getUnitsForNextRound";
         return restTemplate.getForEntity(url, BattleNewUnitsForNextRoundDTO.class).getBody();
     }
 
     public int getBaseDefenseHealthPoints(UUID baseId) {
         /* TODO Remove hardcoded url */
         /* Get defense Health Points for this base from the base-manager module */
-        String url = "http://localhost:8082/api/battle/" + baseId + "/getBaseDefenseHealthPoints";
+        String url = "http://localhost:8082/api/base/" + baseId + "/getDefenseHealthPoints";
         return restTemplate.getForEntity(url, Integer.class).getBody();
     }
 
