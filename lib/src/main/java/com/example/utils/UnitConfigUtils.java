@@ -1,4 +1,4 @@
-package com.example.utils.units;
+package com.example.utils;
 
 import com.example.config.UnitConfig;
 import com.example.dto.UnitDTO;

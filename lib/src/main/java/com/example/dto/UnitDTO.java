@@ -10,13 +10,13 @@ public class UnitDTO {
 
     private String unitName;
 
-    private int healthPoints;
+    private double healthPoints;
 
     private double movementSpeed;
 
-    private int attack;
+    private double attack;
 
-    private int defense;
+    private double defense;
 
     private int recruitmentTime;
 

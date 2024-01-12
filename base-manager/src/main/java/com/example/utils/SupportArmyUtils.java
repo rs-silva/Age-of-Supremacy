@@ -5,7 +5,6 @@ import com.example.dto.ArmyMovementEventDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
 import com.example.models.SupportArmy;
-import com.example.utils.units.UnitsUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,7 +31,8 @@ public class SupportArmyUtils {
 
         baseUtils.removeUnitsFromBase(originBase, armyToSend);
 
-        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armySimpleDTO);
+        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase.getX_coordinate(), originBase.getY_coordinate(),
+                destinationBase.getX_coordinate(), destinationBase.getY_coordinate(), armySimpleDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
                 .ownerPlayerId(originBase.getPlayer().getId())
@@ -70,7 +70,8 @@ public class SupportArmyUtils {
             }
         }
 
-        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(supportArmy.getBaseBeingSupported(), ownerBase, armySimpleDTO);
+        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(supportArmy.getBaseBeingSupported().getX_coordinate(), supportArmy.getBaseBeingSupported().getY_coordinate(),
+                ownerBase.getX_coordinate(), ownerBase.getY_coordinate(), armySimpleDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
                 .ownerPlayerId(ownerBase.getPlayer().getId())

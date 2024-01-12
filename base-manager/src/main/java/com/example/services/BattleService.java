@@ -6,7 +6,7 @@ import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
 import com.example.utils.BaseManagerConstants;
 import com.example.utils.BaseUtils;
-import com.example.utils.units.UnitsUtils;
+import com.example.utils.UnitsUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -45,7 +45,8 @@ public class BattleService {
 
         baseUtils.removeUnitsFromBase(originBase, armySimpleDTO.getUnits());
 
-        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase, destinationBase, armySimpleDTO);
+        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase.getX_coordinate(), originBase.getY_coordinate(),
+                destinationBase.getX_coordinate(), destinationBase.getY_coordinate(), armySimpleDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
                 .ownerPlayerId(originBase.getPlayer().getId())

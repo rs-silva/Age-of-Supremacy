@@ -4,7 +4,7 @@ import com.example.dto.UnitDTO;
 import com.example.enums.UnitNames;
 import com.example.exceptions.InternalServerErrorException;
 import com.example.utils.BaseManagerConstants;
-import com.example.utils.units.UnitConfigUtils;
+import com.example.utils.UnitConfigUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
