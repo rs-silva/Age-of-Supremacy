@@ -2,10 +2,10 @@
   "units": [
     {
       "unitName": "Infantry",
-      "healthPoints": 60,
+      "healthPoints": 6,
       "movementSpeed": 2,
-      "attack": 20,
-      "defense": 40,
+      "attack": 2,
+      "defense": 3,
       "recruitmentTime": 10,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -14,10 +14,10 @@
     },
     {
       "unitName": "Engineer",
-      "healthPoints": 40,
+      "healthPoints": 4,
       "movementSpeed": 1.5,
-      "attack": 35,
-      "defense": 15,
+      "attack": 4,
+      "defense": 1.5,
       "recruitmentTime": 2,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -26,10 +26,10 @@
     },
     {
       "unitName": "Sniper",
-      "healthPoints": 40,
-      "movementSpeed": 1.5,
-      "attack": 35,
-      "defense": 15,
+      "healthPoints": 2.5,
+      "movementSpeed": 2.5,
+      "attack": 4,
+      "defense": 0.5,
       "recruitmentTime": 5,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -39,9 +39,9 @@
     {
       "unitName": "Armored Personnel Carrier",
       "healthPoints": 40,
-      "movementSpeed": 1.5,
-      "attack": 35,
-      "defense": 15,
+      "movementSpeed": 15,
+      "attack": 20,
+      "defense": 12,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -50,10 +50,10 @@
     },
     {
       "unitName": "Main Battle Tank",
-      "healthPoints": 40,
-      "movementSpeed": 1.5,
-      "attack": 35,
-      "defense": 15,
+      "healthPoints": 80,
+      "movementSpeed": 10,
+      "attack": 50,
+      "defense": 40,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -62,10 +62,10 @@
     },
     {
       "unitName": "Artillery",
-      "healthPoints": 40,
-      "movementSpeed": 1.5,
-      "attack": 35,
-      "defense": 15,
+      "healthPoints": 20,
+      "movementSpeed": 7.5,
+      "attack": 120,
+      "defense": 10,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -74,10 +74,10 @@
     },
     {
       "unitName": "Jet Fighter",
-      "healthPoints": 40,
-      "movementSpeed": 1.5,
-      "attack": 35,
-      "defense": 15,
+      "healthPoints": 60,
+      "movementSpeed": 50,
+      "attack": 40,
+      "defense": 18,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -87,8 +87,8 @@
     {
       "unitName": "Bomber",
       "healthPoints": 40,
-      "movementSpeed": 1.5,
-      "attack": 35,
+      "movementSpeed": 30,
+      "attack": 150,
       "defense": 15,
       "recruitmentTime": 20,
       "resources": [
@@ -98,10 +98,10 @@
     },
     {
       "unitName": "Recon",
-      "healthPoints": 40,
-      "movementSpeed": 1.5,
-      "attack": 35,
-      "defense": 15,
+      "healthPoints": 20,
+      "movementSpeed": 20,
+      "attack": 2,
+      "defense": 0,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
