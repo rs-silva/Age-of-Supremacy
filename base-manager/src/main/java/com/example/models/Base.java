@@ -61,7 +61,7 @@ public class Base {
     @Column(name = "unit_quantity")
     private Map<String, Integer> units;
 
-    @OneToMany(mappedBy = "baseBeingSupported", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "baseBeingSupported", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SupportArmy> supportArmies;
 
     private Timestamp lastResourcesUpdate;
@@ -71,6 +71,10 @@ public class Base {
 
     public void addBuilding(Building building) {
         this.buildings.add(building);
+    }
+
+    public void removeSupportArmies() {
+        this.supportArmies.clear();
     }
 
     @Override

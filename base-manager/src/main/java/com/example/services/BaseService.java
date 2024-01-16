@@ -20,7 +20,6 @@ import com.example.models.Building;
 import com.example.models.Player;
 import com.example.models.SupportArmy;
 import com.example.repositories.BaseRepository;
-import com.example.repositories.SupportArmyRepository;
 import com.example.services.buildings.BuildingInterfaceService;
 import com.example.utils.BaseManagerConstants;
 import com.example.utils.BaseUtils;
@@ -62,13 +61,9 @@ public class BaseService {
 
     private final UnitRecruitmentUtils unitRecruitmentUtils;
 
-    private final SupportArmyService supportArmyService;
-
     private final BaseUtils baseUtils;
 
-    private final SupportArmyRepository supportArmyRepository;
-
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingInterfaceService buildingInterfaceService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, @Lazy SupportArmyService supportArmyService, BaseUtils baseUtils, SupportArmyRepository supportArmyRepository) {
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingInterfaceService buildingInterfaceService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, BaseUtils baseUtils) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
@@ -76,9 +71,7 @@ public class BaseService {
         this.buildingInterfaceService = buildingInterfaceService;
         this.playerService = playerService;
         this.unitRecruitmentUtils = unitRecruitmentUtils;
-        this.supportArmyService = supportArmyService;
         this.baseUtils = baseUtils;
-        this.supportArmyRepository = supportArmyRepository;
     }
 
     public void generateBase(Player player) {
@@ -202,9 +195,9 @@ public class BaseService {
                     .build();
 
             armyExtendedDTOList.add(armyDTO);
-            supportArmyRepository.deleteById(supportArmy.getId());
         }
 
+        base.removeSupportArmies();
         battleNewUnitsForNextRoundDTO.setSupportArmies(armyExtendedDTOList);
         return battleNewUnitsForNextRoundDTO;
     }
