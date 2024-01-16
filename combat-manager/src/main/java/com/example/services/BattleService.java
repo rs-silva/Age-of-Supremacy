@@ -58,7 +58,7 @@ public class BattleService {
     }
 
     /* Runs the next round for each battle occurring */
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 10000)
     @Transactional
     public void runNextRoundForEachBattle() {
         List<Battle> battleList = battleRepository.findAll();
@@ -118,6 +118,7 @@ public class BattleService {
 
         // Iterate through armies and add units to the front line respecting type-specific limits
         for (Army army : armies) {
+            LOG.info("1 - FOR ARMY = {}", army.toString());
             Map<String, Integer> armyUnits = army.getUnits();
 
             Army newFrontLineArmy = new Army();
@@ -144,6 +145,9 @@ public class BattleService {
 
             newFrontLineArmy.setUnits(newFrontLineArmyUnits);
             frontLineArmies.add(newFrontLineArmy);
+
+            LOG.info("2 - FOR ARMY = {}", army.toString());
+            //armyService.save(army);
         }
 
         return frontLineArmies;

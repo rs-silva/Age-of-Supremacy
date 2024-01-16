@@ -47,4 +47,7 @@ public class ArmyService {
         armyRepository.save(army);
     }
 
+    public void save(Army army) {
+        armyRepository.save(army);
+    }
 }
