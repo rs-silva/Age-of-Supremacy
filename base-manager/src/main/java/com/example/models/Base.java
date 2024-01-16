@@ -73,7 +73,7 @@ public class Base {
         this.buildings.add(building);
     }
 
-    public void removeSupportArmies() {
+    public void removeAllSupportArmies() {
         this.supportArmies.clear();
     }
 

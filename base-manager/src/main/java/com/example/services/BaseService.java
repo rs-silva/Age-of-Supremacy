@@ -197,7 +197,7 @@ public class BaseService {
             armyExtendedDTOList.add(armyDTO);
         }
 
-        base.removeSupportArmies();
+        base.removeAllSupportArmies();
         battleNewUnitsForNextRoundDTO.setSupportArmies(armyExtendedDTOList);
         return battleNewUnitsForNextRoundDTO;
     }
