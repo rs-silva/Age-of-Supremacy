@@ -20,6 +20,7 @@ import com.example.models.Building;
 import com.example.models.Player;
 import com.example.models.SupportArmy;
 import com.example.repositories.BaseRepository;
+import com.example.repositories.SupportArmyRepository;
 import com.example.services.buildings.BuildingInterfaceService;
 import com.example.utils.BaseManagerConstants;
 import com.example.utils.BaseUtils;
@@ -65,7 +66,9 @@ public class BaseService {
 
     private final BaseUtils baseUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingInterfaceService buildingInterfaceService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, @Lazy SupportArmyService supportArmyService, BaseUtils baseUtils) {
+    private final SupportArmyRepository supportArmyRepository;
+
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingInterfaceService buildingInterfaceService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, @Lazy SupportArmyService supportArmyService, BaseUtils baseUtils, SupportArmyRepository supportArmyRepository) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
@@ -75,6 +78,7 @@ public class BaseService {
         this.unitRecruitmentUtils = unitRecruitmentUtils;
         this.supportArmyService = supportArmyService;
         this.baseUtils = baseUtils;
+        this.supportArmyRepository = supportArmyRepository;
     }
 
     public void generateBase(Player player) {
@@ -187,6 +191,7 @@ public class BaseService {
         /* Support armies currently in the base */
         List<SupportArmy> supportArmiesList = base.getSupportArmies();
         for (SupportArmy supportArmy : supportArmiesList) {
+            LOG.info("supportArmy = {}", supportArmy.toString());
             UUID supportArmyOwnerBaseId = supportArmy.getOwnerBaseId();
             Base supportArmyBase = findById(supportArmyOwnerBaseId);
 
@@ -197,8 +202,7 @@ public class BaseService {
                     .build();
 
             armyExtendedDTOList.add(armyDTO);
-
-            supportArmyService.delete(supportArmy);
+            supportArmyRepository.deleteById(supportArmy.getId());
         }
 
         battleNewUnitsForNextRoundDTO.setSupportArmies(armyExtendedDTOList);

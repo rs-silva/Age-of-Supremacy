@@ -129,8 +129,8 @@ public class SupportArmyService {
         return true;
     }
 
-    public void delete(SupportArmy supportArmy) {
-        supportArmyRepository.delete(supportArmy);
+    public void deleteAll(List<SupportArmy> supportArmies) {
+        supportArmyRepository.deleteAll(supportArmies);
     }
 
 }
