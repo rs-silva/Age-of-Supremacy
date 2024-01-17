@@ -9,13 +9,13 @@ public class ActiveDefensesPhaseUnitsDamageFactor {
 
     private static final double GROUND_INFANTRY_DAMAGE_FACTOR = 0.001;
 
-    private static final double GROUND_ENGINEER_DAMAGE_FACTOR = 0.25;
+    private static final double GROUND_ENGINEER_DAMAGE_FACTOR = 0.1;
 
-    private static final double GROUND_SNIPER_DAMAGE_FACTOR = 0.003;
+    private static final double GROUND_SNIPER_DAMAGE_FACTOR = 0.001;
 
-    private static final double ARMORED_APC_DAMAGE_FACTOR = 0.15;
+    private static final double ARMORED_APC_DAMAGE_FACTOR = 0.1;
 
-    private static final double ARMORED_MBT_DAMAGE_FACTOR = 0.4;
+    private static final double ARMORED_MBT_DAMAGE_FACTOR = 0.25;
 
     private static final double ARMORED_ARTILLERY_DAMAGE_FACTOR = 1;
 
@@ -23,7 +23,7 @@ public class ActiveDefensesPhaseUnitsDamageFactor {
 
     private static final double AIR_FIGHTER_DAMAGE_FACTOR = 0.3;
 
-    private static final double AIR_BOMBER_DAMAGE_FACTOR = 0.75;
+    private static final double AIR_BOMBER_DAMAGE_FACTOR = 1;
 
     public static Map<String, Double> getActiveDefensesPhaseUnitsDamageFactors() {
         Map<String, Double> unitsDamageFactor = new HashMap<>();

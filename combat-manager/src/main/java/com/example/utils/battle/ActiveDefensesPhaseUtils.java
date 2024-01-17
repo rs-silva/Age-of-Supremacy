@@ -26,15 +26,16 @@ public class ActiveDefensesPhaseUtils {
         for (Army army : frontLineAttackingArmies) {
             Map<String, Integer> armyUnits = army.getUnits();
 
-            for (String unitName : armyUnits.keySet()) {
+            for (Map.Entry<String, Integer> unit : armyUnits.entrySet()) {
+                String unitName = unit.getKey();
+                int unitAmount = unit.getValue();
+
                 UnitDTO unitConfig = unitConfigUtils.getUnitConfig(unitName);
 
                 double unitAttackValue = unitConfig.getAttack();
                 double unitAccuracy = unitConfig.getAccuracy();
 
-                int unitAmount = armyUnits.get(unitName);
                 double unitDamageFactor = unitsDamageFactor.get(unitName);
-
                 double unitAttackPower = calculateUnitAttackPower(unitAmount, unitAttackValue, unitDamageFactor, unitAccuracy);
 
                 totalAttackPower += unitAttackPower;
