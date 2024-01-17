@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.utils.battle;
 
 import com.example.enums.UnitNames;
 
@@ -7,23 +7,23 @@ import java.util.Map;
 
 public abstract class BattleFrontLineUnitsLimits {
 
-    public static final int GROUND_INFANTRY_LIMIT = 1000;
+    private static final int GROUND_INFANTRY_LIMIT = 300;
 
-    public static final int GROUND_ENGINEER_LIMIT = 300;
+    private static final int GROUND_ENGINEER_LIMIT = 100;
 
-    public static final int GROUND_SNIPER_LIMIT = 50;
+    private static final int GROUND_SNIPER_LIMIT = 30;
 
-    public static final int ARMORED_APC_LIMIT = 50;
+    private static final int ARMORED_APC_LIMIT = 40;
 
-    public static final int ARMORED_MBT_LIMIT = 30;
+    private static final int ARMORED_MBT_LIMIT = 30;
 
-    public static final int ARMORED_ARTILLERY_LIMIT = 30;
+    private static final int ARMORED_ARTILLERY_LIMIT = 30;
 
-    public static final int AIR_FIGHTER_LIMIT = 30;
+    private static final int AIR_FIGHTER_LIMIT = 30;
 
-    public static final int AIR_BOMBER_LIMIT = 20;
+    private static final int AIR_BOMBER_LIMIT = 20;
 
-    public static final int AIR_RECON_LIMIT = 30;
+    private static final int AIR_RECON_LIMIT = 30;
 
     public static Map<String, Integer> getFrontLineUnitsLimits() {
         Map<String, Integer> frontLineUnitsLimits = new HashMap<>();

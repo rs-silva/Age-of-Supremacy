@@ -8,8 +8,9 @@ import com.example.models.Army;
 import com.example.models.Battle;
 import com.example.repositories.BattleRepository;
 import com.example.utils.ArmyUtils;
-import com.example.utils.BattleFrontLineUnitsLimits;
-import com.example.utils.BattleUtils;
+import com.example.utils.battle.ActiveDefensesPhaseUtils;
+import com.example.utils.battle.BattleFrontLineUnitsLimits;
+import com.example.utils.battle.BattleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,10 +36,13 @@ public class BattleService {
 
     private final Map<String, Integer> frontLineUnitsLimits;
 
-    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService) {
+    private final ActiveDefensesPhaseUtils activeDefensesPhaseUtils;
+
+    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService, ActiveDefensesPhaseUtils activeDefensesPhaseUtils) {
         this.battleRepository = battleRepository;
         this.battleUtils = battleUtils;
         this.armyService = armyService;
+        this.activeDefensesPhaseUtils = activeDefensesPhaseUtils;
         this.frontLineUnitsLimits = BattleFrontLineUnitsLimits.getFrontLineUnitsLimits();
     }
 
@@ -84,6 +88,16 @@ public class BattleService {
 
             LOG.info("AFTER Attacking Armies = {}", attackingArmies.toString());
             LOG.info("AFTER Defending Armies = {}", defendingArmies.toString());
+
+            /* If the base defenses are still active, the attacking armies cannot attack the defending armies */
+            if (battleUtils.areBaseDefensesActive(battle)) {
+                double totalAttackPower = activeDefensesPhaseUtils.calculateAttackingPowerToBaseDefenses(attackingArmies);
+                LOG.info("totalAttackPower = {}", totalAttackPower);
+            }
+            /* If the base defenses are not active, the attacking and the defending armies will attack each other */
+            else {
+
+            }
         }
     }
 
@@ -137,7 +151,8 @@ public class BattleService {
 
                     frontLineUnitsCounter.put(unitType, frontLineUnitsCounter.getOrDefault(unitType, 0) + unitsToAdd);
 
-                    armyUnits.put(unitType, unitAmount - unitsToAdd);
+                    /* TODO Uncomment this line */
+                    //armyUnits.put(unitType, unitAmount - unitsToAdd);
                 }
             }
 

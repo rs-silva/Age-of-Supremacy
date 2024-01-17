@@ -25,6 +25,16 @@ public class UnitConfigUtils {
                 .orElse(null);
     }
 
+    public double getUnitAttackValue(String unitName) {
+        UnitDTO unitDTO = unitConfig.getUnits()
+                .stream()
+                .filter(unit -> unit.getUnitName().equals(unitName))
+                .findFirst()
+                .orElse(null);
+
+        return unitDTO.getAttack();
+    }
+
     public Map<String, Integer> getUnitResourceConfig(UnitDTO unitDTO) {
         if (unitDTO != null) {
             Map<String, Integer> resources = new HashMap<>();

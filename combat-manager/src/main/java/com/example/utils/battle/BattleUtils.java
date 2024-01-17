@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.utils.battle;
 
 import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
@@ -31,6 +31,10 @@ public class BattleUtils {
         /* Get defense information for this base from the base-manager module */
         String url = "http://localhost:8082/api/base/" + baseId + "/getDefenseInformation";
         return restTemplate.getForEntity(url, BaseDefenseInformationDTO.class).getBody();
+    }
+
+    public boolean areBaseDefensesActive(Battle battle) {
+        return battle.getDefenseHealthPoints() > 0;
     }
 
 }
