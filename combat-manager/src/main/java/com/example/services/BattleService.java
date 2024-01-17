@@ -82,12 +82,13 @@ public class BattleService {
 
             /* If the base defenses are still active, the attacking armies cannot attack the defending armies */
             if (battleUtils.areBaseDefensesActive(battle)) {
-                double totalAttackPower = battleUtils.calculateAttackingPowerToBaseDefenses(attackingFrontLine);
+                int totalAttackPower = battleUtils.calculateAttackingPowerToBaseDefenses(attackingFrontLine);
                 LOG.info("totalAttackPower = {}", totalAttackPower);
+                battleUtils.updateBaseDefensesHealthPoints(battle, totalAttackPower);
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
             else {
-
+                LOG.info("BASE DEFENSES ARE DOWN!");
             }
         }
     }

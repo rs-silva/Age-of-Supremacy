@@ -85,12 +85,31 @@ public class BattleUtils {
         return frontLineArmies;
     }
 
-    public double calculateAttackingPowerToBaseDefenses(List<Army> attackingArmies) {
-        return activeDefensesPhaseUtils.calculateAttackingPowerToBaseDefenses(attackingArmies);
+    public int calculateAttackingPowerToBaseDefenses(List<Army> attackingArmies) {
+        double attackingPower = activeDefensesPhaseUtils.calculateAttackingPowerToBaseDefenses(attackingArmies);
+
+        /* Scaling factor = Apply a random scaling factor between 75% and 125% to the original attacking power value */
+        double MIN_FACTOR = 0.75;
+        double MAX_FACTOR = 1.25;
+
+        double scalingFactor = getRandomNumber(MIN_FACTOR, MAX_FACTOR);
+        System.out.println("RANDOM FACTOR = " + scalingFactor);
+        double attackingPowerWithFactor = attackingPower * scalingFactor;
+        return (int) attackingPowerWithFactor;
+    }
+
+    public void updateBaseDefensesHealthPoints(Battle battle, int attackingDamage) {
+        int currentHealthPoints = battle.getDefenseHealthPoints();
+        int updatedHealthPoints = currentHealthPoints - attackingDamage;
+        battle.setDefenseHealthPoints(Math.max(updatedHealthPoints, 0));
     }
 
     public boolean areBaseDefensesActive(Battle battle) {
         return battle.getDefenseHealthPoints() > 0;
+    }
+
+    private double getRandomNumber(double min, double max) {
+        return (Math.random() * (max - min)) + min;
     }
 
 }
