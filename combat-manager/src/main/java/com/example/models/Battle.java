@@ -31,11 +31,11 @@ public class Battle {
     @Column(unique = true)
     private UUID baseId;
 
-    private int groundDefense;
+    private int groundDefensePower;
 
-    private int antiTankDefense;
+    private int antiTankDefensePower;
 
-    private int antiAirDefense;
+    private int antiAirDefensePower;
 
     private int defenseHealthPoints;
 
@@ -51,9 +51,9 @@ public class Battle {
         return "Battle{" +
                 "id=" + id +
                 ", baseId=" + baseId +
-                ", groundDefense=" + groundDefense +
-                ", antiTankDefense=" + antiTankDefense +
-                ", antiAirDefense=" + antiAirDefense +
+                ", groundDefensePower=" + groundDefensePower +
+                ", antiTankDefensePower=" + antiTankDefensePower +
+                ", antiAirDefensePower=" + antiAirDefensePower +
                 ", defenseHealthPoints=" + defenseHealthPoints +
                 '}';
     }

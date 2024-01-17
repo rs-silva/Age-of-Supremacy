@@ -53,15 +53,15 @@ public class BaseUtils {
         }
 
         Map<String, String> strategicDefenseCenterProperties = buildingInterfaceService.getAdditionalProperties(strategicDefenseCenter);
-        int groundDefense = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_GROUND.getLabel()));
-        int antiTankDefense = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_ANTITANK.getLabel()));
-        int antiAirDefense = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_AA.getLabel()));
+        int groundDefense = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_GROUND_POWER.getLabel()));
+        int antiTankDefense = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_ANTITANK_POWER.getLabel()));
+        int antiAirDefense = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_AA_POWER.getLabel()));
         int defenseHealthPoints = Integer.parseInt(strategicDefenseCenterProperties.get(BuildingsPropertiesNames.DEFENSE_CENTER_HEALTH_POINTS.getLabel()));
 
         return BaseDefenseInformationDTO.builder()
-                .groundDefense(groundDefense)
-                .antiTankDefense(antiTankDefense)
-                .antiAirDefense(antiAirDefense)
+                .groundDefensePower(groundDefense)
+                .antiTankDefensePower(antiTankDefense)
+                .antiAirDefensePower(antiAirDefense)
                 .defenseHealthPoints(defenseHealthPoints)
                 .build();
     }

@@ -184,7 +184,6 @@ public class BaseService {
         /* Support armies currently in the base */
         List<SupportArmy> supportArmiesList = base.getSupportArmies();
         for (SupportArmy supportArmy : supportArmiesList) {
-            LOG.info("supportArmy = {}", supportArmy.toString());
             UUID supportArmyOwnerBaseId = supportArmy.getOwnerBaseId();
             Base supportArmyBase = findById(supportArmyOwnerBaseId);
 

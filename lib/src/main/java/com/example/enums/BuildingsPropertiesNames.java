@@ -17,9 +17,9 @@ public enum BuildingsPropertiesNames {
     DEFENSE_CENTER_ANTITANK_FACTOR("Anti-tank defense factor"),
     DEFENSE_CENTER_HEALTH_POINTS_FACTOR("Defense center's health points factor"),
 
-    DEFENSE_CENTER_GROUND("Ground defense"),
-    DEFENSE_CENTER_AA("Anti-air defense"),
-    DEFENSE_CENTER_ANTITANK("Anti-tank defense"),
+    DEFENSE_CENTER_GROUND_POWER("Ground defense power"),
+    DEFENSE_CENTER_AA_POWER("Anti-air defense power"),
+    DEFENSE_CENTER_ANTITANK_POWER("Anti-tank defense power"),
     DEFENSE_CENTER_HEALTH_POINTS("Defense center's health points");
 
     private final String label;

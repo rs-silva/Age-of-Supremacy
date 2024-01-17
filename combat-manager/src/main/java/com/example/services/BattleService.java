@@ -47,9 +47,9 @@ public class BattleService {
 
         Battle battle = Battle.builder()
                 .baseId(baseId)
-                .groundDefense(baseDefenseInformation.getGroundDefense())
-                .antiTankDefense(baseDefenseInformation.getAntiTankDefense())
-                .antiAirDefense(baseDefenseInformation.getAntiAirDefense())
+                .groundDefensePower(baseDefenseInformation.getGroundDefensePower())
+                .antiTankDefensePower(baseDefenseInformation.getAntiTankDefensePower())
+                .antiAirDefensePower(baseDefenseInformation.getAntiAirDefensePower())
                 .defenseHealthPoints(baseDefenseInformation.getDefenseHealthPoints())
                 .armies(new ArrayList<>())
                 .build();
@@ -118,7 +118,6 @@ public class BattleService {
 
         // Iterate through armies and add units to the front line respecting type-specific limits
         for (Army army : armies) {
-            LOG.info("1 - FOR ARMY = {}", army.toString());
             Map<String, Integer> armyUnits = army.getUnits();
 
             Army newFrontLineArmy = new Army();
@@ -146,7 +145,6 @@ public class BattleService {
             newFrontLineArmy.setUnits(newFrontLineArmyUnits);
             frontLineArmies.add(newFrontLineArmy);
 
-            LOG.info("2 - FOR ARMY = {}", army.toString());
             //armyService.save(army);
         }
 

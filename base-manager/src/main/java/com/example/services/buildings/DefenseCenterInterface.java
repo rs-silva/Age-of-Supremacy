@@ -52,9 +52,9 @@ public class DefenseCenterInterface implements BuildingInterface {
         int aaDefense = getAADefense(building);
         int healthPoints = getHealthPoints(building);
 
-        properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_GROUND.getLabel(), String.valueOf(overallDefense));
-        properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_ANTITANK.getLabel(), String.valueOf(antitankDefense));
-        properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_AA.getLabel(), String.valueOf(aaDefense));
+        properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_GROUND_POWER.getLabel(), String.valueOf(overallDefense));
+        properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_ANTITANK_POWER.getLabel(), String.valueOf(antitankDefense));
+        properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_AA_POWER.getLabel(), String.valueOf(aaDefense));
         properties.put(BuildingsPropertiesNames.DEFENSE_CENTER_HEALTH_POINTS.getLabel(), String.valueOf(healthPoints));
 
         return properties;

@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BaseDefenseInformationDTO {
 
-    private int groundDefense;
+    private int groundDefensePower;
 
-    private int antiTankDefense;
+    private int antiTankDefensePower;
 
-    private int antiAirDefense;
+    private int antiAirDefensePower;
 
     private int defenseHealthPoints;
 
