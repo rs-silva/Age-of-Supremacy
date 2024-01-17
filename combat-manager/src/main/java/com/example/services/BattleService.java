@@ -110,7 +110,7 @@ public class BattleService {
 
     private List<Army> setupFrontLine(List<Army> armies) {
         // Create a map to store the count of units for each type in the front line
-        Map<String, Integer> frontLineUnitCounts = new HashMap<>();
+        Map<String, Integer> frontLineUnitsCounter = new HashMap<>();
         List<Army> frontLineArmies = new ArrayList<>();
 
         // Sort armies based on some criteria (e.g., total attack power)
@@ -127,25 +127,22 @@ public class BattleService {
 
             for (Map.Entry<String, Integer> entry : armyUnits.entrySet()) {
                 String unitType = entry.getKey();
-                int unitCount = entry.getValue();
+                int unitAmount = entry.getValue();
 
                 int unitTypeLimit = frontLineUnitsLimits.get(unitType);
 
-                int unitsToAdd = Math.min(unitCount, unitTypeLimit - frontLineUnitCounts.getOrDefault(unitType, 0));
+                int unitsToAdd = Math.min(unitAmount, unitTypeLimit - frontLineUnitsCounter.getOrDefault(unitType, 0));
                 if (unitsToAdd > 0) {
                     newFrontLineArmyUnits.put(unitType, unitsToAdd);
 
-                    frontLineUnitCounts.put(unitType, frontLineUnitCounts.getOrDefault(unitType, 0) + unitsToAdd);
+                    frontLineUnitsCounter.put(unitType, frontLineUnitsCounter.getOrDefault(unitType, 0) + unitsToAdd);
 
-                    int unitOriginalAmount = armyUnits.get(unitType);
-                    armyUnits.put(unitType, unitOriginalAmount - unitsToAdd);
+                    armyUnits.put(unitType, unitAmount - unitsToAdd);
                 }
             }
 
             newFrontLineArmy.setUnits(newFrontLineArmyUnits);
             frontLineArmies.add(newFrontLineArmy);
-
-            //armyService.save(army);
         }
 
         return frontLineArmies;

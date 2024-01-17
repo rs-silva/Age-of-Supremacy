@@ -42,10 +42,6 @@ public class Battle {
     @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
     private List<Army> armies;
 
-    public void addArmy(Army army) {
-        this.armies.add(army);
-    }
-
     @Override
     public String toString() {
         return "Battle{" +
