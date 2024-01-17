@@ -16,7 +16,7 @@
       "unitName": "Engineer",
       "healthPoints": 4,
       "movementSpeed": 1.5,
-      "attack": 4,
+      "attack": 5,
       "defense": 1.5,
       "recruitmentTime": 2,
       "resources": [
@@ -40,7 +40,7 @@
       "unitName": "Armored Personnel Carrier",
       "healthPoints": 40,
       "movementSpeed": 15,
-      "attack": 20,
+      "attack": 15,
       "defense": 12,
       "recruitmentTime": 20,
       "resources": [
@@ -52,7 +52,7 @@
       "unitName": "Main Battle Tank",
       "healthPoints": 80,
       "movementSpeed": 10,
-      "attack": 50,
+      "attack": 40,
       "defense": 40,
       "recruitmentTime": 20,
       "resources": [
@@ -64,7 +64,7 @@
       "unitName": "Artillery",
       "healthPoints": 20,
       "movementSpeed": 7.5,
-      "attack": 120,
+      "attack": 100,
       "defense": 10,
       "recruitmentTime": 20,
       "resources": [

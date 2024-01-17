@@ -7,23 +7,23 @@ import java.util.Map;
 
 public abstract class BattleFrontLineUnitsLimits {
 
-    private static final int GROUND_INFANTRY_LIMIT = 300;
+    private static final int GROUND_INFANTRY_LIMIT = 500;
 
-    private static final int GROUND_ENGINEER_LIMIT = 100;
+    private static final int GROUND_ENGINEER_LIMIT = 80;
 
-    private static final int GROUND_SNIPER_LIMIT = 30;
+    private static final int GROUND_SNIPER_LIMIT = 15;
 
     private static final int ARMORED_APC_LIMIT = 40;
 
-    private static final int ARMORED_MBT_LIMIT = 30;
+    private static final int ARMORED_MBT_LIMIT = 20;
 
     private static final int ARMORED_ARTILLERY_LIMIT = 30;
 
-    private static final int AIR_FIGHTER_LIMIT = 30;
+    private static final int AIR_RECON_LIMIT = 20;
+
+    private static final int AIR_FIGHTER_LIMIT = 40;
 
     private static final int AIR_BOMBER_LIMIT = 20;
-
-    private static final int AIR_RECON_LIMIT = 30;
 
     public static Map<String, Integer> getFrontLineUnitsLimits() {
         Map<String, Integer> frontLineUnitsLimits = new HashMap<>();

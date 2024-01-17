@@ -8,8 +8,6 @@ import com.example.models.Army;
 import com.example.models.Battle;
 import com.example.repositories.BattleRepository;
 import com.example.utils.ArmyUtils;
-import com.example.utils.battle.ActiveDefensesPhaseUtils;
-import com.example.utils.battle.BattleFrontLineUnitsLimits;
 import com.example.utils.battle.BattleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -34,16 +31,10 @@ public class BattleService {
 
     private final ArmyService armyService;
 
-    private final Map<String, Integer> frontLineUnitsLimits;
-
-    private final ActiveDefensesPhaseUtils activeDefensesPhaseUtils;
-
-    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService, ActiveDefensesPhaseUtils activeDefensesPhaseUtils) {
+    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService) {
         this.battleRepository = battleRepository;
         this.battleUtils = battleUtils;
         this.armyService = armyService;
-        this.activeDefensesPhaseUtils = activeDefensesPhaseUtils;
-        this.frontLineUnitsLimits = BattleFrontLineUnitsLimits.getFrontLineUnitsLimits();
     }
 
     public Battle generateBattle(UUID baseId) {
@@ -80,8 +71,8 @@ public class BattleService {
             LOG.info("BEFORE Attacking Armies = {}", attackingArmies.toString());
             LOG.info("BEFORE Defending Armies = {}", defendingArmies.toString());
 
-            List<Army> attackingFrontLine = setupFrontLine(attackingArmies);
-            List<Army> defendingFrontLine = setupFrontLine(defendingArmies);
+            List<Army> attackingFrontLine = battleUtils.setupFrontLine(attackingArmies);
+            List<Army> defendingFrontLine = battleUtils.setupFrontLine(defendingArmies);
 
             LOG.info("Attacking Front Line = {}", attackingFrontLine.toString());
             LOG.info("Defending Front Line = {}", defendingFrontLine.toString());
@@ -91,7 +82,7 @@ public class BattleService {
 
             /* If the base defenses are still active, the attacking armies cannot attack the defending armies */
             if (battleUtils.areBaseDefensesActive(battle)) {
-                double totalAttackPower = activeDefensesPhaseUtils.calculateAttackingPowerToBaseDefenses(attackingArmies);
+                double totalAttackPower = battleUtils.calculateAttackingPowerToBaseDefenses(attackingFrontLine);
                 LOG.info("totalAttackPower = {}", totalAttackPower);
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
@@ -120,47 +111,6 @@ public class BattleService {
             }
         }
 
-    }
-
-    private List<Army> setupFrontLine(List<Army> armies) {
-        // Create a map to store the count of units for each type in the front line
-        Map<String, Integer> frontLineUnitsCounter = new HashMap<>();
-        List<Army> frontLineArmies = new ArrayList<>();
-
-        // Sort armies based on some criteria (e.g., total attack power)
-        //armies.sort(Comparator.comparingInt(this::calculateTotalAttackPower).reversed());
-
-        // Iterate through armies and add units to the front line respecting type-specific limits
-        for (Army army : armies) {
-            Map<String, Integer> armyUnits = army.getUnits();
-
-            Army newFrontLineArmy = new Army();
-            newFrontLineArmy.setOwnerBaseId(army.getOwnerBaseId());
-            newFrontLineArmy.setOwnerPlayerId(army.getOwnerPlayerId());
-            Map<String, Integer> newFrontLineArmyUnits = new HashMap<>();
-
-            for (Map.Entry<String, Integer> entry : armyUnits.entrySet()) {
-                String unitType = entry.getKey();
-                int unitAmount = entry.getValue();
-
-                int unitTypeLimit = frontLineUnitsLimits.get(unitType);
-
-                int unitsToAdd = Math.min(unitAmount, unitTypeLimit - frontLineUnitsCounter.getOrDefault(unitType, 0));
-                if (unitsToAdd > 0) {
-                    newFrontLineArmyUnits.put(unitType, unitsToAdd);
-
-                    frontLineUnitsCounter.put(unitType, frontLineUnitsCounter.getOrDefault(unitType, 0) + unitsToAdd);
-
-                    /* TODO Uncomment this line */
-                    //armyUnits.put(unitType, unitAmount - unitsToAdd);
-                }
-            }
-
-            newFrontLineArmy.setUnits(newFrontLineArmyUnits);
-            frontLineArmies.add(newFrontLineArmy);
-        }
-
-        return frontLineArmies;
     }
 
     public Battle findByBaseId(UUID baseId) {
