@@ -1,5 +1,6 @@
 package com.example.utils.battle;
 
+import com.example.dto.UnitDTO;
 import com.example.models.Army;
 import com.example.utils.UnitConfigUtils;
 import org.springframework.stereotype.Component;
@@ -26,11 +27,15 @@ public class ActiveDefensesPhaseUtils {
             Map<String, Integer> armyUnits = army.getUnits();
 
             for (String unitName : armyUnits.keySet()) {
+                UnitDTO unitConfig = unitConfigUtils.getUnitConfig(unitName);
+
+                double unitAttackValue = unitConfig.getAttack();
+                double unitAccuracy = unitConfig.getAccuracy();
+
                 int unitAmount = armyUnits.get(unitName);
-                double unitAttackValue = unitConfigUtils.getUnitAttackValue(unitName);
                 double unitDamageFactor = unitsDamageFactor.get(unitName);
 
-                double unitAttackPower = calculateUnitAttackPower(unitAmount, unitAttackValue, unitDamageFactor);
+                double unitAttackPower = calculateUnitAttackPower(unitAmount, unitAttackValue, unitDamageFactor, unitAccuracy);
 
                 totalAttackPower += unitAttackPower;
             }
@@ -40,8 +45,8 @@ public class ActiveDefensesPhaseUtils {
         return totalAttackPower;
     }
 
-    private double calculateUnitAttackPower(int unitAmount, double unitAttackValue, double unitDamageFactor) {
-        return unitAmount * unitAttackValue * unitDamageFactor;
+    private double calculateUnitAttackPower(int unitAmount, double unitAttackValue, double unitDamageFactor, double unitAccuracy) {
+        return unitAmount * unitAttackValue * unitDamageFactor * unitAccuracy;
     }
 
 }

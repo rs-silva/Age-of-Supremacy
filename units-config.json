@@ -6,6 +6,7 @@
       "movementSpeed": 2,
       "attack": 2,
       "defense": 3,
+      "accuracy" : 0.7,
       "recruitmentTime": 10,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -18,6 +19,7 @@
       "movementSpeed": 1.5,
       "attack": 5,
       "defense": 1.5,
+      "accuracy" : 0.6,
       "recruitmentTime": 2,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -30,6 +32,7 @@
       "movementSpeed": 2.5,
       "attack": 4,
       "defense": 0.5,
+      "accuracy" : 0.9,
       "recruitmentTime": 5,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -42,6 +45,7 @@
       "movementSpeed": 15,
       "attack": 15,
       "defense": 12,
+      "accuracy" : 0.65,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -54,6 +58,7 @@
       "movementSpeed": 10,
       "attack": 40,
       "defense": 40,
+      "accuracy" : 0.75,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -66,6 +71,7 @@
       "movementSpeed": 7.5,
       "attack": 100,
       "defense": 10,
+      "accuracy" : 0.8,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -78,6 +84,7 @@
       "movementSpeed": 50,
       "attack": 40,
       "defense": 18,
+      "accuracy" : 0.8,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -90,6 +97,7 @@
       "movementSpeed": 30,
       "attack": 150,
       "defense": 15,
+      "accuracy" : 0.5,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },
@@ -100,8 +108,9 @@
       "unitName": "Recon",
       "healthPoints": 20,
       "movementSpeed": 20,
-      "attack": 2,
-      "defense": 0,
+      "attack": 1,
+      "defense": 2,
+      "accuracy" : 0.7,
       "recruitmentTime": 20,
       "resources": [
         { "resourceName": "Construction Materials", "quantity": 1 },

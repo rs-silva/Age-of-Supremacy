@@ -18,6 +18,8 @@ public class UnitDTO {
 
     private double defense;
 
+    private double accuracy;
+
     private int recruitmentTime;
 
     private List<ResourceConfig> resources;
