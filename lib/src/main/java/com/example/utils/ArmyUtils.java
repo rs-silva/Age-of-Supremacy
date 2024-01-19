@@ -1,5 +1,7 @@
 package com.example.utils;
 
+import com.example.enums.UnitNames;
+
 import java.util.Map;
 
 public abstract class ArmyUtils {
@@ -20,6 +22,22 @@ public abstract class ArmyUtils {
         }
 
         return currentUnits;
+    }
+
+    public static boolean checkIfArmyHasEveryUnitType(Map<String, Integer> armyUnits) {
+        if (armyUnits.keySet().size() < UnitNames.values().length) {
+            return false;
+        }
+
+        for (Map.Entry<String, Integer> unitInfo : armyUnits.entrySet()) {
+            int unitAmount = unitInfo.getValue();
+
+            if (unitAmount == 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

@@ -4,6 +4,7 @@ import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.models.Army;
 import com.example.models.Battle;
+import com.example.utils.ArmyUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -93,6 +94,21 @@ public class BattleUtils {
         System.out.println("SCALING FACTOR = " + scalingFactor);
         double attackingPowerWithFactor = attackingPower * scalingFactor;
         return (int) attackingPowerWithFactor;
+    }
+
+    public boolean checkIfFrontLinesAreFull(List<Army> attackingFrontLine, List<Army> defendingFrontLine) {
+        /* Checks if both front lines have all the unit types */
+        return checkIfFrontLineIsFull(attackingFrontLine) && checkIfFrontLineIsFull(defendingFrontLine);
+    }
+
+    private boolean checkIfFrontLineIsFull(List<Army> frontLine) {
+        for (Army army : frontLine) {
+            if (!ArmyUtils.checkIfArmyHasEveryUnitType(army.getUnits())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void updateBaseDefensesHealthPoints(Battle battle, int attackingDamage) {

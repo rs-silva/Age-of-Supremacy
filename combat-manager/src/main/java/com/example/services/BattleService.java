@@ -91,6 +91,8 @@ public class BattleService {
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
             else {
                 LOG.info("BASE DEFENSES ARE DOWN!");
+                boolean checkIfFrontLinesAreFull = battleUtils.checkIfFrontLinesAreFull(attackingFrontLine, defendingFrontLine);
+                LOG.info("checkIfFrontLinesAreFull = {}", checkIfFrontLinesAreFull);
             }
         }
 
