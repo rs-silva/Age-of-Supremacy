@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,7 @@ public class BattleService {
     @Transactional
     public void runNextRoundForEachBattle() {
         List<Battle> battleList = battleRepository.findAll();
+        long now = Instant.now().toEpochMilli();
 
         for (Battle battle : battleList) {
             LOG.info("Battle {} next round", battle);
@@ -91,6 +93,8 @@ public class BattleService {
                 LOG.info("BASE DEFENSES ARE DOWN!");
             }
         }
+
+        LOG.info("Battles processing time = {}ms", Instant.now().toEpochMilli() - now);
     }
 
     private void setupRoundNewUnits(Battle battle) {

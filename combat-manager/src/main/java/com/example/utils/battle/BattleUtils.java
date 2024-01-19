@@ -95,14 +95,6 @@ public class BattleUtils {
         return (int) attackingPowerWithFactor;
     }
 
-    private double getScalingFactor() {
-        /* Scaling factor = Get a scaling factor between 75% and 125% of the original attacking power value */
-        double MEAN = 1;
-        double STANDARD_DEVIATION = 0.07;
-
-        return getNumberFromGaussianDistribution(MEAN, STANDARD_DEVIATION);
-    }
-
     public void updateBaseDefensesHealthPoints(Battle battle, int attackingDamage) {
         int currentHealthPoints = battle.getDefenseHealthPoints();
         int updatedHealthPoints = currentHealthPoints - attackingDamage;
@@ -111,6 +103,14 @@ public class BattleUtils {
 
     public boolean areBaseDefensesActive(Battle battle) {
         return battle.getDefenseHealthPoints() > 0;
+    }
+
+    private double getScalingFactor() {
+        /* Scaling factor = Get a scaling factor between 75% and 125% of the original attacking power value */
+        double MEAN = 1;
+        double STANDARD_DEVIATION = 0.07;
+
+        return getNumberFromGaussianDistribution(MEAN, STANDARD_DEVIATION);
     }
 
     private double getNumberFromGaussianDistribution(double mean, double standardDeviation) {
