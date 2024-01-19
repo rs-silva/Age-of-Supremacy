@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -88,14 +89,18 @@ public class BattleUtils {
     public int calculateAttackingPowerToBaseDefenses(List<Army> attackingArmies) {
         double attackingPower = activeDefensesPhaseUtils.calculateAttackingPowerToBaseDefenses(attackingArmies);
 
-        /* Scaling factor = Apply a random scaling factor between 75% and 125% to the original attacking power value */
-        double MIN_FACTOR = 0.75;
-        double MAX_FACTOR = 1.25;
-
-        double scalingFactor = getRandomNumber(MIN_FACTOR, MAX_FACTOR);
-        System.out.println("RANDOM FACTOR = " + scalingFactor);
+        double scalingFactor = getScalingFactor();
+        System.out.println("SCALING FACTOR = " + scalingFactor);
         double attackingPowerWithFactor = attackingPower * scalingFactor;
         return (int) attackingPowerWithFactor;
+    }
+
+    private double getScalingFactor() {
+        /* Scaling factor = Get a scaling factor between 75% and 125% of the original attacking power value */
+        double MEAN = 1;
+        double STANDARD_DEVIATION = 0.07;
+
+        return getNumberFromGaussianDistribution(MEAN, STANDARD_DEVIATION);
     }
 
     public void updateBaseDefensesHealthPoints(Battle battle, int attackingDamage) {
@@ -108,8 +113,10 @@ public class BattleUtils {
         return battle.getDefenseHealthPoints() > 0;
     }
 
-    private double getRandomNumber(double min, double max) {
-        return (Math.random() * (max - min)) + min;
+    private double getNumberFromGaussianDistribution(double mean, double standardDeviation) {
+        Random random = new Random();
+
+        return random.nextGaussian() * standardDeviation + mean;
     }
 
 }
