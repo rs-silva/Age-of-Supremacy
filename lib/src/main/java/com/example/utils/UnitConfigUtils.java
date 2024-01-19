@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Component
 public class UnitConfigUtils {
@@ -15,6 +16,16 @@ public class UnitConfigUtils {
 
     public UnitConfigUtils(UnitConfig unitConfig) {
         this.unitConfig = unitConfig;
+    }
+
+    public double getUnitDefense(String unitName) {
+        return getUnitMetric(unitName, UnitDTO::getDefense);
+    }
+
+    private double getUnitMetric(String unitName, Function<UnitDTO, Double> metricFunction) {
+        UnitDTO unit = getUnitConfig(unitName);
+
+        return metricFunction.apply(unit);
     }
 
     public UnitDTO getUnitConfig(String unitName) {

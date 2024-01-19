@@ -87,6 +87,9 @@ public class BattleService {
                 int totalAttackPower = battleUtils.calculateAttackingPowerToBaseDefenses(attackingFrontLine);
                 LOG.info("totalAttackPower = {}", totalAttackPower);
                 battleUtils.updateBaseDefensesHealthPoints(battle, totalAttackPower);
+
+                int attackingFrontLineDefense = battleUtils.getArmiesDefense(attackingFrontLine);
+                LOG.info("attackingFrontLineDefense = {}", attackingFrontLineDefense);
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
             else {

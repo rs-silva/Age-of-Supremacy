@@ -2,9 +2,11 @@ package com.example.utils.battle;
 
 import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
+import com.example.enums.UnitNames;
 import com.example.models.Army;
 import com.example.models.Battle;
 import com.example.utils.ArmyUtils;
+import com.example.utils.UnitConfigUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,10 +24,13 @@ public class BattleUtils {
 
     private final ActiveDefensesPhaseUtils activeDefensesPhaseUtils;
 
+    private final UnitConfigUtils unitConfigUtils;
+
     private final RestTemplate restTemplate;
 
-    public BattleUtils(ActiveDefensesPhaseUtils activeDefensesPhaseUtils, RestTemplate restTemplate) {
+    public BattleUtils(ActiveDefensesPhaseUtils activeDefensesPhaseUtils, UnitConfigUtils unitConfigUtils, RestTemplate restTemplate) {
         this.activeDefensesPhaseUtils = activeDefensesPhaseUtils;
+        this.unitConfigUtils = unitConfigUtils;
         this.frontLineUnitsLimits = BattleFrontLineUnitsLimits.getFrontLineUnitsLimits();
         this.restTemplate = restTemplate;
     }
@@ -94,6 +99,32 @@ public class BattleUtils {
         System.out.println("SCALING FACTOR = " + scalingFactor);
         double attackingPowerWithFactor = attackingPower * scalingFactor;
         return (int) attackingPowerWithFactor;
+    }
+
+    public int getArmiesDefense(List<Army> armies) {
+        double totalDefense = 0;
+
+        for (Army army : armies) {
+            totalDefense += getGroundDefense(army.getUnits());
+        }
+
+        double scalingFactor = getScalingFactor();
+        System.out.println("SCALING FACTOR = " + scalingFactor);
+        double defenseWithFactor = totalDefense * scalingFactor;
+        return (int) defenseWithFactor;
+    }
+
+    private double getGroundDefense(Map<String, Integer> armyUnits) {
+        /* Infantry + Engineers + Sniper */
+        int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
+        int engineerAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
+        int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
+
+        double infantryDefense = infantryAmount * unitConfigUtils.getUnitDefense(UnitNames.GROUND_INFANTRY.getLabel());
+        double engineerDefense = engineerAmount * unitConfigUtils.getUnitDefense(UnitNames.GROUND_ENGINEER.getLabel());
+        double sniperDefense = sniperAmount * unitConfigUtils.getUnitDefense(UnitNames.GROUND_SNIPER.getLabel());
+
+        return infantryDefense + engineerDefense + sniperDefense;
     }
 
     public boolean checkIfFrontLinesAreFull(List<Army> attackingFrontLine, List<Army> defendingFrontLine) {
