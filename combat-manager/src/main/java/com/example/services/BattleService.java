@@ -3,6 +3,7 @@ package com.example.services;
 import com.example.dto.ArmyExtendedDTO;
 import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
+import com.example.dto.UnitDTO;
 import com.example.enums.ArmyRole;
 import com.example.models.Army;
 import com.example.models.Battle;
@@ -88,7 +89,7 @@ public class BattleService {
                 LOG.info("totalAttackPower = {}", totalAttackPower);
                 battleUtils.updateBaseDefensesHealthPoints(battle, totalAttackPower);
 
-                int attackingFrontLineDefense = battleUtils.getArmiesDefense(attackingFrontLine);
+                int attackingFrontLineDefense = battleUtils.getArmiesMetric(attackingFrontLine, UnitDTO::getDefense);
                 LOG.info("attackingFrontLineDefense = {}", attackingFrontLineDefense);
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */

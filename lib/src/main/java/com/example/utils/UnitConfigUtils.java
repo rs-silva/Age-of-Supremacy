@@ -18,11 +18,7 @@ public class UnitConfigUtils {
         this.unitConfig = unitConfig;
     }
 
-    public double getUnitDefense(String unitName) {
-        return getUnitMetric(unitName, UnitDTO::getDefense);
-    }
-
-    private double getUnitMetric(String unitName, Function<UnitDTO, Double> metricFunction) {
+    public double getUnitMetric(String unitName, Function<UnitDTO, Double> metricFunction) {
         UnitDTO unit = getUnitConfig(unitName);
 
         return metricFunction.apply(unit);

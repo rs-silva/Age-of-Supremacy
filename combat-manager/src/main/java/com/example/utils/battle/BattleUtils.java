@@ -2,6 +2,7 @@ package com.example.utils.battle;
 
 import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
+import com.example.dto.UnitDTO;
 import com.example.enums.UnitNames;
 import com.example.models.Army;
 import com.example.models.Battle;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Component
 public class BattleUtils {
@@ -101,30 +103,58 @@ public class BattleUtils {
         return (int) attackingPowerWithFactor;
     }
 
-    public int getArmiesDefense(List<Army> armies) {
-        double totalDefense = 0;
+    public int getArmiesMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
+        double totalMetric = 0;
 
         for (Army army : armies) {
-            totalDefense += getGroundDefense(army.getUnits());
+            totalMetric += getArmyGroundUnitsMetric(army.getUnits(), metricFunction);
+            totalMetric += getArmyArmoredUnitsMetric(army.getUnits(), metricFunction);
+            totalMetric += getArmyAirUnitsMetric(army.getUnits(), metricFunction);
         }
 
         double scalingFactor = getScalingFactor();
         System.out.println("SCALING FACTOR = " + scalingFactor);
-        double defenseWithFactor = totalDefense * scalingFactor;
-        return (int) defenseWithFactor;
+        double totalWithFactor = totalMetric * scalingFactor;
+        return (int) totalWithFactor;
     }
 
-    private double getGroundDefense(Map<String, Integer> armyUnits) {
+    private double getArmyGroundUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
         /* Infantry + Engineers + Sniper */
         int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
         int engineerAmount = armyUnits.getOrDefault(UnitNames.GROUND_ENGINEER.getLabel(), 0);
         int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_SNIPER.getLabel(), 0);
 
-        double infantryDefense = infantryAmount * unitConfigUtils.getUnitDefense(UnitNames.GROUND_INFANTRY.getLabel());
-        double engineerDefense = engineerAmount * unitConfigUtils.getUnitDefense(UnitNames.GROUND_ENGINEER.getLabel());
-        double sniperDefense = sniperAmount * unitConfigUtils.getUnitDefense(UnitNames.GROUND_SNIPER.getLabel());
+        double infantryMetric = infantryAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_INFANTRY.getLabel(), metricFunction);
+        double engineerMetric = engineerAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_ENGINEER.getLabel(), metricFunction);
+        double sniperMetric = sniperAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_SNIPER.getLabel(), metricFunction);
 
-        return infantryDefense + engineerDefense + sniperDefense;
+        return infantryMetric + engineerMetric + sniperMetric;
+    }
+
+    private double getArmyArmoredUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
+        /* APC + MBT + Artillery */
+        int apcAmount = armyUnits.getOrDefault(UnitNames.ARMORED_APC.getLabel(), 0);
+        int mbtAmount = armyUnits.getOrDefault(UnitNames.ARMORED_MBT.getLabel(), 0);
+        int artilleryAmount = armyUnits.getOrDefault(UnitNames.ARMORED_ARTILLERY.getLabel(), 0);
+
+        double apcMetric = apcAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_APC.getLabel(), metricFunction);
+        double mbtMetric = mbtAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_MBT.getLabel(), metricFunction);
+        double artilleryMetric = artilleryAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_ARTILLERY.getLabel(), metricFunction);
+
+        return apcMetric + mbtMetric + artilleryMetric;
+    }
+
+    private double getArmyAirUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
+        /* Jet Fighter + Bomber + Recon */
+        int jetFighterAmount = armyUnits.getOrDefault(UnitNames.AIR_FIGHTER.getLabel(), 0);
+        int bomberAmount = armyUnits.getOrDefault(UnitNames.AIR_BOMBER.getLabel(), 0);
+        int reconAmount = armyUnits.getOrDefault(UnitNames.AIR_RECON.getLabel(), 0);
+
+        double jetFighterMetric = jetFighterAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_FIGHTER.getLabel(), metricFunction);
+        double bomberMetric = bomberAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_BOMBER.getLabel(), metricFunction);
+        double reconMetric = reconAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_RECON.getLabel(), metricFunction);
+
+        return jetFighterMetric + bomberMetric + reconMetric;
     }
 
     public boolean checkIfFrontLinesAreFull(List<Army> attackingFrontLine, List<Army> defendingFrontLine) {
