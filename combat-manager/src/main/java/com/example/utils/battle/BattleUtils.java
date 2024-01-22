@@ -104,7 +104,7 @@ public class BattleUtils {
     }
 
     public int getArmiesMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
-        double totalMetric = 0;
+        int totalMetric = 0;
 
         for (Army army : armies) {
             totalMetric += getArmyGroundUnitsMetric(army.getUnits(), metricFunction);
@@ -112,13 +112,10 @@ public class BattleUtils {
             totalMetric += getArmyAirUnitsMetric(army.getUnits(), metricFunction);
         }
 
-        double scalingFactor = getScalingFactor();
-        System.out.println("SCALING FACTOR = " + scalingFactor);
-        double totalWithFactor = totalMetric * scalingFactor;
-        return (int) totalWithFactor;
+        return totalMetric;
     }
 
-    private double getArmyGroundUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
+    public int getArmyGroundUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
         /* Infantry + Engineers + Sniper */
         int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
         int engineerAmount = armyUnits.getOrDefault(UnitNames.GROUND_ENGINEER.getLabel(), 0);
@@ -128,10 +125,15 @@ public class BattleUtils {
         double engineerMetric = engineerAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_ENGINEER.getLabel(), metricFunction);
         double sniperMetric = sniperAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_SNIPER.getLabel(), metricFunction);
 
-        return infantryMetric + engineerMetric + sniperMetric;
+        double totalMetric = infantryMetric + engineerMetric + sniperMetric;
+
+        double scalingFactor = getScalingFactor();
+        System.out.println("SCALING FACTOR = " + scalingFactor);
+        double totalWithFactor = totalMetric * scalingFactor;
+        return (int) totalWithFactor;
     }
 
-    private double getArmyArmoredUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
+    public int getArmyArmoredUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
         /* APC + MBT + Artillery */
         int apcAmount = armyUnits.getOrDefault(UnitNames.ARMORED_APC.getLabel(), 0);
         int mbtAmount = armyUnits.getOrDefault(UnitNames.ARMORED_MBT.getLabel(), 0);
@@ -141,10 +143,15 @@ public class BattleUtils {
         double mbtMetric = mbtAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_MBT.getLabel(), metricFunction);
         double artilleryMetric = artilleryAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_ARTILLERY.getLabel(), metricFunction);
 
-        return apcMetric + mbtMetric + artilleryMetric;
+        double totalMetric = apcMetric + mbtMetric + artilleryMetric;
+
+        double scalingFactor = getScalingFactor();
+        System.out.println("SCALING FACTOR = " + scalingFactor);
+        double totalWithFactor = totalMetric * scalingFactor;
+        return (int) totalWithFactor;
     }
 
-    private double getArmyAirUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
+    public int getArmyAirUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
         /* Jet Fighter + Bomber + Recon */
         int jetFighterAmount = armyUnits.getOrDefault(UnitNames.AIR_FIGHTER.getLabel(), 0);
         int bomberAmount = armyUnits.getOrDefault(UnitNames.AIR_BOMBER.getLabel(), 0);
@@ -154,7 +161,12 @@ public class BattleUtils {
         double bomberMetric = bomberAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_BOMBER.getLabel(), metricFunction);
         double reconMetric = reconAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_RECON.getLabel(), metricFunction);
 
-        return jetFighterMetric + bomberMetric + reconMetric;
+        double totalMetric = jetFighterMetric + bomberMetric + reconMetric;
+
+        double scalingFactor = getScalingFactor();
+        System.out.println("SCALING FACTOR = " + scalingFactor);
+        double totalWithFactor = totalMetric * scalingFactor;
+        return (int) totalWithFactor;
     }
 
     public boolean checkIfFrontLinesAreFull(List<Army> attackingFrontLine, List<Army> defendingFrontLine) {
