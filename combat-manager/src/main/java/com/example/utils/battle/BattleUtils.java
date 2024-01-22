@@ -117,8 +117,8 @@ public class BattleUtils {
     private double getGroundDefense(Map<String, Integer> armyUnits) {
         /* Infantry + Engineers + Sniper */
         int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
-        int engineerAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
-        int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
+        int engineerAmount = armyUnits.getOrDefault(UnitNames.GROUND_ENGINEER.getLabel(), 0);
+        int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_SNIPER.getLabel(), 0);
 
         double infantryDefense = infantryAmount * unitConfigUtils.getUnitDefense(UnitNames.GROUND_INFANTRY.getLabel());
         double engineerDefense = engineerAmount * unitConfigUtils.getUnitDefense(UnitNames.GROUND_ENGINEER.getLabel());
