@@ -103,6 +103,7 @@ public class BattleService {
                 LOG.info("attackingFrontLineArmoredUnitsDefense = {}", attackingFrontLineArmoredUnitsDefense);
                 int armoredDefensesEffectiveDamage = Math.max(armoredUnitsDefensePower - attackingFrontLineArmoredUnitsDefense, 0);
                 LOG.info("armoredDefensesEffectiveDamage = {}", armoredDefensesEffectiveDamage);
+                battleUtils.calculateArmoredUnitsLosses(attackingFrontLine, armoredDefensesEffectiveDamage);
 
                 int airUnitsDefensePower = battle.getAirDefensePower();
                 int attackingFrontLineAirUnitsDefense = battleUtils.getArmiesAirUnitsMetric(attackingFrontLine, UnitDTO::getDefense);

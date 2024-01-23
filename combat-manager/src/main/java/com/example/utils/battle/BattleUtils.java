@@ -117,6 +117,13 @@ public class BattleUtils {
         return totalMetric;
     }
 
+    public int applyScalingFactor(int value) {
+        double scalingFactor = getScalingFactor();
+        LOG.info("scalingFactor = {}", scalingFactor);
+
+        return (int) (value * scalingFactor);
+    }
+
     public int getArmiesGroundUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
         double totalMetric = 0;
 
@@ -136,13 +143,6 @@ public class BattleUtils {
         }
 
         return (int) totalMetric;
-    }
-
-    public int applyScalingFactor(int value) {
-        double scalingFactor = getScalingFactor();
-        LOG.info("scalingFactor = {}", scalingFactor);
-
-        return (int) (value * scalingFactor);
     }
 
     public int getArmiesArmoredUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
@@ -234,6 +234,57 @@ public class BattleUtils {
                 int totalSniperLosses = (int) (snipersDamage / sniperHealthPoints);
                 totalSniperLosses = Math.min(totalSniperLosses, sniperAmount);
                 LOG.info("totalSniperLosses = {}", totalSniperLosses);
+            }
+        }
+    }
+
+    public void calculateArmoredUnitsLosses(List<Army> armies, int totalDamage) {
+        /* APC + MBT + Artillery */
+        int apcFrontLineLimit = frontLineUnitsLimits.get(UnitNames.ARMORED_APC.getLabel());
+        int mbtFrontLineLimit = frontLineUnitsLimits.get(UnitNames.ARMORED_MBT.getLabel());
+        int artilleryFrontLineLimit = frontLineUnitsLimits.get(UnitNames.ARMORED_ARTILLERY.getLabel());
+        int totalFrontLineLimit = apcFrontLineLimit + mbtFrontLineLimit + artilleryFrontLineLimit;
+
+        double apcFrontLineLimitPercentage = (double) apcFrontLineLimit / totalFrontLineLimit;
+        LOG.info("apcFrontLineLimitPercentage = {}", apcFrontLineLimitPercentage);
+        double mbtFrontLineLimitPercentage = (double) mbtFrontLineLimit / totalFrontLineLimit;
+        LOG.info("mbtFrontLineLimitPercentage = {}", mbtFrontLineLimitPercentage);
+        double artilleryFrontLineLimitPercentage = (double) artilleryFrontLineLimit / totalFrontLineLimit;
+        LOG.info("artilleryFrontLineLimitPercentage = {}", artilleryFrontLineLimitPercentage);
+
+        int apcDamage = (int) (totalDamage * apcFrontLineLimitPercentage);
+        int mbtDamage = (int) (totalDamage * mbtFrontLineLimitPercentage);
+        int artilleryDamage = (int) (totalDamage * artilleryFrontLineLimitPercentage);
+
+        double apcHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.ARMORED_APC.getLabel(), UnitDTO::getHealthPoints);
+        double mbtHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.ARMORED_MBT.getLabel(), UnitDTO::getHealthPoints);
+        double artilleryHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.ARMORED_ARTILLERY.getLabel(), UnitDTO::getHealthPoints);
+
+        for (Army army : armies) {
+            Map<String, Integer> armyUnits = army.getUnits();
+
+            if (apcDamage > 0) {
+                int apcAmount = armyUnits.getOrDefault(UnitNames.ARMORED_APC.getLabel(), 0);
+
+                int totalAPCLosses = (int) (apcDamage / apcHealthPoints);
+                totalAPCLosses = Math.min(totalAPCLosses, apcAmount);
+                LOG.info("totalAPCLosses = {}", totalAPCLosses);
+            }
+
+            if (mbtDamage > 0) {
+                int mbtAmount = armyUnits.getOrDefault(UnitNames.ARMORED_MBT.getLabel(), 0);
+
+                int totalMBTLosses = (int) (mbtDamage / mbtHealthPoints);
+                totalMBTLosses = Math.min(totalMBTLosses, mbtAmount);
+                LOG.info("totalMBTLosses = {}", totalMBTLosses);
+            }
+
+            if (artilleryDamage > 0) {
+                int artilleryAmount = armyUnits.getOrDefault(UnitNames.ARMORED_ARTILLERY.getLabel(), 0);
+
+                int totalArtilleryLosses = (int) (artilleryDamage / artilleryHealthPoints);
+                totalArtilleryLosses = Math.min(totalArtilleryLosses, artilleryAmount);
+                LOG.info("totalArtilleryLosses = {}", totalArtilleryLosses);
             }
         }
     }

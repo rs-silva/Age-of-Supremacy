@@ -41,7 +41,7 @@
     },
     {
       "unitName": "Armored Personnel Carrier",
-      "healthPoints": 40,
+      "healthPoints": 50,
       "movementSpeed": 15,
       "attack": 10,
       "defense": 8,
@@ -54,7 +54,7 @@
     },
     {
       "unitName": "Main Battle Tank",
-      "healthPoints": 80,
+      "healthPoints": 75,
       "movementSpeed": 10,
       "attack": 30,
       "defense": 25,
@@ -67,7 +67,7 @@
     },
     {
       "unitName": "Artillery",
-      "healthPoints": 20,
+      "healthPoints": 35,
       "movementSpeed": 7.5,
       "attack": 70,
       "defense": 8,
