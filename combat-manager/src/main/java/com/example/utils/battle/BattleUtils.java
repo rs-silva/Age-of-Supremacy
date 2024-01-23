@@ -189,9 +189,21 @@ public class BattleUtils {
 
     public void calculateGroundUnitsLosses(List<Army> armies, int totalDamage) {
         /* Infantry + Engineers + Sniper */
-        int infantryDamage = totalDamage / 3;
-        int engineersDamage = totalDamage / 3;
-        int snipersDamage = totalDamage / 3;
+        int infantryFrontLineLimit = frontLineUnitsLimits.get(UnitNames.GROUND_INFANTRY.getLabel());
+        int engineerFrontLineLimit = frontLineUnitsLimits.get(UnitNames.GROUND_ENGINEER.getLabel());
+        int sniperFrontLineLimit = frontLineUnitsLimits.get(UnitNames.GROUND_SNIPER.getLabel());
+        int totalFrontLineLimit = infantryFrontLineLimit + engineerFrontLineLimit + sniperFrontLineLimit;
+
+        double infantryFrontLineLimitPercentage = (double) infantryFrontLineLimit / totalFrontLineLimit;
+        LOG.info("infantryFrontLineLimitPercentage = {}", infantryFrontLineLimitPercentage);
+        double engineerFrontLineLimitPercentage = (double) engineerFrontLineLimit / totalFrontLineLimit;
+        LOG.info("engineerFrontLineLimitPercentage = {}", engineerFrontLineLimitPercentage);
+        double sniperFrontLineLimitPercentage = (double) sniperFrontLineLimit / totalFrontLineLimit;
+        LOG.info("sniperFrontLineLimitPercentage = {}", sniperFrontLineLimitPercentage);
+
+        int infantryDamage = (int) (totalDamage * infantryFrontLineLimitPercentage);
+        int engineersDamage = (int) (totalDamage * engineerFrontLineLimitPercentage);
+        int snipersDamage = (int) (totalDamage * sniperFrontLineLimitPercentage);
 
         double infantryHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.GROUND_INFANTRY.getLabel(), UnitDTO::getHealthPoints);
         double engineerHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.GROUND_ENGINEER.getLabel(), UnitDTO::getHealthPoints);
@@ -204,6 +216,7 @@ public class BattleUtils {
                 int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
 
                 int totalInfantryLosses = (int) (infantryDamage / infantryHealthPoints);
+                totalInfantryLosses = Math.min(totalInfantryLosses, infantryAmount);
                 LOG.info("totalInfantryLosses = {}", totalInfantryLosses);
             }
 
@@ -211,6 +224,7 @@ public class BattleUtils {
                 int engineersAmount = armyUnits.getOrDefault(UnitNames.GROUND_ENGINEER.getLabel(), 0);
 
                 int totalEngineerLosses = (int) (engineersDamage / engineerHealthPoints);
+                totalEngineerLosses = Math.min(totalEngineerLosses, engineersAmount);
                 LOG.info("totalEngineerLosses = {}", totalEngineerLosses);
             }
 
@@ -218,6 +232,7 @@ public class BattleUtils {
                 int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_SNIPER.getLabel(), 0);
 
                 int totalSniperLosses = (int) (snipersDamage / sniperHealthPoints);
+                totalSniperLosses = Math.min(totalSniperLosses, sniperAmount);
                 LOG.info("totalSniperLosses = {}", totalSniperLosses);
             }
         }
