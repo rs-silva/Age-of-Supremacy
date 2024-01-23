@@ -8,6 +8,8 @@ import com.example.models.Army;
 import com.example.models.Battle;
 import com.example.utils.ArmyUtils;
 import com.example.utils.UnitConfigUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,16 +24,21 @@ import java.util.function.Function;
 @Component
 public class BattleUtils {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BattleUtils.class);
+
     private final Map<String, Integer> frontLineUnitsLimits;
 
     private final ActiveDefensesPhaseUtils activeDefensesPhaseUtils;
+
+    private final EngagementPhaseUtils engagementPhaseUtils;
 
     private final UnitConfigUtils unitConfigUtils;
 
     private final RestTemplate restTemplate;
 
-    public BattleUtils(ActiveDefensesPhaseUtils activeDefensesPhaseUtils, UnitConfigUtils unitConfigUtils, RestTemplate restTemplate) {
+    public BattleUtils(ActiveDefensesPhaseUtils activeDefensesPhaseUtils, EngagementPhaseUtils engagementPhaseUtils, UnitConfigUtils unitConfigUtils, RestTemplate restTemplate) {
         this.activeDefensesPhaseUtils = activeDefensesPhaseUtils;
+        this.engagementPhaseUtils = engagementPhaseUtils;
         this.unitConfigUtils = unitConfigUtils;
         this.frontLineUnitsLimits = BattleFrontLineUnitsLimits.getFrontLineUnitsLimits();
         this.restTemplate = restTemplate;
@@ -97,10 +104,7 @@ public class BattleUtils {
     public int calculateAttackingPowerToBaseDefenses(List<Army> attackingArmies) {
         double attackingPower = activeDefensesPhaseUtils.calculateAttackingPowerToBaseDefenses(attackingArmies);
 
-        double scalingFactor = getScalingFactor();
-        System.out.println("SCALING FACTOR = " + scalingFactor);
-        double attackingPowerWithFactor = attackingPower * scalingFactor;
-        return (int) attackingPowerWithFactor;
+        return applyScalingFactor((int) attackingPower);
     }
 
     public int getArmiesMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
@@ -131,10 +135,14 @@ public class BattleUtils {
             totalMetric = infantryMetric + engineerMetric + sniperMetric;
         }
 
+        return (int) totalMetric;
+    }
+
+    public int applyScalingFactor(int value) {
         double scalingFactor = getScalingFactor();
-        System.out.println("SCALING FACTOR = " + scalingFactor);
-        double totalWithFactor = totalMetric * scalingFactor;
-        return (int) totalWithFactor;
+        LOG.info("scalingFactor = {}", scalingFactor);
+
+        return (int) (value * scalingFactor);
     }
 
     public int getArmiesArmoredUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
@@ -155,10 +163,7 @@ public class BattleUtils {
             totalMetric = apcMetric + mbtMetric + artilleryMetric;
         }
 
-        double scalingFactor = getScalingFactor();
-        System.out.println("SCALING FACTOR = " + scalingFactor);
-        double totalWithFactor = totalMetric * scalingFactor;
-        return (int) totalWithFactor;
+        return (int) totalMetric;
     }
 
     public int getArmiesAirUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
@@ -179,10 +184,43 @@ public class BattleUtils {
             totalMetric = jetFighterMetric + bomberMetric + reconMetric;
         }
 
-        double scalingFactor = getScalingFactor();
-        System.out.println("SCALING FACTOR = " + scalingFactor);
-        double totalWithFactor = totalMetric * scalingFactor;
-        return (int) totalWithFactor;
+        return (int) totalMetric;
+    }
+
+    public void calculateGroundUnitsLosses(List<Army> armies, int totalDamage) {
+        /* Infantry + Engineers + Sniper */
+        int infantryDamage = totalDamage / 3;
+        int engineersDamage = totalDamage / 3;
+        int snipersDamage = totalDamage / 3;
+
+        double infantryHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.GROUND_INFANTRY.getLabel(), UnitDTO::getHealthPoints);
+        double engineerHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.GROUND_ENGINEER.getLabel(), UnitDTO::getHealthPoints);
+        double sniperHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.GROUND_SNIPER.getLabel(), UnitDTO::getHealthPoints);
+
+        for (Army army : armies) {
+            Map<String, Integer> armyUnits = army.getUnits();
+
+            if (infantryDamage > 0) {
+                int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
+
+                int totalInfantryLosses = (int) (infantryDamage / infantryHealthPoints);
+                LOG.info("totalInfantryLosses = {}", totalInfantryLosses);
+            }
+
+            if (engineersDamage > 0) {
+                int engineersAmount = armyUnits.getOrDefault(UnitNames.GROUND_ENGINEER.getLabel(), 0);
+
+                int totalEngineerLosses = (int) (engineersDamage / engineerHealthPoints);
+                LOG.info("totalEngineerLosses = {}", totalEngineerLosses);
+            }
+
+            if (snipersDamage > 0) {
+                int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_SNIPER.getLabel(), 0);
+
+                int totalSniperLosses = (int) (snipersDamage / sniperHealthPoints);
+                LOG.info("totalSniperLosses = {}", totalSniperLosses);
+            }
+        }
     }
 
     public boolean checkIfFrontLinesAreFull(List<Army> attackingFrontLine, List<Army> defendingFrontLine) {

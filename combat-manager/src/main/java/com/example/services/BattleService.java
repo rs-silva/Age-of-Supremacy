@@ -91,18 +91,22 @@ public class BattleService {
 
                 int groundUnitsDefensePower = battle.getGroundDefensePower();
                 int attackingFrontLineGroundUnitsDefense = battleUtils.getArmiesGroundUnitsMetric(attackingFrontLine, UnitDTO::getDefense);
+                attackingFrontLineGroundUnitsDefense = battleUtils.applyScalingFactor(attackingFrontLineGroundUnitsDefense);
                 LOG.info("attackingFrontLineGroundUnitsDefense = {}", attackingFrontLineGroundUnitsDefense);
                 int groundDefensesEffectiveDamage = Math.max(groundUnitsDefensePower - attackingFrontLineGroundUnitsDefense, 0);
                 LOG.info("groundDefensesEffectiveDamage = {}", groundDefensesEffectiveDamage);
+                battleUtils.calculateGroundUnitsLosses(attackingFrontLine, groundDefensesEffectiveDamage);
 
                 int armoredUnitsDefensePower = battle.getArmoredDefensePower();
                 int attackingFrontLineArmoredUnitsDefense = battleUtils.getArmiesArmoredUnitsMetric(attackingFrontLine, UnitDTO::getDefense);
+                attackingFrontLineArmoredUnitsDefense = battleUtils.applyScalingFactor(attackingFrontLineArmoredUnitsDefense);
                 LOG.info("attackingFrontLineArmoredUnitsDefense = {}", attackingFrontLineArmoredUnitsDefense);
                 int armoredDefensesEffectiveDamage = Math.max(armoredUnitsDefensePower - attackingFrontLineArmoredUnitsDefense, 0);
                 LOG.info("armoredDefensesEffectiveDamage = {}", armoredDefensesEffectiveDamage);
 
                 int airUnitsDefensePower = battle.getAirDefensePower();
                 int attackingFrontLineAirUnitsDefense = battleUtils.getArmiesAirUnitsMetric(attackingFrontLine, UnitDTO::getDefense);
+                attackingFrontLineAirUnitsDefense = battleUtils.applyScalingFactor(attackingFrontLineAirUnitsDefense);
                 LOG.info("attackingFrontLineAirUnitsDefense = {}", attackingFrontLineAirUnitsDefense);
                 int airDefensesEffectiveDamage = Math.max(airUnitsDefensePower - attackingFrontLineAirUnitsDefense, 0);
                 LOG.info("airDefensesEffectiveDamage = {}", airDefensesEffectiveDamage);
