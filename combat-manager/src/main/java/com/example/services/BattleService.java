@@ -45,8 +45,8 @@ public class BattleService {
         Battle battle = Battle.builder()
                 .baseId(baseId)
                 .groundDefensePower(baseDefenseInformation.getGroundDefensePower())
-                .antiTankDefensePower(baseDefenseInformation.getAntiTankDefensePower())
-                .antiAirDefensePower(baseDefenseInformation.getAntiAirDefensePower())
+                .armoredDefensePower(baseDefenseInformation.getArmoredDefensePower())
+                .airDefensePower(baseDefenseInformation.getAirDefensePower())
                 .defenseHealthPoints(baseDefenseInformation.getDefenseHealthPoints())
                 .armies(new ArrayList<>())
                 .build();
@@ -89,8 +89,23 @@ public class BattleService {
                 LOG.info("totalAttackPower = {}", totalAttackPower);
                 battleUtils.updateBaseDefensesHealthPoints(battle, totalAttackPower);
 
-                int attackingFrontLineDefense = battleUtils.getArmiesMetric(attackingFrontLine, UnitDTO::getDefense);
-                LOG.info("attackingFrontLineDefense = {}", attackingFrontLineDefense);
+                int groundUnitsDefensePower = battle.getGroundDefensePower();
+                int attackingFrontLineGroundUnitsDefense = battleUtils.getArmiesGroundUnitsMetric(attackingFrontLine, UnitDTO::getDefense);
+                LOG.info("attackingFrontLineGroundUnitsDefense = {}", attackingFrontLineGroundUnitsDefense);
+                int groundDefensesEffectiveDamage = Math.max(groundUnitsDefensePower - attackingFrontLineGroundUnitsDefense, 0);
+                LOG.info("groundDefensesEffectiveDamage = {}", groundDefensesEffectiveDamage);
+
+                int armoredUnitsDefensePower = battle.getArmoredDefensePower();
+                int attackingFrontLineArmoredUnitsDefense = battleUtils.getArmiesArmoredUnitsMetric(attackingFrontLine, UnitDTO::getDefense);
+                LOG.info("attackingFrontLineArmoredUnitsDefense = {}", attackingFrontLineArmoredUnitsDefense);
+                int armoredDefensesEffectiveDamage = Math.max(armoredUnitsDefensePower - attackingFrontLineArmoredUnitsDefense, 0);
+                LOG.info("armoredDefensesEffectiveDamage = {}", armoredDefensesEffectiveDamage);
+
+                int airUnitsDefensePower = battle.getAirDefensePower();
+                int attackingFrontLineAirUnitsDefense = battleUtils.getArmiesAirUnitsMetric(attackingFrontLine, UnitDTO::getDefense);
+                LOG.info("attackingFrontLineAirUnitsDefense = {}", attackingFrontLineAirUnitsDefense);
+                int airDefensesEffectiveDamage = Math.max(airUnitsDefensePower - attackingFrontLineAirUnitsDefense, 0);
+                LOG.info("airDefensesEffectiveDamage = {}", airDefensesEffectiveDamage);
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
             else {

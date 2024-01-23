@@ -60,8 +60,8 @@ public class BaseUtils {
 
         return BaseDefenseInformationDTO.builder()
                 .groundDefensePower(groundDefense)
-                .antiTankDefensePower(antiTankDefense)
-                .antiAirDefensePower(antiAirDefense)
+                .armoredDefensePower(antiTankDefense)
+                .airDefensePower(antiAirDefense)
                 .defenseHealthPoints(defenseHealthPoints)
                 .build();
     }

@@ -106,26 +106,30 @@ public class BattleUtils {
     public int getArmiesMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
         int totalMetric = 0;
 
-        for (Army army : armies) {
-            totalMetric += getArmyGroundUnitsMetric(army.getUnits(), metricFunction);
-            totalMetric += getArmyArmoredUnitsMetric(army.getUnits(), metricFunction);
-            totalMetric += getArmyAirUnitsMetric(army.getUnits(), metricFunction);
-        }
+        totalMetric += getArmiesGroundUnitsMetric(armies, metricFunction);
+        totalMetric += getArmiesArmoredUnitsMetric(armies, metricFunction);
+        totalMetric += getArmiesAirUnitsMetric(armies, metricFunction);
 
         return totalMetric;
     }
 
-    public int getArmyGroundUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
+    public int getArmiesGroundUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
+        double totalMetric = 0;
+
         /* Infantry + Engineers + Sniper */
-        int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
-        int engineerAmount = armyUnits.getOrDefault(UnitNames.GROUND_ENGINEER.getLabel(), 0);
-        int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_SNIPER.getLabel(), 0);
+        for (Army army : armies) {
+            Map<String, Integer> armyUnits = army.getUnits();
 
-        double infantryMetric = infantryAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_INFANTRY.getLabel(), metricFunction);
-        double engineerMetric = engineerAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_ENGINEER.getLabel(), metricFunction);
-        double sniperMetric = sniperAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_SNIPER.getLabel(), metricFunction);
+            int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
+            int engineerAmount = armyUnits.getOrDefault(UnitNames.GROUND_ENGINEER.getLabel(), 0);
+            int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_SNIPER.getLabel(), 0);
 
-        double totalMetric = infantryMetric + engineerMetric + sniperMetric;
+            double infantryMetric = infantryAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_INFANTRY.getLabel(), metricFunction);
+            double engineerMetric = engineerAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_ENGINEER.getLabel(), metricFunction);
+            double sniperMetric = sniperAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_SNIPER.getLabel(), metricFunction);
+
+            totalMetric = infantryMetric + engineerMetric + sniperMetric;
+        }
 
         double scalingFactor = getScalingFactor();
         System.out.println("SCALING FACTOR = " + scalingFactor);
@@ -133,17 +137,23 @@ public class BattleUtils {
         return (int) totalWithFactor;
     }
 
-    public int getArmyArmoredUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
+    public int getArmiesArmoredUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
+        double totalMetric = 0;
+
         /* APC + MBT + Artillery */
-        int apcAmount = armyUnits.getOrDefault(UnitNames.ARMORED_APC.getLabel(), 0);
-        int mbtAmount = armyUnits.getOrDefault(UnitNames.ARMORED_MBT.getLabel(), 0);
-        int artilleryAmount = armyUnits.getOrDefault(UnitNames.ARMORED_ARTILLERY.getLabel(), 0);
+        for (Army army : armies) {
+            Map<String, Integer> armyUnits = army.getUnits();
 
-        double apcMetric = apcAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_APC.getLabel(), metricFunction);
-        double mbtMetric = mbtAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_MBT.getLabel(), metricFunction);
-        double artilleryMetric = artilleryAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_ARTILLERY.getLabel(), metricFunction);
+            int apcAmount = armyUnits.getOrDefault(UnitNames.ARMORED_APC.getLabel(), 0);
+            int mbtAmount = armyUnits.getOrDefault(UnitNames.ARMORED_MBT.getLabel(), 0);
+            int artilleryAmount = armyUnits.getOrDefault(UnitNames.ARMORED_ARTILLERY.getLabel(), 0);
 
-        double totalMetric = apcMetric + mbtMetric + artilleryMetric;
+            double apcMetric = apcAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_APC.getLabel(), metricFunction);
+            double mbtMetric = mbtAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_MBT.getLabel(), metricFunction);
+            double artilleryMetric = artilleryAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_ARTILLERY.getLabel(), metricFunction);
+
+            totalMetric = apcMetric + mbtMetric + artilleryMetric;
+        }
 
         double scalingFactor = getScalingFactor();
         System.out.println("SCALING FACTOR = " + scalingFactor);
@@ -151,17 +161,23 @@ public class BattleUtils {
         return (int) totalWithFactor;
     }
 
-    public int getArmyAirUnitsMetric(Map<String, Integer> armyUnits, Function<UnitDTO, Double> metricFunction) {
+    public int getArmiesAirUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
+        double totalMetric = 0;
+
         /* Jet Fighter + Bomber + Recon */
-        int jetFighterAmount = armyUnits.getOrDefault(UnitNames.AIR_FIGHTER.getLabel(), 0);
-        int bomberAmount = armyUnits.getOrDefault(UnitNames.AIR_BOMBER.getLabel(), 0);
-        int reconAmount = armyUnits.getOrDefault(UnitNames.AIR_RECON.getLabel(), 0);
+        for (Army army : armies) {
+            Map<String, Integer> armyUnits = army.getUnits();
 
-        double jetFighterMetric = jetFighterAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_FIGHTER.getLabel(), metricFunction);
-        double bomberMetric = bomberAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_BOMBER.getLabel(), metricFunction);
-        double reconMetric = reconAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_RECON.getLabel(), metricFunction);
+            int jetFighterAmount = armyUnits.getOrDefault(UnitNames.AIR_FIGHTER.getLabel(), 0);
+            int bomberAmount = armyUnits.getOrDefault(UnitNames.AIR_BOMBER.getLabel(), 0);
+            int reconAmount = armyUnits.getOrDefault(UnitNames.AIR_RECON.getLabel(), 0);
 
-        double totalMetric = jetFighterMetric + bomberMetric + reconMetric;
+            double jetFighterMetric = jetFighterAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_FIGHTER.getLabel(), metricFunction);
+            double bomberMetric = bomberAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_BOMBER.getLabel(), metricFunction);
+            double reconMetric = reconAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_RECON.getLabel(), metricFunction);
+
+            totalMetric = jetFighterMetric + bomberMetric + reconMetric;
+        }
 
         double scalingFactor = getScalingFactor();
         System.out.println("SCALING FACTOR = " + scalingFactor);

@@ -33,9 +33,9 @@ public class Battle {
 
     private int groundDefensePower;
 
-    private int antiTankDefensePower;
+    private int armoredDefensePower;
 
-    private int antiAirDefensePower;
+    private int airDefensePower;
 
     private int defenseHealthPoints;
 
@@ -48,8 +48,8 @@ public class Battle {
                 "id=" + id +
                 ", baseId=" + baseId +
                 ", groundDefensePower=" + groundDefensePower +
-                ", antiTankDefensePower=" + antiTankDefensePower +
-                ", antiAirDefensePower=" + antiAirDefensePower +
+                ", antiTankDefensePower=" + armoredDefensePower +
+                ", antiAirDefensePower=" + airDefensePower +
                 ", defenseHealthPoints=" + defenseHealthPoints +
                 '}';
     }
