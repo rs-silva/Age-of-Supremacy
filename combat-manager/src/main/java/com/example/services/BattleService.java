@@ -3,7 +3,6 @@ package com.example.services;
 import com.example.dto.ArmyExtendedDTO;
 import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
-import com.example.dto.UnitDTO;
 import com.example.enums.ArmyRole;
 import com.example.models.Army;
 import com.example.models.Battle;
@@ -55,7 +54,7 @@ public class BattleService {
     }
 
     /* Runs the next round for each battle occurring */
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 5000)
     @Transactional
     public void runNextRoundForEachBattle() {
         List<Battle> battleList = battleRepository.findAll();
@@ -90,27 +89,16 @@ public class BattleService {
                 battleUtils.updateBaseDefensesHealthPoints(battle, totalAttackPower);
 
                 int groundUnitsDefensePower = battle.getGroundDefensePower();
-                int attackingFrontLineGroundUnitsDefense = battleUtils.getArmiesGroundUnitsMetric(attackingFrontLine, UnitDTO::getDefense);
-                attackingFrontLineGroundUnitsDefense = battleUtils.applyScalingFactor(attackingFrontLineGroundUnitsDefense);
-                LOG.info("attackingFrontLineGroundUnitsDefense = {}", attackingFrontLineGroundUnitsDefense);
-                int groundDefensesEffectiveDamage = Math.max(groundUnitsDefensePower - attackingFrontLineGroundUnitsDefense, 0);
-                LOG.info("groundDefensesEffectiveDamage = {}", groundDefensesEffectiveDamage);
-                battleUtils.calculateGroundUnitsLosses(attackingFrontLine, groundDefensesEffectiveDamage);
+                groundUnitsDefensePower = battleUtils.applyScalingFactor(groundUnitsDefensePower);
+                battleUtils.calculateGroundUnitsLosses(attackingFrontLine, groundUnitsDefensePower);
 
                 int armoredUnitsDefensePower = battle.getArmoredDefensePower();
-                int attackingFrontLineArmoredUnitsDefense = battleUtils.getArmiesArmoredUnitsMetric(attackingFrontLine, UnitDTO::getDefense);
-                attackingFrontLineArmoredUnitsDefense = battleUtils.applyScalingFactor(attackingFrontLineArmoredUnitsDefense);
-                LOG.info("attackingFrontLineArmoredUnitsDefense = {}", attackingFrontLineArmoredUnitsDefense);
-                int armoredDefensesEffectiveDamage = Math.max(armoredUnitsDefensePower - attackingFrontLineArmoredUnitsDefense, 0);
-                LOG.info("armoredDefensesEffectiveDamage = {}", armoredDefensesEffectiveDamage);
-                battleUtils.calculateArmoredUnitsLosses(attackingFrontLine, armoredDefensesEffectiveDamage);
+                armoredUnitsDefensePower = battleUtils.applyScalingFactor(armoredUnitsDefensePower);
+                battleUtils.calculateArmoredUnitsLosses(attackingFrontLine, armoredUnitsDefensePower);
 
                 int airUnitsDefensePower = battle.getAirDefensePower();
-                int attackingFrontLineAirUnitsDefense = battleUtils.getArmiesAirUnitsMetric(attackingFrontLine, UnitDTO::getDefense);
-                attackingFrontLineAirUnitsDefense = battleUtils.applyScalingFactor(attackingFrontLineAirUnitsDefense);
-                LOG.info("attackingFrontLineAirUnitsDefense = {}", attackingFrontLineAirUnitsDefense);
-                int airDefensesEffectiveDamage = Math.max(airUnitsDefensePower - attackingFrontLineAirUnitsDefense, 0);
-                LOG.info("airDefensesEffectiveDamage = {}", airDefensesEffectiveDamage);
+                airUnitsDefensePower = battleUtils.applyScalingFactor(airUnitsDefensePower);
+                battleUtils.calculateAirUnitsLosses(attackingFrontLine, airUnitsDefensePower);
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
             else {

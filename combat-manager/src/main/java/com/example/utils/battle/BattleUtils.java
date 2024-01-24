@@ -289,6 +289,57 @@ public class BattleUtils {
         }
     }
 
+    public void calculateAirUnitsLosses(List<Army> armies, int totalDamage) {
+        /* Jet Fighter + Bomber + Recon */
+        int jetFighterFrontLineLimit = frontLineUnitsLimits.get(UnitNames.AIR_FIGHTER.getLabel());
+        int bomberFrontLineLimit = frontLineUnitsLimits.get(UnitNames.AIR_BOMBER.getLabel());
+        int reconFrontLineLimit = frontLineUnitsLimits.get(UnitNames.AIR_RECON.getLabel());
+        int totalFrontLineLimit = jetFighterFrontLineLimit + bomberFrontLineLimit + reconFrontLineLimit;
+
+        double jetFighterFrontLineLimitPercentage = (double) jetFighterFrontLineLimit / totalFrontLineLimit;
+        LOG.info("jetFighterFrontLineLimitPercentage = {}", jetFighterFrontLineLimitPercentage);
+        double bomberFrontLineLimitPercentage = (double) bomberFrontLineLimit / totalFrontLineLimit;
+        LOG.info("bomberFrontLineLimitPercentage = {}", bomberFrontLineLimitPercentage);
+        double reconFrontLineLimitPercentage = (double) reconFrontLineLimit / totalFrontLineLimit;
+        LOG.info("reconFrontLineLimitPercentage = {}", reconFrontLineLimitPercentage);
+
+        int jetFighterDamage = (int) (totalDamage * jetFighterFrontLineLimitPercentage);
+        int bomberDamage = (int) (totalDamage * bomberFrontLineLimitPercentage);
+        int reconDamage = (int) (totalDamage * reconFrontLineLimitPercentage);
+
+        double jetFighterHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.AIR_FIGHTER.getLabel(), UnitDTO::getHealthPoints);
+        double bomberHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.AIR_BOMBER.getLabel(), UnitDTO::getHealthPoints);
+        double reconHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.AIR_RECON.getLabel(), UnitDTO::getHealthPoints);
+
+        for (Army army : armies) {
+            Map<String, Integer> armyUnits = army.getUnits();
+
+            if (jetFighterDamage > 0) {
+                int jetFighterAmount = armyUnits.getOrDefault(UnitNames.AIR_FIGHTER.getLabel(), 0);
+
+                int totalJetFighterLosses = (int) (jetFighterDamage / jetFighterHealthPoints);
+                totalJetFighterLosses = Math.min(totalJetFighterLosses, jetFighterAmount);
+                LOG.info("totalJetFighterLosses = {}", totalJetFighterLosses);
+            }
+
+            if (bomberDamage > 0) {
+                int bomberAmount = armyUnits.getOrDefault(UnitNames.AIR_BOMBER.getLabel(), 0);
+
+                int totalBomberLosses = (int) (bomberDamage / bomberHealthPoints);
+                totalBomberLosses = Math.min(totalBomberLosses, bomberAmount);
+                LOG.info("totalBomberLosses = {}", totalBomberLosses);
+            }
+
+            if (reconDamage > 0) {
+                int reconAmount = armyUnits.getOrDefault(UnitNames.AIR_RECON.getLabel(), 0);
+
+                int totalReconLosses = (int) (reconDamage / reconHealthPoints);
+                totalReconLosses = Math.min(totalReconLosses, reconAmount);
+                LOG.info("totalReconLosses = {}", totalReconLosses);
+            }
+        }
+    }
+
     public boolean checkIfFrontLinesAreFull(List<Army> attackingFrontLine, List<Army> defendingFrontLine) {
         /* Checks if both front lines have all the unit types */
         return checkIfFrontLineIsFull(attackingFrontLine) && checkIfFrontLineIsFull(defendingFrontLine);

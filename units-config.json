@@ -2,7 +2,7 @@
   "units": [
     {
       "unitName": "Infantry",
-      "healthPoints": 6,
+      "healthPoints": 7,
       "movementSpeed": 2,
       "attack": 2,
       "defense": 1.5,
@@ -15,7 +15,7 @@
     },
     {
       "unitName": "Engineer",
-      "healthPoints": 4,
+      "healthPoints": 4.5,
       "movementSpeed": 1.5,
       "attack": 7.5,
       "defense": 1,
@@ -28,7 +28,7 @@
     },
     {
       "unitName": "Sniper",
-      "healthPoints": 2.5,
+      "healthPoints": 3.5,
       "movementSpeed": 2.5,
       "attack": 4,
       "defense": 0.5,
