@@ -3,6 +3,10 @@ package com.example.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @AllArgsConstructor
 @Getter
 public enum UnitNames {
@@ -30,6 +34,29 @@ public enum UnitNames {
         }
 
         return false;
+    }
+
+    public static List<String> getGroundUnitsNames() {
+        return getLabelsForPrefix("GROUND_");
+    }
+
+    public static List<String> getArmoredUnitsNames() {
+        return getLabelsForPrefix("ARMORED_");
+    }
+
+    public static List<String> getAirUnitsNames() {
+        return getLabelsForPrefix("AIR_");
+    }
+
+    private static List<String> getLabelsForPrefix(String prefix) {
+        List<String> labels = new ArrayList<>();
+
+        Arrays.stream(values())
+                .filter(value -> value.name().startsWith(prefix))
+                .map(UnitNames::getLabel)
+                .forEach(labels::add);
+
+        return labels;
     }
 
 }

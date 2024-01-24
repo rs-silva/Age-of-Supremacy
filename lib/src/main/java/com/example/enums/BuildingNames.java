@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum BuildingNames {
+
     MAIN_BUILDING("Headquarters"),
     RESOURCE_1_FACTORY("Masonry Workshop"),
     RESOURCE_2_FACTORY("Steel Forge"),

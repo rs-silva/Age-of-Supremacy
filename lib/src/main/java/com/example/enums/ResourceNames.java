@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ResourceNames {
+
     RESOURCE_1("Construction Materials"),
     RESOURCE_2("Steel"),
     RESOURCE_3("Fuel"),
