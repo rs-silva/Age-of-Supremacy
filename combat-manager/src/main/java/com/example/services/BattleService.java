@@ -4,7 +4,6 @@ import com.example.dto.ArmyExtendedDTO;
 import com.example.dto.BaseDefenseInformationDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.enums.ArmyRole;
-import com.example.enums.UnitNames;
 import com.example.models.Army;
 import com.example.models.Battle;
 import com.example.repositories.BattleRepository;
@@ -100,8 +99,6 @@ public class BattleService {
                 int airUnitsDefensePower = battle.getAirDefensePower();
                 airUnitsDefensePower = battleUtils.applyScalingFactor(airUnitsDefensePower);
                 battleUtils.calculateAirUnitsLosses(attackingFrontLine, airUnitsDefensePower);
-
-                LOG.info("test = {}", UnitNames.getGroundUnitsNames());
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
             else {

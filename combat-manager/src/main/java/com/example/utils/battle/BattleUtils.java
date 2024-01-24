@@ -110,9 +110,9 @@ public class BattleUtils {
     public int getArmiesMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
         int totalMetric = 0;
 
-        totalMetric += getArmiesGroundUnitsMetric(armies, metricFunction);
-        totalMetric += getArmiesArmoredUnitsMetric(armies, metricFunction);
-        totalMetric += getArmiesAirUnitsMetric(armies, metricFunction);
+        totalMetric += getArmiesGroundUnitsMetricTotal(armies, metricFunction);
+        totalMetric += getArmiesArmoredUnitsMetricTotal(armies, metricFunction);
+        totalMetric += getArmiesAirUnitsMetricTotal(armies, metricFunction);
 
         return totalMetric;
     }
@@ -124,64 +124,35 @@ public class BattleUtils {
         return (int) (value * scalingFactor);
     }
 
-    public int getArmiesGroundUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
-        double totalMetric = 0;
-
+    public int getArmiesGroundUnitsMetricTotal(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
         /* Infantry + Engineers + Sniper */
-        for (Army army : armies) {
-            Map<String, Integer> armyUnits = army.getUnits();
-
-            int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
-            int engineerAmount = armyUnits.getOrDefault(UnitNames.GROUND_ENGINEER.getLabel(), 0);
-            int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_SNIPER.getLabel(), 0);
-
-            double infantryMetric = infantryAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_INFANTRY.getLabel(), metricFunction);
-            double engineerMetric = engineerAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_ENGINEER.getLabel(), metricFunction);
-            double sniperMetric = sniperAmount * unitConfigUtils.getUnitMetric(UnitNames.GROUND_SNIPER.getLabel(), metricFunction);
-
-            totalMetric = infantryMetric + engineerMetric + sniperMetric;
-        }
-
-        return (int) totalMetric;
+        return getUnitsMetricTotal(armies, UnitNames.getGroundUnitsNames(), metricFunction);
     }
 
-    public int getArmiesArmoredUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
-        double totalMetric = 0;
-
+    public int getArmiesArmoredUnitsMetricTotal(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
         /* APC + MBT + Artillery */
-        for (Army army : armies) {
-            Map<String, Integer> armyUnits = army.getUnits();
-
-            int apcAmount = armyUnits.getOrDefault(UnitNames.ARMORED_APC.getLabel(), 0);
-            int mbtAmount = armyUnits.getOrDefault(UnitNames.ARMORED_MBT.getLabel(), 0);
-            int artilleryAmount = armyUnits.getOrDefault(UnitNames.ARMORED_ARTILLERY.getLabel(), 0);
-
-            double apcMetric = apcAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_APC.getLabel(), metricFunction);
-            double mbtMetric = mbtAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_MBT.getLabel(), metricFunction);
-            double artilleryMetric = artilleryAmount * unitConfigUtils.getUnitMetric(UnitNames.ARMORED_ARTILLERY.getLabel(), metricFunction);
-
-            totalMetric = apcMetric + mbtMetric + artilleryMetric;
-        }
-
-        return (int) totalMetric;
+        return getUnitsMetricTotal(armies, UnitNames.getArmoredUnitsNames(), metricFunction);
     }
 
-    public int getArmiesAirUnitsMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
+    public int getArmiesAirUnitsMetricTotal(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
+        /* Jet Fighter + Bomber + Recon */
+        return getUnitsMetricTotal(armies, UnitNames.getAirUnitsNames(), metricFunction);
+    }
+
+    public int getUnitsMetricTotal(List<Army> armies, List<String> unitNames, Function<UnitDTO, Double> metricFunction) {
         double totalMetric = 0;
 
-        /* Jet Fighter + Bomber + Recon */
         for (Army army : armies) {
             Map<String, Integer> armyUnits = army.getUnits();
 
-            int jetFighterAmount = armyUnits.getOrDefault(UnitNames.AIR_FIGHTER.getLabel(), 0);
-            int bomberAmount = armyUnits.getOrDefault(UnitNames.AIR_BOMBER.getLabel(), 0);
-            int reconAmount = armyUnits.getOrDefault(UnitNames.AIR_RECON.getLabel(), 0);
+            for (String unitName : unitNames) {
+                int unitAmount = armyUnits.getOrDefault(unitName, 0);
 
-            double jetFighterMetric = jetFighterAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_FIGHTER.getLabel(), metricFunction);
-            double bomberMetric = bomberAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_BOMBER.getLabel(), metricFunction);
-            double reconMetric = reconAmount * unitConfigUtils.getUnitMetric(UnitNames.AIR_RECON.getLabel(), metricFunction);
+                double unitMetric = unitAmount * unitConfigUtils.getUnitMetric(unitName, metricFunction);
 
-            totalMetric = jetFighterMetric + bomberMetric + reconMetric;
+                totalMetric += unitMetric;
+            }
+
         }
 
         return (int) totalMetric;
@@ -189,154 +160,65 @@ public class BattleUtils {
 
     public void calculateGroundUnitsLosses(List<Army> armies, int totalDamage) {
         /* Infantry + Engineers + Sniper */
-        int infantryFrontLineLimit = frontLineUnitsLimits.get(UnitNames.GROUND_INFANTRY.getLabel());
-        int engineerFrontLineLimit = frontLineUnitsLimits.get(UnitNames.GROUND_ENGINEER.getLabel());
-        int sniperFrontLineLimit = frontLineUnitsLimits.get(UnitNames.GROUND_SNIPER.getLabel());
-        int totalFrontLineLimit = infantryFrontLineLimit + engineerFrontLineLimit + sniperFrontLineLimit;
-
-        double infantryFrontLineLimitPercentage = (double) infantryFrontLineLimit / totalFrontLineLimit;
-        LOG.info("infantryFrontLineLimitPercentage = {}", infantryFrontLineLimitPercentage);
-        double engineerFrontLineLimitPercentage = (double) engineerFrontLineLimit / totalFrontLineLimit;
-        LOG.info("engineerFrontLineLimitPercentage = {}", engineerFrontLineLimitPercentage);
-        double sniperFrontLineLimitPercentage = (double) sniperFrontLineLimit / totalFrontLineLimit;
-        LOG.info("sniperFrontLineLimitPercentage = {}", sniperFrontLineLimitPercentage);
-
-        int infantryDamage = (int) (totalDamage * infantryFrontLineLimitPercentage);
-        int engineersDamage = (int) (totalDamage * engineerFrontLineLimitPercentage);
-        int snipersDamage = (int) (totalDamage * sniperFrontLineLimitPercentage);
-
-        double infantryHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.GROUND_INFANTRY.getLabel(), UnitDTO::getHealthPoints);
-        double engineerHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.GROUND_ENGINEER.getLabel(), UnitDTO::getHealthPoints);
-        double sniperHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.GROUND_SNIPER.getLabel(), UnitDTO::getHealthPoints);
-
-        for (Army army : armies) {
-            Map<String, Integer> armyUnits = army.getUnits();
-
-            if (infantryDamage > 0) {
-                int infantryAmount = armyUnits.getOrDefault(UnitNames.GROUND_INFANTRY.getLabel(), 0);
-
-                int totalInfantryLosses = (int) (infantryDamage / infantryHealthPoints);
-                totalInfantryLosses = Math.min(totalInfantryLosses, infantryAmount);
-                LOG.info("totalInfantryLosses = {}", totalInfantryLosses);
-            }
-
-            if (engineersDamage > 0) {
-                int engineersAmount = armyUnits.getOrDefault(UnitNames.GROUND_ENGINEER.getLabel(), 0);
-
-                int totalEngineerLosses = (int) (engineersDamage / engineerHealthPoints);
-                totalEngineerLosses = Math.min(totalEngineerLosses, engineersAmount);
-                LOG.info("totalEngineerLosses = {}", totalEngineerLosses);
-            }
-
-            if (snipersDamage > 0) {
-                int sniperAmount = armyUnits.getOrDefault(UnitNames.GROUND_SNIPER.getLabel(), 0);
-
-                int totalSniperLosses = (int) (snipersDamage / sniperHealthPoints);
-                totalSniperLosses = Math.min(totalSniperLosses, sniperAmount);
-                LOG.info("totalSniperLosses = {}", totalSniperLosses);
-            }
-        }
+        calculateUnitsLosses(armies, UnitNames.getGroundUnitsNames(), totalDamage);
     }
 
     public void calculateArmoredUnitsLosses(List<Army> armies, int totalDamage) {
         /* APC + MBT + Artillery */
-        int apcFrontLineLimit = frontLineUnitsLimits.get(UnitNames.ARMORED_APC.getLabel());
-        int mbtFrontLineLimit = frontLineUnitsLimits.get(UnitNames.ARMORED_MBT.getLabel());
-        int artilleryFrontLineLimit = frontLineUnitsLimits.get(UnitNames.ARMORED_ARTILLERY.getLabel());
-        int totalFrontLineLimit = apcFrontLineLimit + mbtFrontLineLimit + artilleryFrontLineLimit;
-
-        double apcFrontLineLimitPercentage = (double) apcFrontLineLimit / totalFrontLineLimit;
-        LOG.info("apcFrontLineLimitPercentage = {}", apcFrontLineLimitPercentage);
-        double mbtFrontLineLimitPercentage = (double) mbtFrontLineLimit / totalFrontLineLimit;
-        LOG.info("mbtFrontLineLimitPercentage = {}", mbtFrontLineLimitPercentage);
-        double artilleryFrontLineLimitPercentage = (double) artilleryFrontLineLimit / totalFrontLineLimit;
-        LOG.info("artilleryFrontLineLimitPercentage = {}", artilleryFrontLineLimitPercentage);
-
-        int apcDamage = (int) (totalDamage * apcFrontLineLimitPercentage);
-        int mbtDamage = (int) (totalDamage * mbtFrontLineLimitPercentage);
-        int artilleryDamage = (int) (totalDamage * artilleryFrontLineLimitPercentage);
-
-        double apcHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.ARMORED_APC.getLabel(), UnitDTO::getHealthPoints);
-        double mbtHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.ARMORED_MBT.getLabel(), UnitDTO::getHealthPoints);
-        double artilleryHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.ARMORED_ARTILLERY.getLabel(), UnitDTO::getHealthPoints);
-
-        for (Army army : armies) {
-            Map<String, Integer> armyUnits = army.getUnits();
-
-            if (apcDamage > 0) {
-                int apcAmount = armyUnits.getOrDefault(UnitNames.ARMORED_APC.getLabel(), 0);
-
-                int totalAPCLosses = (int) (apcDamage / apcHealthPoints);
-                totalAPCLosses = Math.min(totalAPCLosses, apcAmount);
-                LOG.info("totalAPCLosses = {}", totalAPCLosses);
-            }
-
-            if (mbtDamage > 0) {
-                int mbtAmount = armyUnits.getOrDefault(UnitNames.ARMORED_MBT.getLabel(), 0);
-
-                int totalMBTLosses = (int) (mbtDamage / mbtHealthPoints);
-                totalMBTLosses = Math.min(totalMBTLosses, mbtAmount);
-                LOG.info("totalMBTLosses = {}", totalMBTLosses);
-            }
-
-            if (artilleryDamage > 0) {
-                int artilleryAmount = armyUnits.getOrDefault(UnitNames.ARMORED_ARTILLERY.getLabel(), 0);
-
-                int totalArtilleryLosses = (int) (artilleryDamage / artilleryHealthPoints);
-                totalArtilleryLosses = Math.min(totalArtilleryLosses, artilleryAmount);
-                LOG.info("totalArtilleryLosses = {}", totalArtilleryLosses);
-            }
-        }
+        calculateUnitsLosses(armies, UnitNames.getArmoredUnitsNames(), totalDamage);
     }
 
     public void calculateAirUnitsLosses(List<Army> armies, int totalDamage) {
         /* Jet Fighter + Bomber + Recon */
-        int jetFighterFrontLineLimit = frontLineUnitsLimits.get(UnitNames.AIR_FIGHTER.getLabel());
-        int bomberFrontLineLimit = frontLineUnitsLimits.get(UnitNames.AIR_BOMBER.getLabel());
-        int reconFrontLineLimit = frontLineUnitsLimits.get(UnitNames.AIR_RECON.getLabel());
-        int totalFrontLineLimit = jetFighterFrontLineLimit + bomberFrontLineLimit + reconFrontLineLimit;
+        calculateUnitsLosses(armies, UnitNames.getAirUnitsNames(), totalDamage);
+    }
 
-        double jetFighterFrontLineLimitPercentage = (double) jetFighterFrontLineLimit / totalFrontLineLimit;
-        LOG.info("jetFighterFrontLineLimitPercentage = {}", jetFighterFrontLineLimitPercentage);
-        double bomberFrontLineLimitPercentage = (double) bomberFrontLineLimit / totalFrontLineLimit;
-        LOG.info("bomberFrontLineLimitPercentage = {}", bomberFrontLineLimitPercentage);
-        double reconFrontLineLimitPercentage = (double) reconFrontLineLimit / totalFrontLineLimit;
-        LOG.info("reconFrontLineLimitPercentage = {}", reconFrontLineLimitPercentage);
+    public void calculateUnitsLosses(List<Army> armies, List<String> unitNames, int totalDamage) {
+        Map<String, Integer> unitsFrontLineLimit = new HashMap<>();
+        int totalFrontLineLimit = 0;
 
-        int jetFighterDamage = (int) (totalDamage * jetFighterFrontLineLimitPercentage);
-        int bomberDamage = (int) (totalDamage * bomberFrontLineLimitPercentage);
-        int reconDamage = (int) (totalDamage * reconFrontLineLimitPercentage);
+        for (String unitName : unitNames) {
+            int unitFrontLineLimit = frontLineUnitsLimits.get(unitName);
 
-        double jetFighterHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.AIR_FIGHTER.getLabel(), UnitDTO::getHealthPoints);
-        double bomberHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.AIR_BOMBER.getLabel(), UnitDTO::getHealthPoints);
-        double reconHealthPoints = unitConfigUtils.getUnitMetric(UnitNames.AIR_RECON.getLabel(), UnitDTO::getHealthPoints);
+            unitsFrontLineLimit.put(unitName, unitFrontLineLimit);
+            totalFrontLineLimit += unitFrontLineLimit;
+        }
+
+        Map<String, Double> unitsFrontLineLimitPercentage = new HashMap<>();
+        for (Map.Entry<String, Integer> unitFrontLineLimit : unitsFrontLineLimit.entrySet()) {
+            String unitName = unitFrontLineLimit.getKey();
+            int unitLimit = unitFrontLineLimit.getValue();
+
+            double unitFrontLineLimitPercentage = (double) unitLimit / totalFrontLineLimit;
+            LOG.info("Front Line limit percentage for {} = {}", unitName, unitFrontLineLimitPercentage);
+            unitsFrontLineLimitPercentage.put(unitName, unitFrontLineLimitPercentage);
+        }
+
+        Map<String, Integer> unitsTotalDamage = new HashMap<>();
+        for (Map.Entry<String, Double> unitFrontLineLimitPercentage : unitsFrontLineLimitPercentage.entrySet()) {
+            String unitName = unitFrontLineLimitPercentage.getKey();
+            double unitPercentage = unitFrontLineLimitPercentage.getValue();
+
+            int unitDamage = (int) (unitPercentage * totalDamage);
+            unitsTotalDamage.put(unitName, unitDamage);
+        }
 
         for (Army army : armies) {
             Map<String, Integer> armyUnits = army.getUnits();
 
-            if (jetFighterDamage > 0) {
-                int jetFighterAmount = armyUnits.getOrDefault(UnitNames.AIR_FIGHTER.getLabel(), 0);
+            for (String unitName : unitNames) {
+                int unitDamage = unitsTotalDamage.get(unitName);
 
-                int totalJetFighterLosses = (int) (jetFighterDamage / jetFighterHealthPoints);
-                totalJetFighterLosses = Math.min(totalJetFighterLosses, jetFighterAmount);
-                LOG.info("totalJetFighterLosses = {}", totalJetFighterLosses);
+                if (unitDamage > 0) {
+                    int unitAmount = armyUnits.getOrDefault(unitName, 0);
+                    double unitHealthPoints = unitConfigUtils.getUnitMetric(unitName, UnitDTO::getHealthPoints);
+
+                    int totalUnitLosses = (int) (unitDamage / unitHealthPoints);
+                    totalUnitLosses = Math.min(totalUnitLosses, unitAmount);
+                    LOG.info("Total {} losses = {}", unitName, totalUnitLosses);
+                }
             }
 
-            if (bomberDamage > 0) {
-                int bomberAmount = armyUnits.getOrDefault(UnitNames.AIR_BOMBER.getLabel(), 0);
-
-                int totalBomberLosses = (int) (bomberDamage / bomberHealthPoints);
-                totalBomberLosses = Math.min(totalBomberLosses, bomberAmount);
-                LOG.info("totalBomberLosses = {}", totalBomberLosses);
-            }
-
-            if (reconDamage > 0) {
-                int reconAmount = armyUnits.getOrDefault(UnitNames.AIR_RECON.getLabel(), 0);
-
-                int totalReconLosses = (int) (reconDamage / reconHealthPoints);
-                totalReconLosses = Math.min(totalReconLosses, reconAmount);
-                LOG.info("totalReconLosses = {}", totalReconLosses);
-            }
         }
     }
 

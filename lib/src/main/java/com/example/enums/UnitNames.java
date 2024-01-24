@@ -11,14 +11,17 @@ import java.util.List;
 @Getter
 public enum UnitNames {
 
+    /* Ground Units */
     GROUND_INFANTRY("Infantry"),
     GROUND_ENGINEER("Engineer"),
     GROUND_SNIPER("Sniper"),
 
+    /* Armored Units */
     ARMORED_APC("Armored Personnel Carrier"),
     ARMORED_MBT("Main Battle Tank"),
     ARMORED_ARTILLERY("Artillery"),
 
+    /* Air Units */
     AIR_FIGHTER("Jet Fighter"),
     AIR_BOMBER("Bomber"),
     AIR_RECON("Recon");
