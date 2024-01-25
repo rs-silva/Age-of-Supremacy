@@ -16,7 +16,8 @@ public abstract class ArmyUtils {
                 int unitUpdatedAmount = unitCurrentAmount + unitAmountToAdd;
 
                 currentUnits.put(unitName, unitUpdatedAmount);
-            } else {
+            }
+            else {
                 currentUnits.put(unitName, unitAmountToAdd);
             }
         }

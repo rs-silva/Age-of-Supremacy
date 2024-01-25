@@ -89,7 +89,8 @@ public class BattleUtils {
 
                     frontLineUnitsCounter.put(unitType, frontLineUnitsCounter.getOrDefault(unitType, 0) + unitsToAdd);
 
-                    armyUnits.put(unitType, unitAmount - unitsToAdd);
+                    /* TODO uncomment this line */
+                    //armyUnits.put(unitType, unitAmount - unitsToAdd);
                 }
             }
 
@@ -175,29 +176,40 @@ public class BattleUtils {
     public void calculateUnitsLosses(List<Army> armies, List<String> unitNames, int totalDamage) {
         Map<String, Integer> unitsFrontLineLimits = getUnitsFrontLineLimits(unitNames);
 
-        int totalFrontLineLimit = unitsFrontLineLimits.values().stream().reduce(0, Integer::sum);
+        int totalUnitsFrontLineLimit = unitsFrontLineLimits.values().stream().reduce(0, Integer::sum);
 
-        Map<String, Double> unitsFrontLineLimitPercentage = getUnitsFrontLineLimitsPercentage(unitsFrontLineLimits, totalFrontLineLimit);
+        Map<String, Double> unitsFrontLineLimitPercentage = getUnitsFrontLineLimitsPercentage(unitsFrontLineLimits, totalUnitsFrontLineLimit);
 
         Map<String, Integer> unitsTotalDamage = getUnitsTotalDamage(totalDamage, unitsFrontLineLimitPercentage);
+        LOG.info("unitsTotalDamage = {}", unitsTotalDamage);
 
         for (Army army : armies) {
             Map<String, Integer> armyUnits = army.getUnits();
 
             for (String unitName : unitNames) {
-                int unitDamage = unitsTotalDamage.get(unitName);
+                int damageToUnit = unitsTotalDamage.get(unitName);
 
-                if (unitDamage > 0) {
+                if (damageToUnit > 0) {
                     int unitAmount = armyUnits.getOrDefault(unitName, 0);
                     double unitHealthPoints = unitConfigUtils.getUnitMetric(unitName, UnitDTO::getHealthPoints);
 
-                    int totalUnitLosses = (int) (unitDamage / unitHealthPoints);
+                    int totalUnitLosses = (int) (damageToUnit / unitHealthPoints);
                     totalUnitLosses = Math.min(totalUnitLosses, unitAmount);
+
                     LOG.info("Total {} losses = {}", unitName, totalUnitLosses);
                     armyUnits.put(unitName, unitAmount - totalUnitLosses);
+
+                    damageToUnit = (int) (damageToUnit - (totalUnitLosses * unitHealthPoints));
+                    if (damageToUnit > unitHealthPoints) {
+                        unitsTotalDamage.put(unitName, damageToUnit);
+                    }
+                    else {
+                        unitsTotalDamage.put(unitName, 0);
+                    }
                 }
             }
 
+            LOG.info("unitsTotalDamage = {}", unitsTotalDamage);
         }
     }
 
@@ -215,19 +227,22 @@ public class BattleUtils {
 
     private Map<String, Double> getUnitsFrontLineLimitsPercentage(Map<String, Integer> unitsFrontLineLimits, int totalFrontLineLimit) {
         Map<String, Double> unitsFrontLineLimitPercentage = new HashMap<>();
+
         for (Map.Entry<String, Integer> unitFrontLineLimit : unitsFrontLineLimits.entrySet()) {
             String unitName = unitFrontLineLimit.getKey();
             int unitLimit = unitFrontLineLimit.getValue();
 
             double unitFrontLineLimitPercentage = (double) unitLimit / totalFrontLineLimit;
-            LOG.info("Front Line limit percentage for {} = {}", unitName, unitFrontLineLimitPercentage);
+            //LOG.info("Front Line limit percentage for {} = {}", unitName, unitFrontLineLimitPercentage);
             unitsFrontLineLimitPercentage.put(unitName, unitFrontLineLimitPercentage);
         }
+
         return unitsFrontLineLimitPercentage;
     }
 
     private Map<String, Integer> getUnitsTotalDamage(int totalDamage, Map<String, Double> unitsFrontLineLimitPercentage) {
         Map<String, Integer> unitsTotalDamage = new HashMap<>();
+
         for (Map.Entry<String, Double> unitFrontLineLimitPercentage : unitsFrontLineLimitPercentage.entrySet()) {
             String unitName = unitFrontLineLimitPercentage.getKey();
             double unitPercentage = unitFrontLineLimitPercentage.getValue();
@@ -235,6 +250,7 @@ public class BattleUtils {
             int unitDamage = (int) (unitPercentage * totalDamage);
             unitsTotalDamage.put(unitName, unitDamage);
         }
+
         return unitsTotalDamage;
     }
 

@@ -54,7 +54,7 @@ public class BattleService {
     }
 
     /* Runs the next round for each battle occurring */
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 5000)
     @Transactional
     public void runNextRoundForEachBattle() {
         List<Battle> battleList = battleRepository.findAll();
@@ -104,8 +104,8 @@ public class BattleService {
                 LOG.info("checkIfFrontLinesAreFull = {}", checkIfFrontLinesAreFull);
             }
 
-            mergeFrontLines(attackingArmies, attackingFrontLine);
-            mergeFrontLines(defendingArmies, defendingFrontLine);
+            //mergeFrontLines(attackingArmies, attackingFrontLine);
+            //mergeFrontLines(defendingArmies, defendingFrontLine);
 
         }
 
