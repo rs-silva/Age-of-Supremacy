@@ -50,4 +50,15 @@ public class ArmyService {
     public void save(Army army) {
         armyRepository.save(army);
     }
+
+    public Army getArmyWithOwnerBaseId(List<Army> armies, UUID ownerBaseId) {
+        for (Army army : armies) {
+            if (army.getOwnerBaseId().equals(ownerBaseId)) {
+                return army;
+            }
+        }
+
+        return null;
+    }
+
 }

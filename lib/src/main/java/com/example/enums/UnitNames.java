@@ -24,7 +24,8 @@ public enum UnitNames {
     /* Air Units */
     AIR_FIGHTER("Jet Fighter"),
     AIR_BOMBER("Bomber"),
-    AIR_RECON("Recon");
+
+    RECON("Recon");
 
     private final String label;
 

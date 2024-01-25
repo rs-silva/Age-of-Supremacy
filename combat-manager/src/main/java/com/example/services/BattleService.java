@@ -54,7 +54,7 @@ public class BattleService {
     }
 
     /* Runs the next round for each battle occurring */
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 10000)
     @Transactional
     public void runNextRoundForEachBattle() {
         List<Battle> battleList = battleRepository.findAll();
@@ -106,6 +106,10 @@ public class BattleService {
                 boolean checkIfFrontLinesAreFull = battleUtils.checkIfFrontLinesAreFull(attackingFrontLine, defendingFrontLine);
                 LOG.info("checkIfFrontLinesAreFull = {}", checkIfFrontLinesAreFull);
             }
+
+            mergeFrontLines(attackingArmies, attackingFrontLine);
+            mergeFrontLines(defendingArmies, defendingFrontLine);
+
         }
 
         LOG.info("Battles processing time = {}ms", Instant.now().toEpochMilli() - now);
@@ -130,6 +134,16 @@ public class BattleService {
             }
         }
 
+    }
+
+    private void mergeFrontLines(List<Army> armies, List<Army> frontLine) {
+        for (Army frontLineArmy : frontLine) {
+            UUID ownerBaseId = frontLineArmy.getOwnerBaseId();
+            Army army = armyService.getArmyWithOwnerBaseId(armies, ownerBaseId);
+
+            Map<String, Integer> updatedUnits = ArmyUtils.addUnitsToArmy(army.getUnits(), frontLineArmy.getUnits());
+            army.setUnits(updatedUnits);
+        }
     }
 
     public Battle findByBaseId(UUID baseId) {

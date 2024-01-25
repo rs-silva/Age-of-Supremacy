@@ -80,7 +80,7 @@
     },
     {
       "unitName": "Jet Fighter",
-      "healthPoints": 60,
+      "healthPoints": 75,
       "movementSpeed": 50,
       "attack": 30,
       "defense": 12,
@@ -93,7 +93,7 @@
     },
     {
       "unitName": "Bomber",
-      "healthPoints": 80,
+      "healthPoints": 100,
       "movementSpeed": 30,
       "attack": 100,
       "defense": 15,

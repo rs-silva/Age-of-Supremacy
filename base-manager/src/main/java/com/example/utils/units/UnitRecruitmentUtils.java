@@ -157,16 +157,16 @@ public class UnitRecruitmentUtils {
 
     private void validateAirUnits(Map<String, Integer> units, Integer barracksLevel, Integer aircraftFactoryLevel) {
         /* Recon Plane */
-        if (units.containsKey(UnitNames.AIR_RECON.getLabel()) && units.get(UnitNames.AIR_RECON.getLabel()) > 0) {
+        if (units.containsKey(UnitNames.RECON.getLabel()) && units.get(UnitNames.RECON.getLabel()) > 0) {
             if (barracksLevel == null || barracksLevel < UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_RECON_PLANE) {
                 throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
-                        UnitNames.AIR_RECON.getLabel(),
+                        UnitNames.RECON.getLabel(),
                         BuildingNames.BARRACKS.getLabel(),
                         UnitsBuildingLevelRequirements.BARRACKS_LEVEL_FOR_RECON_PLANE));
             }
             if (aircraftFactoryLevel == null || aircraftFactoryLevel < UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_RECON_PLANE) {
                 throw new BadRequestException(String.format(BaseManagerConstants.BUILDING_LEVEL_REQUIREMENTS_NOT_MET_TO_RECRUIT_UNITS,
-                        UnitNames.AIR_RECON.getLabel(),
+                        UnitNames.RECON.getLabel(),
                         BuildingNames.AIRCRAFT_FACTORY.getLabel(),
                         UnitsBuildingLevelRequirements.AIRCRAFT_FACTORY_LEVEL_FOR_RECON_PLANE));
             }

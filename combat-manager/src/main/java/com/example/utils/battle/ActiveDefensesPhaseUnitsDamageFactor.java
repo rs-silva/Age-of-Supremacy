@@ -38,7 +38,7 @@ public class ActiveDefensesPhaseUnitsDamageFactor {
 
         unitsDamageFactor.put(UnitNames.AIR_FIGHTER.getLabel(), AIR_FIGHTER_DAMAGE_FACTOR);
         unitsDamageFactor.put(UnitNames.AIR_BOMBER.getLabel(), AIR_BOMBER_DAMAGE_FACTOR);
-        unitsDamageFactor.put(UnitNames.AIR_RECON.getLabel(), AIR_RECON_DAMAGE_FACTOR);
+        unitsDamageFactor.put(UnitNames.RECON.getLabel(), AIR_RECON_DAMAGE_FACTOR);
 
         return unitsDamageFactor;
     }

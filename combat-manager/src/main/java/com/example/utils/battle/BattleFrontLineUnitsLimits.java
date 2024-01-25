@@ -38,7 +38,7 @@ public abstract class BattleFrontLineUnitsLimits {
 
         frontLineUnitsLimits.put(UnitNames.AIR_FIGHTER.getLabel(), AIR_FIGHTER_LIMIT);
         frontLineUnitsLimits.put(UnitNames.AIR_BOMBER.getLabel(), AIR_BOMBER_LIMIT);
-        frontLineUnitsLimits.put(UnitNames.AIR_RECON.getLabel(), AIR_RECON_LIMIT);
+        frontLineUnitsLimits.put(UnitNames.RECON.getLabel(), AIR_RECON_LIMIT);
 
         return frontLineUnitsLimits;
     }

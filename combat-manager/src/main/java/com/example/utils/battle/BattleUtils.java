@@ -89,8 +89,7 @@ public class BattleUtils {
 
                     frontLineUnitsCounter.put(unitType, frontLineUnitsCounter.getOrDefault(unitType, 0) + unitsToAdd);
 
-                    /* TODO Uncomment this line */
-                    //armyUnits.put(unitType, unitAmount - unitsToAdd);
+                    armyUnits.put(unitType, unitAmount - unitsToAdd);
                 }
             }
 
@@ -216,6 +215,7 @@ public class BattleUtils {
                     int totalUnitLosses = (int) (unitDamage / unitHealthPoints);
                     totalUnitLosses = Math.min(totalUnitLosses, unitAmount);
                     LOG.info("Total {} losses = {}", unitName, totalUnitLosses);
+                    armyUnits.put(unitName, unitAmount - totalUnitLosses);
                 }
             }
 
