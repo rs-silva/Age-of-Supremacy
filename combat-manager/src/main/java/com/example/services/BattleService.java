@@ -79,9 +79,6 @@ public class BattleService {
             LOG.info("Attacking Front Line = {}", attackingFrontLine.toString());
             LOG.info("Defending Front Line = {}", defendingFrontLine.toString());
 
-            LOG.info("AFTER Attacking Armies = {}", attackingArmies.toString());
-            LOG.info("AFTER Defending Armies = {}", defendingArmies.toString());
-
             /* If the base defenses are still active, the attacking armies cannot attack the defending armies */
             if (battleUtils.areBaseDefensesActive(battle)) {
                 int totalAttackPower = battleUtils.calculateAttackingPowerToBaseDefenses(attackingFrontLine);

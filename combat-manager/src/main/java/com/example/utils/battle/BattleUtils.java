@@ -173,34 +173,13 @@ public class BattleUtils {
     }
 
     public void calculateUnitsLosses(List<Army> armies, List<String> unitNames, int totalDamage) {
-        Map<String, Integer> unitsFrontLineLimit = new HashMap<>();
-        int totalFrontLineLimit = 0;
+        Map<String, Integer> unitsFrontLineLimits = getUnitsFrontLineLimits(unitNames);
 
-        for (String unitName : unitNames) {
-            int unitFrontLineLimit = frontLineUnitsLimits.get(unitName);
+        int totalFrontLineLimit = unitsFrontLineLimits.values().stream().reduce(0, Integer::sum);
 
-            unitsFrontLineLimit.put(unitName, unitFrontLineLimit);
-            totalFrontLineLimit += unitFrontLineLimit;
-        }
+        Map<String, Double> unitsFrontLineLimitPercentage = getUnitsFrontLineLimitsPercentage(unitsFrontLineLimits, totalFrontLineLimit);
 
-        Map<String, Double> unitsFrontLineLimitPercentage = new HashMap<>();
-        for (Map.Entry<String, Integer> unitFrontLineLimit : unitsFrontLineLimit.entrySet()) {
-            String unitName = unitFrontLineLimit.getKey();
-            int unitLimit = unitFrontLineLimit.getValue();
-
-            double unitFrontLineLimitPercentage = (double) unitLimit / totalFrontLineLimit;
-            LOG.info("Front Line limit percentage for {} = {}", unitName, unitFrontLineLimitPercentage);
-            unitsFrontLineLimitPercentage.put(unitName, unitFrontLineLimitPercentage);
-        }
-
-        Map<String, Integer> unitsTotalDamage = new HashMap<>();
-        for (Map.Entry<String, Double> unitFrontLineLimitPercentage : unitsFrontLineLimitPercentage.entrySet()) {
-            String unitName = unitFrontLineLimitPercentage.getKey();
-            double unitPercentage = unitFrontLineLimitPercentage.getValue();
-
-            int unitDamage = (int) (unitPercentage * totalDamage);
-            unitsTotalDamage.put(unitName, unitDamage);
-        }
+        Map<String, Integer> unitsTotalDamage = getUnitsTotalDamage(totalDamage, unitsFrontLineLimitPercentage);
 
         for (Army army : armies) {
             Map<String, Integer> armyUnits = army.getUnits();
@@ -220,6 +199,43 @@ public class BattleUtils {
             }
 
         }
+    }
+
+    private Map<String, Integer> getUnitsFrontLineLimits(List<String> unitNames) {
+        Map<String, Integer> unitsFrontLineLimit = new HashMap<>();
+
+        for (String unitName : unitNames) {
+            int unitFrontLineLimit = frontLineUnitsLimits.get(unitName);
+
+            unitsFrontLineLimit.put(unitName, unitFrontLineLimit);
+        }
+
+        return unitsFrontLineLimit;
+    }
+
+    private Map<String, Double> getUnitsFrontLineLimitsPercentage(Map<String, Integer> unitsFrontLineLimits, int totalFrontLineLimit) {
+        Map<String, Double> unitsFrontLineLimitPercentage = new HashMap<>();
+        for (Map.Entry<String, Integer> unitFrontLineLimit : unitsFrontLineLimits.entrySet()) {
+            String unitName = unitFrontLineLimit.getKey();
+            int unitLimit = unitFrontLineLimit.getValue();
+
+            double unitFrontLineLimitPercentage = (double) unitLimit / totalFrontLineLimit;
+            LOG.info("Front Line limit percentage for {} = {}", unitName, unitFrontLineLimitPercentage);
+            unitsFrontLineLimitPercentage.put(unitName, unitFrontLineLimitPercentage);
+        }
+        return unitsFrontLineLimitPercentage;
+    }
+
+    private Map<String, Integer> getUnitsTotalDamage(int totalDamage, Map<String, Double> unitsFrontLineLimitPercentage) {
+        Map<String, Integer> unitsTotalDamage = new HashMap<>();
+        for (Map.Entry<String, Double> unitFrontLineLimitPercentage : unitsFrontLineLimitPercentage.entrySet()) {
+            String unitName = unitFrontLineLimitPercentage.getKey();
+            double unitPercentage = unitFrontLineLimitPercentage.getValue();
+
+            int unitDamage = (int) (unitPercentage * totalDamage);
+            unitsTotalDamage.put(unitName, unitDamage);
+        }
+        return unitsTotalDamage;
     }
 
     public boolean checkIfFrontLinesAreFull(List<Army> attackingFrontLine, List<Army> defendingFrontLine) {
