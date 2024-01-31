@@ -14,7 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -181,9 +184,10 @@ public class BattleUtils {
         Map<String, Double> unitsFrontLineLimitPercentage = getUnitsFrontLineLimitsPercentage(unitsFrontLineLimits, totalUnitsFrontLineLimit);
 
         Map<String, Integer> totalDamageToUnits = getUnitsTotalDamage(totalDamage, unitsFrontLineLimitPercentage);
-        LOG.info("totalDamageToUnits BEFORE = {}", totalDamageToUnits);
 
-        while (isAnyDamageRemaining(totalDamageToUnits) || areAnyUnitsRemaining(armies, unitNames)) {
+        while (isAnyDamageRemaining(totalDamageToUnits) && areAnyUnitsRemaining(armies, unitNames)) {
+
+            LOG.info("totalDamageToUnits = {}", totalDamageToUnits);
 
             for (Map.Entry<String, Integer> totalDamageToUnit : totalDamageToUnits.entrySet()) {
                 String unitName = totalDamageToUnit.getKey();
@@ -193,7 +197,7 @@ public class BattleUtils {
                 totalDamageToUnits.put(unitName, damageToUnit);
             }
 
-            LOG.info("totalDamageToUnits FOR END = {}", totalDamageToUnits);
+            totalDamageToUnits = shuffleMapValues(totalDamageToUnits);
 
         }
 
@@ -228,12 +232,27 @@ public class BattleUtils {
         return damageToUnit;
     }
 
+    public Map<String, Integer> shuffleMapValues(Map<String, Integer> originalMap) {
+        // Get the values as a list
+        List<Integer> valuesList = new ArrayList<>(originalMap.values());
+
+        // Shuffle the values
+        Collections.shuffle(valuesList);
+
+        // Reconstruct the map with shuffled values
+        Iterator<Integer> shuffledValuesIterator = valuesList.iterator();
+        Map<String, Integer> shuffledMap = new LinkedHashMap<>();
+
+        originalMap.keySet().forEach(key -> shuffledMap.put(key, shuffledValuesIterator.next()));
+
+        return shuffledMap;
+    }
+
     private boolean isAnyDamageRemaining(Map<String, Integer> damageToUnits) {
         for (Map.Entry<String, Integer> damageToUnit : damageToUnits.entrySet()) {
             int damage = damageToUnit.getValue();
             if (damage > 0) return true;
         }
-
         return false;
     }
 
