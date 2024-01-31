@@ -181,15 +181,23 @@ public class BattleUtils {
         Map<String, Double> unitsFrontLineLimitPercentage = getUnitsFrontLineLimitsPercentage(unitsFrontLineLimits, totalUnitsFrontLineLimit);
 
         Map<String, Integer> totalDamageToUnits = getUnitsTotalDamage(totalDamage, unitsFrontLineLimitPercentage);
-        LOG.info("totalDamageToUnits = {}", totalDamageToUnits);
+        LOG.info("totalDamageToUnits BEFORE = {}", totalDamageToUnits);
 
-        for (Map.Entry<String, Integer> totalDamageToUnit : totalDamageToUnits.entrySet()) {
-            String unitName = totalDamageToUnit.getKey();
-            int damageToUnit = totalDamageToUnit.getValue();
+        while (isAnyDamageRemaining(totalDamageToUnits) || areAnyUnitsRemaining(armies, unitNames)) {
 
-            damageToUnit = distributeDamageAmongUnitType(armies, unitName, damageToUnit);
-            totalDamageToUnits.put(unitName, damageToUnit);
+            for (Map.Entry<String, Integer> totalDamageToUnit : totalDamageToUnits.entrySet()) {
+                String unitName = totalDamageToUnit.getKey();
+                int damageToUnit = totalDamageToUnit.getValue();
+
+                damageToUnit = distributeDamageAmongUnitType(armies, unitName, damageToUnit);
+                totalDamageToUnits.put(unitName, damageToUnit);
+            }
+
+            LOG.info("totalDamageToUnits FOR END = {}", totalDamageToUnits);
+
         }
+
+        LOG.info("totalDamageToUnits AFTER = {}", totalDamageToUnits);
 
     }
 
@@ -214,10 +222,34 @@ public class BattleUtils {
 
             }
 
-            LOG.info("damageToUnit = {}", damageToUnit);
+            //LOG.info("damageToUnit = {}", damageToUnit);
         }
 
         return damageToUnit;
+    }
+
+    private boolean isAnyDamageRemaining(Map<String, Integer> damageToUnits) {
+        for (Map.Entry<String, Integer> damageToUnit : damageToUnits.entrySet()) {
+            int damage = damageToUnit.getValue();
+            if (damage > 0) return true;
+        }
+
+        return false;
+    }
+
+    private boolean areAnyUnitsRemaining(List<Army> armies, List<String> unitNames) {
+        for (Army army : armies) {
+
+            for (String unitName : unitNames) {
+                Map<String, Integer> armyUnits = army.getUnits();
+
+                int unitAmount = armyUnits.getOrDefault(unitName, 0);
+                if (unitAmount > 0) return true;
+            }
+
+        }
+
+        return false;
     }
 
     private Map<String, Integer> getUnitsFrontLineLimits(List<String> unitNames) {
