@@ -8,6 +8,7 @@ import com.example.models.Army;
 import com.example.models.Battle;
 import com.example.repositories.BattleRepository;
 import com.example.utils.ArmyUtils;
+import com.example.utils.battle.ActiveDefensesPhaseUtils;
 import com.example.utils.battle.BattleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +33,13 @@ public class BattleService {
 
     private final ArmyService armyService;
 
-    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService) {
+    private final ActiveDefensesPhaseUtils activeDefensesPhaseUtils;
+
+    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService, ActiveDefensesPhaseUtils activeDefensesPhaseUtils) {
         this.battleRepository = battleRepository;
         this.battleUtils = battleUtils;
         this.armyService = armyService;
+        this.activeDefensesPhaseUtils = activeDefensesPhaseUtils;
     }
 
     public Battle generateBattle(UUID baseId) {
@@ -87,15 +91,15 @@ public class BattleService {
 
                 int groundUnitsDefensePower = battle.getGroundDefensePower();
                 groundUnitsDefensePower = battleUtils.applyScalingFactor(groundUnitsDefensePower);
-                battleUtils.calculateGroundUnitsLosses(attackingFrontLine, groundUnitsDefensePower);
+                activeDefensesPhaseUtils.calculateGroundUnitsLosses(attackingFrontLine, groundUnitsDefensePower);
 
                 int armoredUnitsDefensePower = battle.getArmoredDefensePower();
                 armoredUnitsDefensePower = battleUtils.applyScalingFactor(armoredUnitsDefensePower);
-                battleUtils.calculateArmoredUnitsLosses(attackingFrontLine, armoredUnitsDefensePower);
+                activeDefensesPhaseUtils.calculateArmoredUnitsLosses(attackingFrontLine, armoredUnitsDefensePower);
 
                 int airUnitsDefensePower = battle.getAirDefensePower();
                 airUnitsDefensePower = battleUtils.applyScalingFactor(airUnitsDefensePower);
-                battleUtils.calculateAirUnitsLosses(attackingFrontLine, airUnitsDefensePower);
+                activeDefensesPhaseUtils.calculateAirUnitsLosses(attackingFrontLine, airUnitsDefensePower);
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
             else {
