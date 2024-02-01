@@ -100,6 +100,16 @@ public class BattleService {
                 int airUnitsDefensePower = battle.getAirDefensePower();
                 airUnitsDefensePower = battleUtils.applyScalingFactor(airUnitsDefensePower);
                 activeDefensesPhaseUtils.calculateAirUnitsLosses(attackingFrontLine, airUnitsDefensePower);
+
+                mergeFrontLines(attackingArmies, attackingFrontLine);
+                mergeFrontLines(defendingArmies, defendingFrontLine);
+
+                cleanEmptyArmies(attackingArmies);
+
+                LOG.info("ATTACKING ARMIES IF = {}", attackingArmies);
+                if (!doArmiesHaveAttackUnits(attackingArmies)) {
+                    LOG.info("NO ATTACK UNITS! DEFENDER HAS WON!");
+                }
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
             else {
@@ -107,9 +117,6 @@ public class BattleService {
                 boolean checkIfFrontLinesAreFull = battleUtils.checkIfFrontLinesAreFull(attackingFrontLine, defendingFrontLine);
                 LOG.info("checkIfFrontLinesAreFull = {}", checkIfFrontLinesAreFull);
             }
-
-            //mergeFrontLines(attackingArmies, attackingFrontLine);
-            //mergeFrontLines(defendingArmies, defendingFrontLine);
 
         }
 
@@ -135,6 +142,26 @@ public class BattleService {
             }
         }
 
+    }
+
+    private void cleanEmptyArmies(List<Army> armies) {
+        for (Army army : armies) {
+            boolean isArmyEmpty = ArmyUtils.isArmyEmpty(army.getUnits());
+
+            if (isArmyEmpty) {
+                armyService.deleteArmy(army);
+            }
+        }
+    }
+
+    private boolean doArmiesHaveAttackUnits(List<Army> armies) {
+        for (Army army : armies) {
+            if (ArmyUtils.doesArmyHaveAttackUnits(army.getUnits())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void mergeFrontLines(List<Army> armies, List<Army> frontLine) {

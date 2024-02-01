@@ -81,7 +81,7 @@ public class SupportArmyService {
 
         supportArmyUtils.createSupportArmyReturnRequest(ownerBase, supportArmy, armySimpleDTO);
 
-        boolean isSupportArmyEmpty = isSupportArmyEmpty(supportArmy);
+        boolean isSupportArmyEmpty = ArmyUtils.isArmyEmpty(supportArmy.getUnits());
 
         if (isSupportArmyEmpty) {
             supportArmyRepository.delete(supportArmy);
@@ -117,17 +117,7 @@ public class SupportArmyService {
         return null;
     }
 
-    private boolean isSupportArmyEmpty(SupportArmy supportArmy) {
-        Map<String, Integer> supportArmyUnits = supportArmy.getUnits();
 
-        for (String unitName : supportArmyUnits.keySet()) {
-            if (supportArmyUnits.get(unitName) > 0) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     public void deleteAll(List<SupportArmy> supportArmies) {
         supportArmyRepository.deleteAll(supportArmies);

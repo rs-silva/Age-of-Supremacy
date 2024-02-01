@@ -1,5 +1,6 @@
 package com.example.enums;
 
+import com.example.utils.ListUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -25,6 +26,7 @@ public enum UnitNames {
     AIR_FIGHTER("Jet Fighter"),
     AIR_BOMBER("Bomber"),
 
+    /* Non-attack units, e.g. recon planes */
     RECON("Recon");
 
     private final String label;
@@ -38,6 +40,14 @@ public enum UnitNames {
         }
 
         return false;
+    }
+
+    public static List<String> getAttackUnitsNames() {
+        List<String> groundUnits = getGroundUnitsNames();
+        List<String> armoredUnits = getArmoredUnitsNames();
+        List<String> airUnits = getAirUnitsNames();
+
+        return ListUtils.concatenateLists(groundUnits, armoredUnits, airUnits);
     }
 
     public static List<String> getGroundUnitsNames() {

@@ -89,8 +89,8 @@ public class BattleUtils {
 
                     frontLineUnitsCounter.put(unitType, frontLineUnitsCounter.getOrDefault(unitType, 0) + unitsToAdd);
 
-                    /* TODO uncomment this line */
-                    //armyUnits.put(unitType, unitAmount - unitsToAdd);
+                    /* Remove from original army */
+                    armyUnits.put(unitType, unitAmount - unitsToAdd);
                 }
             }
 

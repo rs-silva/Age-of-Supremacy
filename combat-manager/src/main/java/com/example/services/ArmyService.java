@@ -47,10 +47,6 @@ public class ArmyService {
         armyRepository.save(army);
     }
 
-    public void save(Army army) {
-        armyRepository.save(army);
-    }
-
     public Army getArmyWithOwnerBaseId(List<Army> armies, UUID ownerBaseId) {
         for (Army army : armies) {
             if (army.getOwnerBaseId().equals(ownerBaseId)) {
@@ -59,6 +55,10 @@ public class ArmyService {
         }
 
         return null;
+    }
+
+    public void deleteArmy(Army army) {
+        armyRepository.delete(army);
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.utils;
 
 import com.example.enums.UnitNames;
 
+import java.util.List;
 import java.util.Map;
 
 public abstract class ArmyUtils {
@@ -34,6 +35,28 @@ public abstract class ArmyUtils {
             int unitAmount = unitInfo.getValue();
 
             if (unitAmount == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean doesArmyHaveAttackUnits(Map<String, Integer> armyUnits) {
+        List<String> attackUnitsNames = UnitNames.getAttackUnitsNames();
+
+        for (String attackUnitName : attackUnitsNames) {
+            if (armyUnits.containsKey(attackUnitName) && armyUnits.get(attackUnitName) > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isArmyEmpty(Map<String, Integer> armyUnits) {
+        for (String unitName : armyUnits.keySet()) {
+            if (armyUnits.get(unitName) > 0) {
                 return false;
             }
         }
