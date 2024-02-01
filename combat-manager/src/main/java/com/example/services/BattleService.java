@@ -103,7 +103,6 @@ public class BattleService {
 
                 mergeFrontLines(attackingArmies, attackingFrontLine);
                 mergeFrontLines(defendingArmies, defendingFrontLine);
-
                 cleanEmptyArmies(attackingArmies);
 
                 LOG.info("ATTACKING ARMIES IF = {}", attackingArmies);
