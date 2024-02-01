@@ -3,6 +3,7 @@ package com.example.utils.battle;
 import com.example.dto.UnitDTO;
 import com.example.enums.UnitNames;
 import com.example.models.Army;
+import com.example.models.Battle;
 import com.example.utils.MapUtils;
 import com.example.utils.UnitConfigUtils;
 import org.slf4j.Logger;
@@ -98,6 +99,12 @@ public class ActiveDefensesPhaseUtils {
 
         LOG.info("totalDamageToUnits AFTER = {}", totalDamageToUnits);
 
+    }
+
+    public void updateBaseDefensesHealthPoints(Battle battle, int attackingDamage) {
+        int currentHealthPoints = battle.getDefenseHealthPoints();
+        int updatedHealthPoints = currentHealthPoints - attackingDamage;
+        battle.setDefenseHealthPoints(Math.max(updatedHealthPoints, 0));
     }
 
     private int distributeDamageAmongUnitType(List<Army> armies, String unitName, int damageToUnit) {

@@ -173,12 +173,6 @@ public class BattleUtils {
         return true;
     }
 
-    public void updateBaseDefensesHealthPoints(Battle battle, int attackingDamage) {
-        int currentHealthPoints = battle.getDefenseHealthPoints();
-        int updatedHealthPoints = currentHealthPoints - attackingDamage;
-        battle.setDefenseHealthPoints(Math.max(updatedHealthPoints, 0));
-    }
-
     public boolean areBaseDefensesActive(Battle battle) {
         return battle.getDefenseHealthPoints() > 0;
     }

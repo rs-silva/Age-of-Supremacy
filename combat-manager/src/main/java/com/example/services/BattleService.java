@@ -87,7 +87,7 @@ public class BattleService {
             if (battleUtils.areBaseDefensesActive(battle)) {
                 int totalAttackPower = battleUtils.calculateAttackingPowerToBaseDefenses(attackingFrontLine);
                 LOG.info("totalAttackPower = {}", totalAttackPower);
-                battleUtils.updateBaseDefensesHealthPoints(battle, totalAttackPower);
+                activeDefensesPhaseUtils.updateBaseDefensesHealthPoints(battle, totalAttackPower);
 
                 int groundUnitsDefensePower = battle.getGroundDefensePower();
                 groundUnitsDefensePower = battleUtils.applyScalingFactor(groundUnitsDefensePower);
