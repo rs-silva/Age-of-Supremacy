@@ -106,6 +106,8 @@ public class BattleService {
                 cleanEmptyArmies(attackingArmies);
 
                 LOG.info("ATTACKING ARMIES IF = {}", attackingArmies);
+                /* End battle with defender winning
+                * Return base's own units and support armies to base-manager */
                 if (!doArmiesHaveAttackUnits(attackingArmies)) {
                     LOG.info("NO ATTACK UNITS! DEFENDER HAS WON!");
                 }
@@ -140,6 +142,10 @@ public class BattleService {
                 currentArmy.setUnits(updatedArmy);
             }
         }
+
+    }
+
+    private void endBattleWithDefenderSideWinning(Battle battle) {
 
     }
 
