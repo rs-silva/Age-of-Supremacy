@@ -65,7 +65,9 @@ public class BaseService {
 
     private final BaseUtils baseUtils;
 
-    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingInterfaceService buildingInterfaceService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, BaseUtils baseUtils) {
+    private final SupportArmyService supportArmyService;
+
+    public BaseService(BaseRepository baseRepository, BuildingService buildingService, JwtAccessTokenUtils jwtAccessTokenUtils, ResourcesUtils resourcesUtils, BuildingInterfaceService buildingInterfaceService, @Lazy PlayerService playerService, UnitRecruitmentUtils unitRecruitmentUtils, BaseUtils baseUtils, SupportArmyService supportArmyService) {
         this.baseRepository = baseRepository;
         this.buildingService = buildingService;
         this.jwtAccessTokenUtils = jwtAccessTokenUtils;
@@ -74,6 +76,7 @@ public class BaseService {
         this.playerService = playerService;
         this.unitRecruitmentUtils = unitRecruitmentUtils;
         this.baseUtils = baseUtils;
+        this.supportArmyService = supportArmyService;
     }
 
     public void generateBase(Player player) {
@@ -201,6 +204,9 @@ public class BaseService {
         base.removeAllSupportArmies();
 
         battleNewUnitsForNextRoundDTO.setSupportArmies(armyExtendedDTOList);
+
+        LOG.info("New Units = {}", battleNewUnitsForNextRoundDTO);
+
         return battleNewUnitsForNextRoundDTO;
     }
 
@@ -210,18 +216,20 @@ public class BaseService {
         return baseUtils.getBaseDefenseInformation(base);
     }
 
-    public void returnSupportArmiesAfterBattle(UUID baseId, BaseUnitsDTO baseUnits) {
+    @Transactional
+    public void returnSupportArmiesAfterBattle(UUID baseId, BaseUnitsDTO returningUnits) {
         Base base = findById(baseId);
 
+        /* Own Units */
         Map<String, Integer> baseOwnUnits = base.getUnits();
-        Map<String, Integer> updatedBaseOwnUnits = ArmyUtils.addUnitsToArmy(baseOwnUnits, baseUnits.getOwnUnits());
+        Map<String, Integer> updatedBaseOwnUnits = ArmyUtils.addUnitsToArmy(baseOwnUnits, returningUnits.getOwnUnits());
         base.setUnits(updatedBaseOwnUnits);
 
-        List<SupportArmy> supportArmyList = base.getSupportArmies();
+        List<SupportArmy> currentSupportArmiesList = base.getSupportArmies();
+        List<ArmyExtendedDTO> returningSupportArmiesList = returningUnits.getSupportArmies();
 
-        for (ArmyExtendedDTO army : baseUnits.getSupportArmies()) {
-
-        }
+        /* Support Units */
+        supportArmyService.updateSupportArmies(base, currentSupportArmiesList, returningSupportArmiesList);
     }
 
     public Base findById(UUID id) {

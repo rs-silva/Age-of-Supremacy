@@ -93,8 +93,6 @@ public class BaseController {
 
         BattleNewUnitsForNextRoundDTO battleNewUnitsForNextRoundDTO = baseService.getBaseCurrentUnitsForBattlesNextRound(baseId);
 
-        LOG.info("New Units = {}", battleNewUnitsForNextRoundDTO);
-
         return ResponseEntity.ok().body(battleNewUnitsForNextRoundDTO);
     }
 

@@ -148,9 +148,11 @@ public class BattleService {
     }
 
     private void endBattleWithDefenderSideWinning(Battle battle) {
+        /* TODO returning Attacking Armies */
         List<Army> attackingArmies = armyService.findByBattleIdAndRole(battle.getId(), ArmyRole.ATTACKING);
         List<Army> defendingArmies = armyService.findByBattleIdAndRole(battle.getId(), ArmyRole.DEFENDING);
         UUID defendingBaseId = battle.getBaseId();
+
         BaseUnitsDTO baseUnits = new BaseUnitsDTO();
         List<ArmyExtendedDTO> supportArmiesList = new ArrayList<>();
 
@@ -176,6 +178,8 @@ public class BattleService {
         baseUnits.setSupportArmies(supportArmiesList);
 
         battleUtils.returnSupportArmiesAfterBattle(defendingBaseId, baseUnits);
+
+        battleRepository.delete(battle);
     }
 
     private void cleanEmptyArmies(List<Army> armies) {

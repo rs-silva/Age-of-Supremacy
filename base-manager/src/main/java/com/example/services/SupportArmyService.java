@@ -1,5 +1,6 @@
 package com.example.services;
 
+import com.example.dto.ArmyExtendedDTO;
 import com.example.dto.ArmySimpleDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.ResourceNotFoundException;
@@ -9,6 +10,7 @@ import com.example.repositories.SupportArmyRepository;
 import com.example.utils.ArmyUtils;
 import com.example.utils.BaseManagerConstants;
 import com.example.utils.SupportArmyUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +28,7 @@ public class SupportArmyService {
 
     private final SupportArmyUtils supportArmyUtils;
 
-    public SupportArmyService(BaseService baseService, SupportArmyRepository supportArmyRepository, SupportArmyUtils supportArmyUtils) {
+    public SupportArmyService(@Lazy BaseService baseService, SupportArmyRepository supportArmyRepository, SupportArmyUtils supportArmyUtils) {
         this.baseService = baseService;
         this.supportArmyRepository = supportArmyRepository;
         this.supportArmyUtils = supportArmyUtils;
@@ -117,10 +119,34 @@ public class SupportArmyService {
         return null;
     }
 
+    public void updateSupportArmies(Base base, List<SupportArmy> currentSupportArmiesList, List<ArmyExtendedDTO> returningSupportArmiesList) {
+        for (ArmyExtendedDTO returningSupportArmy : returningSupportArmiesList) {
+            SupportArmy supportArmy = findByOwnerBaseIdInList(currentSupportArmiesList, returningSupportArmy.getOwnerBaseId());
 
+            if (supportArmy == null) {
+                SupportArmy newSupportArmy = SupportArmy.builder()
+                        .units(returningSupportArmy.getUnits())
+                        .baseBeingSupported(base)
+                        .ownerBaseId(returningSupportArmy.getOwnerBaseId())
+                        .build();
 
-    public void deleteAll(List<SupportArmy> supportArmies) {
-        supportArmyRepository.deleteAll(supportArmies);
+                supportArmyRepository.save(newSupportArmy);
+            }
+            else {
+                Map<String, Integer> updatedArmyUnits = ArmyUtils.addUnitsToArmy(supportArmy.getUnits(), returningSupportArmy.getUnits());
+                supportArmy.setUnits(updatedArmyUnits);
+            }
+        }
+    }
+
+    public SupportArmy findByOwnerBaseIdInList(List<SupportArmy> supportArmyList, UUID ownerBaseId) {
+        for (SupportArmy supportArmy : supportArmyList) {
+            if (supportArmy.getOwnerBaseId().equals(ownerBaseId)) {
+                return supportArmy;
+            }
+        }
+
+        return null;
     }
 
 }
