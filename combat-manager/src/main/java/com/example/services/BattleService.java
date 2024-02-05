@@ -2,6 +2,7 @@ package com.example.services;
 
 import com.example.dto.ArmyExtendedDTO;
 import com.example.dto.BaseDefenseInformationDTO;
+import com.example.dto.BaseUnitsDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.enums.ArmyRole;
 import com.example.models.Army;
@@ -110,6 +111,7 @@ public class BattleService {
                 * Return base's own units and support armies to base-manager */
                 if (!doArmiesHaveAttackUnits(attackingArmies)) {
                     LOG.info("NO ATTACK UNITS! DEFENDER HAS WON!");
+                    endBattleWithDefenderSideWinning(battle);
                 }
             }
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
@@ -146,7 +148,34 @@ public class BattleService {
     }
 
     private void endBattleWithDefenderSideWinning(Battle battle) {
+        List<Army> attackingArmies = armyService.findByBattleIdAndRole(battle.getId(), ArmyRole.ATTACKING);
+        List<Army> defendingArmies = armyService.findByBattleIdAndRole(battle.getId(), ArmyRole.DEFENDING);
+        UUID defendingBaseId = battle.getBaseId();
+        BaseUnitsDTO baseUnits = new BaseUnitsDTO();
+        List<ArmyExtendedDTO> supportArmiesList = new ArrayList<>();
 
+        for (Army defendingArmy : defendingArmies) {
+            Map<String, Integer> armyUnits = defendingArmy.getUnits();
+
+            /* In case it is the base's own units */
+            if (defendingArmy.getOwnerBaseId().equals(defendingBaseId)) {
+                baseUnits.setOwnUnits(armyUnits);
+            }
+            /* In case it's a support unit */
+            else {
+                ArmyExtendedDTO armyExtendedDTO = ArmyExtendedDTO.builder()
+                        .ownerPlayerId(defendingArmy.getOwnerPlayerId())
+                        .ownerBaseId(defendingArmy.getOwnerBaseId())
+                        .units(armyUnits)
+                        .build();
+
+                supportArmiesList.add(armyExtendedDTO);
+            }
+        }
+
+        baseUnits.setSupportArmies(supportArmiesList);
+
+        battleUtils.returnSupportArmiesAfterBattle(defendingBaseId, baseUnits);
     }
 
     private void cleanEmptyArmies(List<Army> armies) {

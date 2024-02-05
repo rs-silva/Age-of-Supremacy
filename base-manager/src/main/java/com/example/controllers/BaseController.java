@@ -1,10 +1,11 @@
 package com.example.controllers;
 
+import com.example.dto.ArmySimpleDTO;
 import com.example.dto.BaseDTO;
 import com.example.dto.BaseDefenseInformationDTO;
+import com.example.dto.BaseUnitsDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.UnitsRecruitmentEventDTO;
-import com.example.dto.ArmySimpleDTO;
 import com.example.services.BaseService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -109,4 +110,14 @@ public class BaseController {
         return ResponseEntity.ok().body(baseDefenseInformation);
     }
 
+    @PostMapping("{baseId}/returnSupportArmiesAfterBattle")
+    public ResponseEntity<String> returnSupportArmiesAfterBattle(@PathVariable UUID baseId,
+                                                                 @RequestBody BaseUnitsDTO baseUnits) {
+
+        LOG.info("Returning {} to base {}", baseUnits, baseId);
+
+        baseService.returnSupportArmiesAfterBattle(baseId, baseUnits);
+
+        return ResponseEntity.ok().build();
+    }
 }

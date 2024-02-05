@@ -1,6 +1,7 @@
 package com.example.utils.battle;
 
 import com.example.dto.BaseDefenseInformationDTO;
+import com.example.dto.BaseUnitsDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.UnitDTO;
 import com.example.enums.UnitNames;
@@ -58,6 +59,13 @@ public class BattleUtils {
         /* Get defense information for this base from the base-manager module */
         String url = "http://localhost:8082/api/base/" + baseId + "/getDefenseInformation";
         return restTemplate.getForEntity(url, BaseDefenseInformationDTO.class).getBody();
+    }
+
+    public void returnSupportArmiesAfterBattle(UUID baseId, BaseUnitsDTO baseUnits) {
+        /* TODO Remove hardcoded url */
+        /* Get defense information for this base from the base-manager module */
+        String url = "http://localhost:8082/api/base/" + baseId + "/returnSupportArmiesAfterBattle";
+        restTemplate.postForObject(url, baseUnits, BaseDefenseInformationDTO.class);
     }
 
     public List<Army> setupFrontLine(List<Army> armies) {

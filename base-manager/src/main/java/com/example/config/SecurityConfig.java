@@ -32,6 +32,7 @@ public class SecurityConfig {
             "/api/building/completeUpgrade/**",
             "/api/base/*/finishBuilding/**",
             "/api/base/*/completeUnitsRecruitment",
+            "/api/base/*/returnSupportArmiesAfterBattle",
             "/api/supportArmy/completeSend/*/to/**",
             "/api/supportArmy/completeReturn/**",
     };
@@ -51,19 +52,19 @@ public class SecurityConfig {
                 .requestMatchers(antMatcher("/h2-console/**")).permitAll());
 
         for (String endpoint : POST_API_ACCESSED_ONLY_BY_LOCALHOST_LIST) {
-               http
-                   .authorizeHttpRequests(auth -> auth
-                   .requestMatchers(antMatcher(HttpMethod.POST, endpoint))
-                   .access((authentication, context) ->
-                           new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest()))));
+           http
+               .authorizeHttpRequests(auth -> auth
+               .requestMatchers(antMatcher(HttpMethod.POST, endpoint))
+               .access((authentication, context) ->
+                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest()))));
         }
 
         for (String endpoint : GET_API_ACCESSED_ONLY_BY_LOCALHOST_LIST) {
             http
-                    .authorizeHttpRequests(auth -> auth
-                            .requestMatchers(antMatcher(HttpMethod.GET, endpoint))
-                            .access((authentication, context) ->
-                                    new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest()))));
+                .authorizeHttpRequests(auth -> auth
+                .requestMatchers(antMatcher(HttpMethod.GET, endpoint))
+                .access((authentication, context) ->
+                        new AuthorizationDecision(new IpAddressMatcher("127.0.0.1").matches(context.getRequest()))));
         }
 
         http.authorizeHttpRequests(auth -> auth

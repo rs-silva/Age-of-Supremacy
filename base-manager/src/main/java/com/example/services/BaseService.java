@@ -4,6 +4,7 @@ import com.example.dto.ArmyExtendedDTO;
 import com.example.dto.ArmySimpleDTO;
 import com.example.dto.BaseDTO;
 import com.example.dto.BaseDefenseInformationDTO;
+import com.example.dto.BaseUnitsDTO;
 import com.example.dto.BattleNewUnitsForNextRoundDTO;
 import com.example.dto.BuildingDTO;
 import com.example.dto.SupportArmyDTO;
@@ -21,6 +22,7 @@ import com.example.models.Player;
 import com.example.models.SupportArmy;
 import com.example.repositories.BaseRepository;
 import com.example.services.buildings.BuildingInterfaceService;
+import com.example.utils.ArmyUtils;
 import com.example.utils.BaseManagerConstants;
 import com.example.utils.BaseUtils;
 import com.example.utils.JwtAccessTokenUtils;
@@ -206,6 +208,20 @@ public class BaseService {
         Base base = findById(baseId);
 
         return baseUtils.getBaseDefenseInformation(base);
+    }
+
+    public void returnSupportArmiesAfterBattle(UUID baseId, BaseUnitsDTO baseUnits) {
+        Base base = findById(baseId);
+
+        Map<String, Integer> baseOwnUnits = base.getUnits();
+        Map<String, Integer> updatedBaseOwnUnits = ArmyUtils.addUnitsToArmy(baseOwnUnits, baseUnits.getOwnUnits());
+        base.setUnits(updatedBaseOwnUnits);
+
+        List<SupportArmy> supportArmyList = base.getSupportArmies();
+
+        for (ArmyExtendedDTO army : baseUnits.getSupportArmies()) {
+
+        }
     }
 
     public Base findById(UUID id) {
