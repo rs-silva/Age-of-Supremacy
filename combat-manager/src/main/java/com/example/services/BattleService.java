@@ -11,6 +11,7 @@ import com.example.repositories.BattleRepository;
 import com.example.utils.ArmyUtils;
 import com.example.utils.battle.ActiveDefensesPhaseUtils;
 import com.example.utils.battle.BattleUtils;
+import com.example.utils.battle.EngagementPhaseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -36,11 +37,14 @@ public class BattleService {
 
     private final ActiveDefensesPhaseUtils activeDefensesPhaseUtils;
 
-    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService, ActiveDefensesPhaseUtils activeDefensesPhaseUtils) {
+    private final EngagementPhaseUtils engagementPhaseUtils;
+
+    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService, ActiveDefensesPhaseUtils activeDefensesPhaseUtils, EngagementPhaseUtils engagementPhaseUtils) {
         this.battleRepository = battleRepository;
         this.battleUtils = battleUtils;
         this.armyService = armyService;
         this.activeDefensesPhaseUtils = activeDefensesPhaseUtils;
+        this.engagementPhaseUtils = engagementPhaseUtils;
     }
 
     public Battle generateBattle(UUID baseId) {
@@ -119,6 +123,8 @@ public class BattleService {
                 LOG.info("BASE DEFENSES ARE DOWN!");
                 boolean checkIfFrontLinesAreFull = battleUtils.checkIfFrontLinesAreFull(attackingFrontLine, defendingFrontLine);
                 LOG.info("checkIfFrontLinesAreFull = {}", checkIfFrontLinesAreFull);
+
+                engagementPhaseUtils.calculateArmiesLosses(attackingFrontLine, defendingFrontLine);
             }
 
         }

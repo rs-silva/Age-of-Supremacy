@@ -180,6 +180,7 @@ public class ActiveDefensesPhaseUtils {
             int damage = damageToUnit.getValue();
             if (damage > 0) return true;
         }
+
         return false;
     }
 
