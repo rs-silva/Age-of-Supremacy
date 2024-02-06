@@ -153,7 +153,7 @@ public class BattleService {
         List<Army> defendingArmies = armyService.findByBattleIdAndRole(battle.getId(), ArmyRole.DEFENDING);
         UUID defendingBaseId = battle.getBaseId();
 
-        BaseUnitsDTO baseUnits = new BaseUnitsDTO();
+        BaseUnitsDTO baseUnitsToReturn = new BaseUnitsDTO();
         List<ArmyExtendedDTO> supportArmiesList = new ArrayList<>();
 
         for (Army defendingArmy : defendingArmies) {
@@ -161,7 +161,7 @@ public class BattleService {
 
             /* In case it is the base's own units */
             if (defendingArmy.getOwnerBaseId().equals(defendingBaseId)) {
-                baseUnits.setOwnUnits(armyUnits);
+                baseUnitsToReturn.setOwnUnits(armyUnits);
             }
             /* In case it's a support unit */
             else {
@@ -175,9 +175,9 @@ public class BattleService {
             }
         }
 
-        baseUnits.setSupportArmies(supportArmiesList);
+        baseUnitsToReturn.setSupportArmies(supportArmiesList);
 
-        battleUtils.returnSupportArmiesAfterBattle(defendingBaseId, baseUnits);
+        battleUtils.returnSupportArmiesAfterBattle(defendingBaseId, baseUnitsToReturn);
 
         battleRepository.delete(battle);
     }
