@@ -16,13 +16,10 @@ public class SupportArmyUtils {
 
     private final BaseUtils baseUtils;
 
-    private final UnitsUtils unitsUtils;
-
     private final RestTemplate restTemplate;
 
-    public SupportArmyUtils(BaseUtils baseUtils, UnitsUtils unitsUtils, RestTemplate restTemplate) {
+    public SupportArmyUtils(BaseUtils baseUtils, RestTemplate restTemplate) {
         this.baseUtils = baseUtils;
-        this.unitsUtils = unitsUtils;
         this.restTemplate = restTemplate;
     }
 
@@ -31,7 +28,7 @@ public class SupportArmyUtils {
 
         baseUtils.removeUnitsFromBase(originBase, armyToSend);
 
-        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase.getX_coordinate(), originBase.getY_coordinate(),
+        Timestamp arrivalTime = ArmyUtils.calculateArmyArrivalTime(originBase.getX_coordinate(), originBase.getY_coordinate(),
                 destinationBase.getX_coordinate(), destinationBase.getY_coordinate(), armySimpleDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()
@@ -70,7 +67,7 @@ public class SupportArmyUtils {
             }
         }
 
-        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(supportArmy.getBaseBeingSupported().getX_coordinate(), supportArmy.getBaseBeingSupported().getY_coordinate(),
+        Timestamp arrivalTime = ArmyUtils.calculateArmyArrivalTime(supportArmy.getBaseBeingSupported().getX_coordinate(), supportArmy.getBaseBeingSupported().getY_coordinate(),
                 ownerBase.getX_coordinate(), ownerBase.getY_coordinate(), armySimpleDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()

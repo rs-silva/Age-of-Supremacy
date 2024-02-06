@@ -4,9 +4,9 @@ import com.example.dto.ArmyMovementEventDTO;
 import com.example.dto.ArmySimpleDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.models.Base;
+import com.example.utils.ArmyUtils;
 import com.example.utils.BaseManagerConstants;
 import com.example.utils.BaseUtils;
-import com.example.utils.UnitsUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -21,14 +21,11 @@ public class BattleService {
 
     private final BaseUtils baseUtils;
 
-    private final UnitsUtils unitsUtils;
-
     private final RestTemplate restTemplate;
 
-    public BattleService(BaseService baseService, BaseUtils baseUtils, UnitsUtils unitsUtils, RestTemplate restTemplate) {
+    public BattleService(BaseService baseService, BaseUtils baseUtils, RestTemplate restTemplate) {
         this.baseService = baseService;
         this.baseUtils = baseUtils;
-        this.unitsUtils = unitsUtils;
         this.restTemplate = restTemplate;
     }
 
@@ -45,7 +42,7 @@ public class BattleService {
 
         baseUtils.removeUnitsFromBase(originBase, armySimpleDTO.getUnits());
 
-        Timestamp arrivalTime = unitsUtils.calculateUnitsArrivalTime(originBase.getX_coordinate(), originBase.getY_coordinate(),
+        Timestamp arrivalTime = ArmyUtils.calculateArmyArrivalTime(originBase.getX_coordinate(), originBase.getY_coordinate(),
                 destinationBase.getX_coordinate(), destinationBase.getY_coordinate(), armySimpleDTO);
 
         ArmyMovementEventDTO armyMovementEventDTO = ArmyMovementEventDTO.builder()

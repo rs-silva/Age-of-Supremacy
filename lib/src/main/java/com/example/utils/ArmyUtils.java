@@ -1,7 +1,10 @@
 package com.example.utils;
 
+import com.example.dto.ArmySimpleDTO;
 import com.example.enums.UnitNames;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -62,6 +65,13 @@ public abstract class ArmyUtils {
         }
 
         return true;
+    }
+
+    public static Timestamp calculateArmyArrivalTime(int originBaseX, int originBaseY, int destinationBaseX, int destinationBaseY, ArmySimpleDTO armySimpleDTO) {
+        /* TODO calculate travelling time based on the bases' coordinates and the units' movement speed */
+        int travellingTimeInSeconds = 5;
+
+        return Timestamp.from(Instant.now().plusMillis(travellingTimeInSeconds * 1000));
     }
 
 }
