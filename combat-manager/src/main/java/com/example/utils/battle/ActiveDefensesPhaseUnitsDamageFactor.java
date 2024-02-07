@@ -5,7 +5,7 @@ import com.example.enums.UnitNames;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ActiveDefensesPhaseUnitsDamageFactor {
+public abstract class ActiveDefensesPhaseUnitsDamageFactor {
 
     private static final double GROUND_INFANTRY_DAMAGE_FACTOR = 0.001;
 
