@@ -25,11 +25,11 @@ public abstract class MapUtils {
         return shuffledMap;
     }
 
-    public static Map<String, Double> addValuesToMap(Map<String, Double> currentMap, String unitName, double valueToAdd) {
+    public static Map<String, Integer> addValuesToMap(Map<String, Integer> currentMap, String unitName, int valueToAdd) {
         if (currentMap.containsKey(unitName)) {
             double currentUnitDamage = currentMap.get(unitName);
 
-            double updatedUnitDamage = currentUnitDamage + valueToAdd;
+            int updatedUnitDamage = (int) (currentUnitDamage + valueToAdd);
 
             currentMap.put(unitName, updatedUnitDamage);
         }

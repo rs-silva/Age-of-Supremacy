@@ -30,13 +30,17 @@ public class EngagementPhaseUtils {
     }
 
     public void calculateArmiesLosses(List<Army> attackingArmies, List<Army> defendingArmies) {
-        calculateArmyUnitsDamage(attackingArmies);
+        Map<String, Integer> attackingUnitsDamage = calculateArmyUnitsDamage(attackingArmies);
+        Map<String, Integer> defendingUnitsDamage = calculateArmyUnitsDamage(defendingArmies);
+
+        LOG.info("attackingUnitsDamage = {}", attackingUnitsDamage);
+        LOG.info("defendingUnitsDamage = {}", defendingUnitsDamage);
 
     }
 
-    private Map<String, Double> calculateArmyUnitsDamage(List<Army> armies) {
+    private Map<String, Integer> calculateArmyUnitsDamage(List<Army> armies) {
         /* Calculate damage for each unit type */
-        Map<String, Double> unitsDamage = new HashMap<>();
+        Map<String, Integer> unitsDamage = new HashMap<>();
 
         for (Army army : armies) {
             Map<String, Integer> armyUnits = army.getUnits();
@@ -50,13 +54,11 @@ public class EngagementPhaseUtils {
                 double unitAttackValue = unitConfig.getAttack();
                 double unitAccuracy = unitConfig.getAccuracy();
 
-                double unitDamage = battleUtils.calculateUnitAttackPower(unitAmount, unitAttackValue, unitAccuracy);
+                int unitDamage = (int) battleUtils.calculateUnitAttackPower(unitAmount, unitAttackValue, unitAccuracy);
 
                 unitsDamage = MapUtils.addValuesToMap(unitsDamage, unitName, unitDamage);
             }
         }
-
-        LOG.info("unitsDamage = {}", unitsDamage);
 
         return unitsDamage;
     }
