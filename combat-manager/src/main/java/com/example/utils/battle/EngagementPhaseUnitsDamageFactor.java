@@ -47,9 +47,9 @@ public abstract class EngagementPhaseUnitsDamageFactor {
                                                    0.1 , 1  , 0.25,
     };
 
-    public static double[] damageFactorsRecon = { 0    , 0   , 0  ,
-                                                  0    , 0   , 0  ,
-                                                  0.001, 0.01, 1  ,
+    public static double[] damageFactorsRecon = { 0    , 0   , 0,
+                                                  0    , 0   , 0,
+                                                  0.001, 0.01, 1,
     };
 
     public static Map<String, Map<String, Double>> getActiveDefensesPhaseUnitsDamageFactors() {
@@ -89,13 +89,13 @@ public abstract class EngagementPhaseUnitsDamageFactor {
     private static Map<String, Double> generateDamageFactorMap(double[] damageFactors) {
         int i = 0;
         Map<String, Double> map = new HashMap<>();
+
         for (UnitNames unitName : UnitNames.values()) {
             map.put(unitName.getLabel(), damageFactors[i]);
             i++;
         }
 
         return map;
-
     }
 
 }

@@ -65,7 +65,7 @@ public class ActiveDefensesPhaseUtils {
                 double unitAccuracy = unitConfig.getAccuracy();
 
                 double unitDamageFactor = unitsDamageFactor.get(unitName);
-                double unitAttackPower = calculateUnitAttackPower(unitAmount, unitAttackValue, unitDamageFactor, unitAccuracy);
+                double unitAttackPower = battleUtils.calculateUnitAttackPower(unitAmount, unitAttackValue, unitDamageFactor, unitAccuracy);
 
                 totalAttackPower += unitAttackPower;
             }
@@ -215,10 +215,6 @@ public class ActiveDefensesPhaseUtils {
         }
 
         return false;
-    }
-
-    private double calculateUnitAttackPower(int unitAmount, double unitAttackValue, double unitDamageFactor, double unitAccuracy) {
-        return unitAmount * unitAttackValue * unitDamageFactor * unitAccuracy;
     }
 
 }

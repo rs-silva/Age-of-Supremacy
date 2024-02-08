@@ -1,7 +1,11 @@
 package com.example.utils.battle;
 
-import com.example.enums.UnitNames;
+import com.example.dto.UnitDTO;
 import com.example.models.Army;
+import com.example.utils.MapUtils;
+import com.example.utils.UnitConfigUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -11,24 +15,27 @@ import java.util.Map;
 @Component
 public class EngagementPhaseUtils {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EngagementPhaseUtils.class);
+
     private final BattleUtils battleUtils;
+
+    private final UnitConfigUtils unitConfigUtils;
 
     private final Map<String, Map<String, Double>> unitsDamageFactor;
 
-    public EngagementPhaseUtils(BattleUtils battleUtils) {
+    public EngagementPhaseUtils(BattleUtils battleUtils, UnitConfigUtils unitConfigUtils) {
         this.battleUtils = battleUtils;
+        this.unitConfigUtils = unitConfigUtils;
         this.unitsDamageFactor = EngagementPhaseUnitsDamageFactor.getActiveDefensesPhaseUnitsDamageFactors();
     }
 
     public void calculateArmiesLosses(List<Army> attackingArmies, List<Army> defendingArmies) {
-        /* Calculate damage for each unit type */
-        for (String unitName : UnitNames.getAttackUnitsNames()) {
-
-        }
+        calculateArmyUnitsDamage(attackingArmies);
 
     }
 
     private Map<String, Double> calculateArmyUnitsDamage(List<Army> armies) {
+        /* Calculate damage for each unit type */
         Map<String, Double> unitsDamage = new HashMap<>();
 
         for (Army army : armies) {
@@ -38,9 +45,32 @@ public class EngagementPhaseUtils {
                 String unitName = unit.getKey();
                 int unitAmount = unit.getValue();
 
-                int unitDamage =
+                UnitDTO unitConfig = unitConfigUtils.getUnitConfig(unitName);
 
+                double unitAttackValue = unitConfig.getAttack();
+                double unitAccuracy = unitConfig.getAccuracy();
+
+                double unitDamage = battleUtils.calculateUnitAttackPower(unitAmount, unitAttackValue, unitAccuracy);
+
+                unitsDamage = MapUtils.addValuesToMap(unitsDamage, unitName, unitDamage);
             }
+        }
+
+        LOG.info("unitsDamage = {}", unitsDamage);
+
+        return unitsDamage;
+    }
+
+    private void updateUnitDamage(Map<String, Double> unitsDamage, String unitName, double unitDamageToAdd) {
+        if (unitsDamage.containsKey(unitName)) {
+            double currentUnitDamage = unitsDamage.get(unitName);
+
+            double updatedUnitDamage = currentUnitDamage + unitDamageToAdd;
+
+            unitsDamage.put(unitName, updatedUnitDamage);
+        }
+        else {
+            unitsDamage.put(unitName, unitDamageToAdd);
         }
     }
 

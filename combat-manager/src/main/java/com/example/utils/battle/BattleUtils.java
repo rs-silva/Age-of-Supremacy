@@ -7,7 +7,6 @@ import com.example.utils.UnitConfigUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -19,22 +18,10 @@ public class BattleUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(BattleUtils.class);
 
-    private final Map<String, Integer> frontLineUnitsLimits;
-
-    private final ActiveDefensesPhaseUtils activeDefensesPhaseUtils;
-
-    private final EngagementPhaseUtils engagementPhaseUtils;
-
     private final UnitConfigUtils unitConfigUtils;
 
-    private final RestTemplate restTemplate;
-
-    public BattleUtils(ActiveDefensesPhaseUtils activeDefensesPhaseUtils, EngagementPhaseUtils engagementPhaseUtils, UnitConfigUtils unitConfigUtils, RestTemplate restTemplate) {
-        this.activeDefensesPhaseUtils = activeDefensesPhaseUtils;
-        this.engagementPhaseUtils = engagementPhaseUtils;
+    public BattleUtils(UnitConfigUtils unitConfigUtils) {
         this.unitConfigUtils = unitConfigUtils;
-        this.frontLineUnitsLimits = BattleFrontLineUnitsLimits.getFrontLineUnitsLimits();
-        this.restTemplate = restTemplate;
     }
 
     public int getArmiesMetric(List<Army> armies, Function<UnitDTO, Double> metricFunction) {
@@ -100,6 +87,14 @@ public class BattleUtils {
         Random random = new Random();
 
         return random.nextGaussian() * standardDeviation + mean;
+    }
+
+    public double calculateUnitAttackPower(int unitAmount, double unitAttackValue, double unitDamageFactor, double unitAccuracy) {
+        return unitAmount * unitAttackValue * unitDamageFactor * unitAccuracy;
+    }
+
+    public double calculateUnitAttackPower(int unitAmount, double unitAttackValue, double unitAccuracy) {
+        return unitAmount * unitAttackValue * unitAccuracy;
     }
 
 }
