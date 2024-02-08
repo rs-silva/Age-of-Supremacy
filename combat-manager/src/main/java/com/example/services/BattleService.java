@@ -10,16 +10,18 @@ import com.example.models.Battle;
 import com.example.repositories.BattleRepository;
 import com.example.utils.ArmyUtils;
 import com.example.utils.battle.ActiveDefensesPhaseUtils;
-import com.example.utils.battle.BattleUtils;
+import com.example.utils.battle.BattleFrontLineUnitsLimits;
 import com.example.utils.battle.EngagementPhaseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,24 +33,27 @@ public class BattleService {
 
     private final BattleRepository battleRepository;
 
-    private final BattleUtils battleUtils;
-
     private final ArmyService armyService;
+
+    private final Map<String, Integer> frontLineUnitsLimits;
 
     private final ActiveDefensesPhaseUtils activeDefensesPhaseUtils;
 
     private final EngagementPhaseUtils engagementPhaseUtils;
 
-    public BattleService(BattleRepository battleRepository, BattleUtils battleUtils, ArmyService armyService, ActiveDefensesPhaseUtils activeDefensesPhaseUtils, EngagementPhaseUtils engagementPhaseUtils) {
+    private final RestTemplate restTemplate;
+
+    public BattleService(BattleRepository battleRepository, ArmyService armyService, ActiveDefensesPhaseUtils activeDefensesPhaseUtils, EngagementPhaseUtils engagementPhaseUtils, RestTemplate restTemplate) {
         this.battleRepository = battleRepository;
-        this.battleUtils = battleUtils;
         this.armyService = armyService;
+        this.restTemplate = restTemplate;
+        this.frontLineUnitsLimits = BattleFrontLineUnitsLimits.getFrontLineUnitsLimits();
         this.activeDefensesPhaseUtils = activeDefensesPhaseUtils;
         this.engagementPhaseUtils = engagementPhaseUtils;
     }
 
     public Battle generateBattle(UUID baseId) {
-        BaseDefenseInformationDTO baseDefenseInformation = battleUtils.getBaseDefenseInformation(baseId);
+        BaseDefenseInformationDTO baseDefenseInformation = getBaseDefenseInformation(baseId);
 
         Battle battle = Battle.builder()
                 .baseId(baseId)
@@ -82,29 +87,26 @@ public class BattleService {
             LOG.info("BEFORE Attacking Armies = {}", attackingArmies.toString());
             LOG.info("BEFORE Defending Armies = {}", defendingArmies.toString());
 
-            List<Army> attackingFrontLine = battleUtils.setupFrontLine(attackingArmies);
-            List<Army> defendingFrontLine = battleUtils.setupFrontLine(defendingArmies);
+            List<Army> attackingFrontLine = setupFrontLine(attackingArmies);
+            List<Army> defendingFrontLine = setupFrontLine(defendingArmies);
 
             LOG.info("Attacking Front Line = {}", attackingFrontLine.toString());
             LOG.info("Defending Front Line = {}", defendingFrontLine.toString());
 
             /* If the base defenses are still active, the attacking armies cannot attack the defending armies */
-            if (battleUtils.areBaseDefensesActive(battle)) {
-                int totalAttackPower = battleUtils.calculateAttackingPowerToBaseDefenses(attackingFrontLine);
+            if (areBaseDefensesActive(battle)) {
+                int totalAttackPower = activeDefensesPhaseUtils.calculateAttackingPowerToBaseDefenses(attackingFrontLine);
                 LOG.info("totalAttackPower = {}", totalAttackPower);
                 activeDefensesPhaseUtils.updateBaseDefensesHealthPoints(battle, totalAttackPower);
 
-                int groundUnitsDefensePower = battle.getGroundDefensePower();
-                groundUnitsDefensePower = battleUtils.applyScalingFactor(groundUnitsDefensePower);
-                activeDefensesPhaseUtils.calculateGroundUnitsLosses(attackingFrontLine, groundUnitsDefensePower);
+                int groundDefensePower = activeDefensesPhaseUtils.getGroundDefensePower(battle);
+                activeDefensesPhaseUtils.calculateGroundUnitsLosses(attackingFrontLine, groundDefensePower);
 
-                int armoredUnitsDefensePower = battle.getArmoredDefensePower();
-                armoredUnitsDefensePower = battleUtils.applyScalingFactor(armoredUnitsDefensePower);
-                activeDefensesPhaseUtils.calculateArmoredUnitsLosses(attackingFrontLine, armoredUnitsDefensePower);
+                int armoredDefensePower = activeDefensesPhaseUtils.getArmoredDefensePower(battle);
+                activeDefensesPhaseUtils.calculateArmoredUnitsLosses(attackingFrontLine, armoredDefensePower);
 
-                int airUnitsDefensePower = battle.getAirDefensePower();
-                airUnitsDefensePower = battleUtils.applyScalingFactor(airUnitsDefensePower);
-                activeDefensesPhaseUtils.calculateAirUnitsLosses(attackingFrontLine, airUnitsDefensePower);
+                int airDefensePower = activeDefensesPhaseUtils.getAirDefensePower(battle);
+                activeDefensesPhaseUtils.calculateAirUnitsLosses(attackingFrontLine, airDefensePower);
 
                 mergeFrontLines(attackingArmies, attackingFrontLine);
                 mergeFrontLines(defendingArmies, defendingFrontLine);
@@ -121,7 +123,7 @@ public class BattleService {
             /* If the base defenses are not active, the attacking and the defending armies will attack each other */
             else {
                 LOG.info("BASE DEFENSES ARE DOWN!");
-                boolean checkIfFrontLinesAreFull = battleUtils.checkIfFrontLinesAreFull(attackingFrontLine, defendingFrontLine);
+                boolean checkIfFrontLinesAreFull = checkIfFrontLinesAreFull(attackingFrontLine, defendingFrontLine);
                 LOG.info("checkIfFrontLinesAreFull = {}", checkIfFrontLinesAreFull);
 
                 engagementPhaseUtils.calculateArmiesLosses(attackingFrontLine, defendingFrontLine);
@@ -134,7 +136,7 @@ public class BattleService {
 
     private void setupRoundNewUnits(Battle battle) {
         /* Fetch the new own units and/or support armies in the base from base-manager */
-        BattleNewUnitsForNextRoundDTO battleNewUnitsForNextRoundDTO = battleUtils.getBaseCurrentUnitsForNextRound(battle);
+        BattleNewUnitsForNextRoundDTO battleNewUnitsForNextRoundDTO = getBaseCurrentUnitsForNextRound(battle);
 
         /* Update armies in the base */
         for (ArmyExtendedDTO newArmy : battleNewUnitsForNextRoundDTO.getSupportArmies()) {
@@ -150,7 +152,47 @@ public class BattleService {
                 currentArmy.setUnits(updatedArmy);
             }
         }
+    }
 
+    private List<Army> setupFrontLine(List<Army> armies) {
+        // Create a map to store the count of units for each type in the front line
+        Map<String, Integer> frontLineUnitsCounter = new HashMap<>();
+        List<Army> frontLineArmies = new ArrayList<>();
+
+        // Sort armies based on some criteria (e.g., total attack power)
+        //armies.sort(Comparator.comparingInt(this::calculateTotalAttackPower).reversed());
+
+        // Iterate through armies and add units to the front line respecting type-specific limits
+        for (Army army : armies) {
+            Map<String, Integer> armyUnits = army.getUnits();
+
+            Army newFrontLineArmy = new Army();
+            newFrontLineArmy.setOwnerBaseId(army.getOwnerBaseId());
+            newFrontLineArmy.setOwnerPlayerId(army.getOwnerPlayerId());
+            Map<String, Integer> newFrontLineArmyUnits = new HashMap<>();
+
+            for (Map.Entry<String, Integer> entry : armyUnits.entrySet()) {
+                String unitType = entry.getKey();
+                int unitAmount = entry.getValue();
+
+                int unitTypeLimit = frontLineUnitsLimits.get(unitType);
+
+                int unitsToAdd = Math.min(unitAmount, unitTypeLimit - frontLineUnitsCounter.getOrDefault(unitType, 0));
+                if (unitsToAdd > 0) {
+                    newFrontLineArmyUnits.put(unitType, unitsToAdd);
+
+                    frontLineUnitsCounter.put(unitType, frontLineUnitsCounter.getOrDefault(unitType, 0) + unitsToAdd);
+
+                    /* Remove from original army */
+                    armyUnits.put(unitType, unitAmount - unitsToAdd);
+                }
+            }
+
+            newFrontLineArmy.setUnits(newFrontLineArmyUnits);
+            frontLineArmies.add(newFrontLineArmy);
+        }
+
+        return frontLineArmies;
     }
 
     private void endBattleWithDefenderSideWinning(Battle battle) {
@@ -183,7 +225,7 @@ public class BattleService {
 
         baseUnitsToReturn.setSupportArmies(supportArmiesList);
 
-        battleUtils.returnSupportArmiesAfterBattle(defendingBaseId, baseUnitsToReturn);
+        returnSupportArmiesAfterBattle(defendingBaseId, baseUnitsToReturn);
 
         battleRepository.delete(battle);
     }
@@ -222,4 +264,45 @@ public class BattleService {
         return battleRepository.findByBaseId(baseId);
     }
 
+    private boolean areBaseDefensesActive(Battle battle) {
+        return battle.getDefenseHealthPoints() > 0;
+    }
+
+    private boolean checkIfFrontLinesAreFull(List<Army> attackingFrontLine, List<Army> defendingFrontLine) {
+        /* Checks if both front lines have all the unit types */
+        return checkIfFrontLineIsFull(attackingFrontLine) && checkIfFrontLineIsFull(defendingFrontLine);
+    }
+
+    private boolean checkIfFrontLineIsFull(List<Army> frontLine) {
+        for (Army army : frontLine) {
+            if (!ArmyUtils.checkIfArmyHasEveryUnitType(army.getUnits())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private BaseDefenseInformationDTO getBaseDefenseInformation(UUID baseId) {
+        /* TODO Remove hardcoded url */
+        /* Get defense information for this base from the base-manager module */
+        String url = "http://localhost:8082/api/base/" + baseId + "/getDefenseInformation";
+        return restTemplate.getForEntity(url, BaseDefenseInformationDTO.class).getBody();
+    }
+
+    public BattleNewUnitsForNextRoundDTO getBaseCurrentUnitsForNextRound(Battle battle) {
+        UUID baseId = battle.getBaseId();
+
+        /* TODO Remove hardcoded url */
+        /* Get current units sit in the base from the base-manager module */
+        String url = "http://localhost:8082/api/base/" + baseId + "/getUnitsForNextRound";
+        return restTemplate.getForEntity(url, BattleNewUnitsForNextRoundDTO.class).getBody();
+    }
+
+    private void returnSupportArmiesAfterBattle(UUID baseId, BaseUnitsDTO baseUnits) {
+        /* TODO Remove hardcoded url */
+        /* Get defense information for this base from the base-manager module */
+        String url = "http://localhost:8082/api/base/" + baseId + "/returnSupportArmiesAfterBattle";
+        restTemplate.postForObject(url, baseUnits, BaseDefenseInformationDTO.class);
+    }
 }

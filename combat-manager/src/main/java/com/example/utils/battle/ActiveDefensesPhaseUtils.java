@@ -25,13 +25,31 @@ public class ActiveDefensesPhaseUtils {
 
     private final UnitConfigUtils unitConfigUtils;
 
-    public ActiveDefensesPhaseUtils(UnitConfigUtils unitConfigUtils) {
+    private final BattleUtils battleUtils;
+
+    public ActiveDefensesPhaseUtils(UnitConfigUtils unitConfigUtils, BattleUtils battleUtils) {
+        this.battleUtils = battleUtils;
         this.frontLineUnitsLimits = BattleFrontLineUnitsLimits.getFrontLineUnitsLimits();
         this.unitsDamageFactor = ActiveDefensesPhaseUnitsDamageFactor.getActiveDefensesPhaseUnitsDamageFactors();
         this.unitConfigUtils = unitConfigUtils;
     }
 
-    public double calculateAttackingPowerToBaseDefenses(List<Army> frontLineAttackingArmies) {
+    public int getGroundDefensePower(Battle battle) {
+        int baseDefensePower = battle.getGroundDefensePower();
+        return battleUtils.applyScalingFactor(baseDefensePower);
+    }
+
+    public int getArmoredDefensePower(Battle battle) {
+        int baseDefensePower = battle.getArmoredDefensePower();
+        return battleUtils.applyScalingFactor(baseDefensePower);
+    }
+
+    public int getAirDefensePower(Battle battle) {
+        int baseDefensePower = battle.getAirDefensePower();
+        return battleUtils.applyScalingFactor(baseDefensePower);
+    }
+
+    public int calculateAttackingPowerToBaseDefenses(List<Army> frontLineAttackingArmies) {
         double totalAttackPower = 0;
 
         for (Army army : frontLineAttackingArmies) {
@@ -54,7 +72,7 @@ public class ActiveDefensesPhaseUtils {
 
         }
 
-        return totalAttackPower;
+        return battleUtils.applyScalingFactor((int) totalAttackPower);
     }
 
     public void calculateGroundUnitsLosses(List<Army> armies, int totalDamage) {
