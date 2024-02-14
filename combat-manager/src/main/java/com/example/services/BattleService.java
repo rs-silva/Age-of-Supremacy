@@ -127,6 +127,11 @@ public class BattleService {
                 LOG.info("checkIfFrontLinesAreFull = {}", checkIfFrontLinesAreFull);
 
                 engagementPhaseUtils.calculateArmiesLosses(attackingFrontLine, defendingFrontLine);
+
+                mergeFrontLines(attackingArmies, attackingFrontLine);
+                mergeFrontLines(defendingArmies, defendingFrontLine);
+                cleanEmptyArmies(attackingArmies);
+                cleanEmptyArmies(defendingArmies);
             }
 
         }

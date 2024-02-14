@@ -56,6 +56,7 @@ public class EngagementPhaseUtils {
 
                 int unitDamage = (int) battleUtils.calculateUnitAttackPower(unitAmount, unitAttackValue, unitAccuracy);
 
+                unitDamage = battleUtils.applyScalingFactor(unitDamage);
                 unitsDamage = MapUtils.addValuesToMap(unitsDamage, unitName, unitDamage);
             }
         }
